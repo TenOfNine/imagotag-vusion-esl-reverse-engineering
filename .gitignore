@@ -1,0 +1,45 @@
+# --- Mitschnitte -----------------------------------------------------------
+# Rohe CSV-Exporte werden mehrere hundert MB gross und sind aus den
+# .sr-Dateien reproduzierbar.
+captures/*.csv
+captures/*.vcd
+captures/*.bin
+
+# Grosse sigrok-Sessions. Kleine (< 20 MB) bitte mit
+#   git add -f captures/<datei>.sr
+# ausdruecklich aufnehmen.
+captures/*.sr
+!captures/README.md
+
+# --- Auswertungsergebnisse -------------------------------------------------
+# Die Reports SOLLEN ins Repo - sie sind das eigentliche Ergebnis.
+!analysis/out/*_transactions.txt
+!analysis/out/*_init_sequence.py
+!analysis/out/*_blocks.csv
+
+# --- Firmware-Images -------------------------------------------------------
+# Ausgelesene Originalfirmware gehoert nicht in ein oeffentliches Repo.
+*.s37
+*.hex
+*.elf
+*.bin.orig
+firmware/**/dump*
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Build -----------------------------------------------------------------
+.pio/
+build/
+dist/
+
+# --- Editor / OS -----------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
