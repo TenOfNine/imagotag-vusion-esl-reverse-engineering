@@ -9,6 +9,7 @@
 | `pcb-top-mcu.webp` | EFR32FG22 with marking, both crystals, NFC IC |
 | `pcb-bottom.webp` | back side: NFC coil, LEDs, open vias |
 | `pcb-top-annotated-pinout.webp` | top side with **hypothetical** pinout |
+| `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---
 

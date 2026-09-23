@@ -726,6 +726,28 @@ then repeat pass B.
 
 ---
 
+## 2026-09-23 — Session 2: Photo of the capture wiring
+
+- Maintainer sent a photo of tag 02's back side with the capture wires:
+  `hardware/photos/pcb-bottom-capture-wiring.webp`.
+- `[PHOTO]` **Seven wires**: blue, grey and white on three vias close to the
+  FPC exit (top right), yellow (upper middle), black (middle left), purple
+  and green (bottom, above the `BOT` label, next to a bundle of parallel
+  traces). Which colour is which SLogic channel / FPC pin is **not stated**.
+- `[PHOTO]` Green joint: no via is clearly visible under the solder blob;
+  a small via just above it (≈ 1 via pitch) is still unsoldered. The
+  purple joint sits on a via.
+- `[PHOTO]` Most small dark dots across the board are tented vias (covered
+  by solder mask). `[ASSUMPTION]` Many of them are stitching vias of the
+  ground pour. A wire on such a via, or a joint that does not reach the
+  copper, would show as a flat line — consistent with D4/D5 being flat in
+  `2026-09-23_tag02_boot-init_20MHz.sr`.
+  → **Test:** M-007 extended checks (end-to-end continuity per wire to its
+  FPC pin; no continuity to battery minus).
+- Nothing about pin assignment is derived from this photo (`CLAUDE.md` §2).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
