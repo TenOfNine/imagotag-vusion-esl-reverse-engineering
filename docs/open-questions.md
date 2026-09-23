@@ -13,11 +13,10 @@ existing references stay valid.
 
 ### 🔴 F-01 What is the actual FPC pinout?
 
-Everything else depends on it. Status 2026-09-23: rounds 1–4 of M-001 are
-consistent with the standard; 9–14 vs. 15/16 still open. See `pinout.md`,
+Status 2026-09-23: **largely answered.** `[MEASUREMENT]` Signal lines on
+9–14, supply on 15/16, GND on 17, GDR on 2. Still open: which signal is on
+which pin within 9–14 → the capture settles it. See `pinout.md`,
 "Measurement status".
-
-→ Measurement request **M-001**
 
 ### 🔴 F-02 What resolution does the panel have?
 
@@ -130,7 +129,9 @@ Relevant for path A: with the EFR32 held in reset, a switched supply would
 stay **off** — the ESP32 would then have to switch it on or feed pins 15/16
 itself.
 
-→ Measurement request M-001, round 5a–5c.
+Update 2026-09-23: `[MEASUREMENT]` 15/16 are one net, 9.98 kΩ to GND,
+connected to leg 3 of the SOT-23 `XDt`. `[ASSUMPTION]` `XDt` is a P-MOSFET
+load switch. → Measurement request **M-005** (only needed for path A).
 
 ---
 

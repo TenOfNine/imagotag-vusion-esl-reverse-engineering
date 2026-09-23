@@ -46,21 +46,22 @@ destroys it.
 
 ---
 
-## Measurement status (2026-09-23, M-001 rounds 1–4)
+## Measurement status (2026-09-23, M-001 complete)
 
-Raw values: `../hardware/measurements.md`. FPC unplugged, board side only.
+Raw values: `../hardware/measurements.md`. FPC unplugged, board side only,
+OWON HDS242.
 
 | Pin | Standard | Measured | Status |
 |---:|---|---|---|
 | 2 | GDR | continuity to leg 1 of the `KM` SOT-23 | `[MEASUREMENT]` connection; "gate" is `[ASSUMPTION]` (usual SOT-23 pinout) |
-| 3 | RESE | continuity to GND | `[MEASUREMENT]` GND-connected; RESE vs. plain GND open (round 5d/5e) |
-| 8 | BS | continuity to GND | `[MEASUREMENT]` GND-connected. `[ASSUMPTION]` BS = low selects 4-wire SPI (with D/C line) |
-| 9–14 | BUSY, RST, D/C, CS, SCK, SDI | diode 0.56 V one way, OL the other | `[MEASUREMENT]` signature; `[ASSUMPTION]` these are the 6 MCU signal lines |
-| 15, 16 | VDDIO, VCI | same signature as 9–14, **no** continuity to battery plus | open (round 5a–5c) |
+| 3 | RESE | continuity to GND (0.19 Ω) and to leg 2 of `KM` | `[MEASUREMENT]`. Consistent with RESE at the MOSFET source; no shunt resolvable with this meter (pin 8 reads 0.17 Ω) |
+| 8 | BS | continuity to GND (0.17 Ω) | `[MEASUREMENT]` GND-connected. `[ASSUMPTION]` BS = low selects 4-wire SPI (with D/C line) |
+| **9–14** | BUSY, RST, D/C, CS, SCK, SDI | diode 0.56 V / OL; 1.85–1.9 MΩ to GND, steady; not connected to each other | `[MEASUREMENT]` **the 6 signal lines are on 9–14.** Which signal is on which pin: `[ASSUMPTION]` standard order, settled by the capture |
+| 15, 16 | VDDIO, VCI | bridged (0.18 Ω); 9.98 kΩ to GND after a capacitor-like rise; 16 → leg 3 of `XDt`; no continuity to battery plus | `[MEASUREMENT]` one supply net. `[ASSUMPTION]` switched by `XDt` (M-005) |
 | 17 | VSS | continuity to GND | `[MEASUREMENT]` |
 | 21 | PREVGH | diode 0.70 V (red on GND) | `[MEASUREMENT]` signature; see below |
 | 23 | PREVGL | diode 0.43 V (red on pin) | `[MEASUREMENT]` signature; see below |
-| 1, 4–7, 18–20, 22, 24 | NC/HLT, VGL, VGH, TSCL, TSDA, VDD, VPP, VSH, VSL, VCOM | OL both ways | `[MEASUREMENT]` no DC path — consistent with pins that only carry capacitors or are unconnected |
+| 1, 4–7, 18–20, 22, 24 | NC/HLT, VGL, VGH, TSCL, TSDA, VDD, VPP, VSH, VSL, VCOM | OL both ways | `[MEASUREMENT]` no DC path — consistent with pins that only carry capacitors or are unconnected. Not individually verified |
 
 `[ASSUMPTION]` The signatures on 21 and 23 match the boost topology of the
 Waveshare driver HAT: pin 21 (PREVGH) reaches GND through the MOSFET body
@@ -69,9 +70,10 @@ Schottky diodes in series (≈ 2 × 0.2 V), in the opposite direction.
 → **Test:** only an actual power-up measurement of the rails, which is not
 planned; the capture is what matters.
 
-**Summary:** everything measured so far is **consistent with the standard
-pinout above**; nothing contradicts it. It is not yet confirmed, because
-9–14 vs. 15/16 cannot be told apart by the diode test alone.
+**Summary:** M-001 decision rule row 1 applies — the six signal lines are
+contiguous on 9–14. The logic analyser may be connected to **pins 9–14 and
+GND only** (see `capture-protocol.md`). The hypothesis warning at the top
+stays for all pins whose *function* is still only assumed.
 
 ---
 

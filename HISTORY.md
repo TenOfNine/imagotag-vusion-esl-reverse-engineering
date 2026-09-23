@@ -480,6 +480,51 @@ RESE), added to `docs/measurement-requests.md`.
 
 ---
 
+## 2026-09-23 — Session 2: M-001 round 5 — signal lines are on 9–14
+
+### What was measured
+Maintainer, 2026-09-23, **OWON HDS242**, FPC unplugged, battery out. Tag:
+the one shown in `hardware/photos/` (no number assigned yet). This also
+answers the open questions from the previous two entries (instrument,
+FPC state).
+
+- `[MEASUREMENT]` 5a: pin 15 ↔ pin 16: continuity, 0.18 Ω.
+- `[MEASUREMENT]` 5b: resistance to GND: pins 9–14 **1.85–1.9 MΩ**,
+  steady; pins 15/16 rise to **9.98 kΩ** within 2 s.
+- `[MEASUREMENT]` 5c: pin 16 ↔ **leg 3 of the SOT-23 `XDt`**. The parts
+  marked `T0.` and `1R.` in session 1 were not found by the maintainer.
+- `[MEASUREMENT]` 5d: pin 3 ↔ **leg 2 of the `KM` SOT-23**.
+- `[MEASUREMENT]` 5e: pin 3 → GND 0.19 Ω, pin 8 → GND 0.17 Ω.
+
+### Interpretation
+- **15/16 are one supply net** (bridged, capacitor-like rise, 10 kΩ to
+  GND), clearly different from 9–14 (no capacitor, MΩ range, not bridged).
+  → Exactly **6 signal lines, contiguous on 9–14.** M-001 decision rule
+  row 1 applies: the standard pinout is confirmed for the position of the
+  signal group, GND (17), GDR (2) and VDDIO/VCI (15/16). M-001 closed.
+- `[ASSUMPTION]` `XDt` is a P-MOSFET load switch for the panel supply (leg 3
+  = drain, usual SOT-23 pinout). Together with "no pin on battery plus"
+  this supports F-14. Follow-up: M-005 (path A only).
+- `[ASSUMPTION]` The 9.98 kΩ on the supply net is a bleeder/pull-down that
+  discharges the panel supply when switched off.
+- Pin 3 sits on the `KM` source (leg 2, usual pinout) — consistent with
+  RESE. A shunt, if any, is below the resolution of the meter
+  (0.19 vs. 0.17 Ω is within lead/contact tolerance).
+
+### What it does not prove
+- Which signal is on which of the pins 9–14. That comes from the capture.
+- The function of the OL pins (1, 4–7, 18–20, 22, 24). Not needed for the
+  capture.
+
+### Next step
+- **M-004:** find solder points (vias) for pins 9–14 and GND.
+- Then `capture-protocol.md`, starting with the oscilloscope check in
+  section 2a — now including the voltage on pin 15 (VDDIO), which is the
+  logic level of all six signals.
+- M-005 (`XDt` legs) only if path A becomes relevant.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

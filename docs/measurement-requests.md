@@ -17,9 +17,11 @@ set the request here to `✅ done`.
 
 | ID | Topic | Status | Blocks |
 |---|---|---|---|
-| M-001 | Continuity-check the FPC pinout | 🟠 rounds 1–4 done, round 5 open | **everything** |
+| M-001 | Continuity-check the FPC pinout | ✅ done 2026-09-23 | — |
 | M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
+| M-004 | Solder points for FPC pins 9–14 + GND | 🔴 open | **the capture** |
+| M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 
 ---
 
@@ -35,9 +37,9 @@ set the request here to `✅ done`.
 For each of the 24 FPC pins, determine where it leads. Fill in the table in
 `../hardware/measurements.md`.
 
-**Status 2026-09-23:** counting direction settled (pin 1 towards the board
-centre, pin 24 at the board edge). Rounds 1–4 done, results in
-`../hardware/measurements.md`. **Round 5 is open.**
+**Status 2026-09-23: ✅ done.** Rounds 1–5 carried out, results in
+`../hardware/measurements.md`. Outcome: signal lines on **9–14**, supply
+(VDDIO/VCI) on 15/16, GND on 17 — decision rule row 1 applies.
 
 #### Preparation
 
@@ -185,6 +187,73 @@ Count the pads per side on the EFR32FG22.
 The pinout tables of the two packages are **not identical**. Without this
 information the SWD pins cannot be assigned reliably — and connecting the
 J-Link wrongly can damage the chip.
+
+---
+
+## M-004 — Solder points for FPC pins 9–14 and GND
+
+**Priority: high** — this is the last step before the capture.
+**Tool:** OWON HDS242, continuity mode
+**State:** unpowered, battery removed, FPC may stay unplugged
+
+### Task
+
+Find one solder point per signal that is easier to hit than the 0.5 mm
+connector tails — typically the vias in the fan-out to the right of the
+connector (see `capture-protocol.md`, section 1B).
+
+1. For each of FPC pins **9, 10, 11, 12, 13, 14**: find a via (or test pad,
+   or resistor pad) with continuity to that pin. Note where it is — best
+   mark it on a photo.
+2. Find a **GND point** as close as possible to those vias (battery minus
+   works, closer is better). Two GND points are better than one.
+3. Optional: a photo of the area with the vias marked, into
+   `../hardware/photos/`.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| A via found for all six pins | solder there, proceed with `capture-protocol.md` |
+| Some pins have no reachable via | solder those at the connector tails; take extra care not to bridge to pin 8 (GND) or pin 15 (supply) |
+
+### ⚠ Safety
+
+Pins 9–14 are bordered by pin 8 (GND) and pin 15 (panel supply) — no HV
+pin is directly adjacent. HV pins are 4, 5 and 20–24. When soldering at the
+connector, still check afterwards (unpowered) that no pin 9–14 has
+continuity to a neighbour.
+
+---
+
+## M-005 — Panel supply switch `XDt`
+
+**Priority: low** — only needed for path A (ESP32 on the carrier board).
+**Tool:** OWON HDS242, continuity + resistance
+**State:** unpowered, battery removed
+
+### Background
+
+`[MEASUREMENT]` Pin 16 (VCI, bridged to 15/VDDIO) connects to leg 3 of the
+SOT-23 `XDt`, and no FPC pin connects to battery plus.
+`[ASSUMPTION]` `XDt` is a P-channel MOSFET switching the panel supply
+(usual SOT-23 pinout: 1 = gate, 2 = source, 3 = drain), with the gate
+driven by an EFR32 GPIO.
+
+### Task
+
+| Test | Expected if the assumption holds |
+|---|---|
+| `XDt` leg 2 ↔ battery plus | continuity (source on the battery) |
+| `XDt` leg 1 ↔ battery plus, resistance | a pull-up resistor (e.g. 10 k–1 MΩ), keeps the switch off by default |
+| `XDt` leg 1 ↔ an EFR32 pin (optional) | continuity → which GPIO enables the panel supply |
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Source on battery plus, gate pulled up | path A: the ESP32 pulls the gate low (or feeds pin 15/16 directly) to power the panel |
+| Different picture | report back, reconsider the supply path |
 
 ---
 

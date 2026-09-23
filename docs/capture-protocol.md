@@ -47,16 +47,23 @@ are much more forgiving than the pads themselves.
 
 ## 2. Channel assignment
 
-| Channel | Signal |
-|---|---|
-| D0 | SCK |
-| D1 | SDI / MOSI |
-| D2 | CS |
-| D3 | D/C |
-| D4 | BUSY |
-| D5 | RST |
-| D6 | free |
-| D7 | **tie to GND** |
+| Channel | Signal | FPC pin (standard order, `[ASSUMPTION]`) |
+|---|---|---|
+| D0 | SCK | 13 |
+| D1 | SDI / MOSI | 14 |
+| D2 | CS | 12 |
+| D3 | D/C | 11 |
+| D4 | BUSY | 9 |
+| D5 | RST | 10 |
+| D6 | free | — |
+| D7 | **tie to GND** | 17 or any GND |
+
+`[MEASUREMENT]` The six signal lines are on FPC pins 9–14 (M-001). Their
+order within 9–14 is only assumed. If the channels turn out to be
+swapped, that is no problem — the decoder takes the channel mapping as
+arguments, and the right mapping can be found from the capture itself
+(SCK is the fastest-toggling line, BUSY is the one that stays high/low for
+seconds).
 
 **Do not leave D7 open** — known SLogic bug: an unused D7 can show a level
 inversion (see `TOOLS.md`).
@@ -72,8 +79,12 @@ Before connecting the SLogic for the first time, **only on the lines
 verified as MCU-connected in M-001**:
 
 1. Power up the tag, trigger a refresh.
-2. Read the high level on **SCK** with the oscilloscope.
-3. If possible, also the **SCK frequency** during a data block.
+2. Read the voltage on **FPC pin 15 (VDDIO)** during the refresh — this is
+   the panel's logic supply and therefore the high level of all signals.
+   `[MEASUREMENT]` pin 15 is only powered while the MCU switches it on
+   (no continuity to battery plus), so measure while the refresh runs.
+3. Read the high level on **SCK** with the oscilloscope.
+4. If possible, also the **SCK frequency** during a data block.
 
 | Result | Consequence |
 |---|---|
