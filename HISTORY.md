@@ -1045,6 +1045,24 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: EFR32 is QFN40 (M-003), SWD pin numbers researched
+
+- Maintainer sent a macro photo: `hardware/photos/pcb-top-mcu-macro.webp`.
+- `[PHOTO]` **10 pads per side** on top, left and bottom, right side in
+  shadow with ~10 visible → **QFN40**, `EFR32FG22C121F512GM40-C`.
+  Confirms the session-1 `[ASSUMPTION]`. Pin-1 dot at the top left.
+- `[RESEARCH]` xG22 QFN40: pin 22 = PA01 = **SWCLK**, pin 23 = PA02 =
+  **SWDIO** (search results quoting the EFR32BG22 datasheet and Silicon Labs
+  radio-board schematics BRD4182A/BRD4184; silabs.com itself was not
+  reachable from the Claude Code environment). FG22 pinout assumed equal
+  to BG22 QFN40 (`[ASSUMPTION]`).
+- `[ASSUMPTION]` With counter-clockwise numbering from the dot, pins 22/23
+  are the 2nd/3rd pad from the bottom on the right side of the photo.
+- Next: **M-011** — find reachable points for SWCLK/SWDIO by continuity,
+  then the non-destructive lock check (F-05). No unlock.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

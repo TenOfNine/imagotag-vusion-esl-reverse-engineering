@@ -19,7 +19,7 @@ set the request here to `✅ done`.
 |---|---|---|---|
 | M-001 | Continuity-check the FPC pinout | ✅ done 2026-09-23 | — |
 | M-002 | Four open vias = SWD? | 🟡 unlikely — maintainer: they are through-holes of the battery contact pads; SWD must be found elsewhere (after M-003) | J-Link access |
-| M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
+| M-003 | QFN package: 32 or 40 pins? | ✅ QFN40 (counted on macro photo 2026-09-23) | — |
 | M-004 | Solder points for FPC pins 9–14 + GND | ✅ done — see `pcb-bottom-capture-wiring-v2.webp`; mapping verified by captures | — |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
@@ -27,6 +27,7 @@ set the request here to `✅ done`.
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | 🟡 open | confidence in write bytes |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) | 🔴 open | **SWD lock check (F-05)** |
 
 ---
 
@@ -467,6 +468,52 @@ refresh there is no image data and no display init sequence to sniff.
 
 Reading with the phone is harmless. **Do not write** to the tag via NFC —
 unknown effect on the original firmware.
+
+---
+
+## M-011 — Reachable points for SWCLK / SWDIO
+
+**Priority: high** — prerequisite for the non-destructive lock check (F-05).
+**Tool:** OWON HDS242 (continuity), sharp probe tip or needle
+**State:** unpowered, battery out
+
+### Background
+
+`[PHOTO]` The EFR32 is a QFN40. `[RESEARCH]` On xG22 QFN40, **pin 22 =
+PA01 = SWCLK** and **pin 23 = PA02 = SWDIO** (see `docs/hardware.md`).
+`[ASSUMPTION]` Counting counter-clockwise from the pin-1 dot (top left in
+`hardware/photos/pcb-top-mcu-macro.webp`): pins 1–10 left side top→bottom,
+11–20 bottom left→right, **21–30 right side bottom→top** → pin 22 and 23
+are the **2nd and 3rd pad from the bottom on the right side**.
+
+### Task
+
+1. Confirm pin 1: the dot on the chip is at the top-left corner in the
+   macro photo — is that how you read it?
+2. On the **right side** of the QFN, touch the 2nd pad from the bottom
+   (pin 22) and follow continuity to **the nearest via, test pad or
+   resistor pad** — on the top side or the back side. Note/mark it.
+   Same for the 3rd pad from the bottom (pin 23).
+3. For both: check they do **not** beep to battery minus or battery plus.
+4. Optional: find **RESETn** the same way once its pin number is known
+   (I will look it up).
+5. A photo with the found points marked.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Both have a reachable via/pad | solder thin wires there → J-Link: SWCLK, SWDIO, GND, VTref (to battery plus) |
+| Only the QFN pads themselves | solder 0.1 mm wire directly to the pad toes — doable but delicate; decide together |
+| A pin beeps to GND/VDD | numbering assumption wrong → report back |
+
+### ⚠ Safety
+
+- Tag 02 only, never tag 01.
+- In the later J-Link step: **only** `commander device info` and
+  `commander security status`. **No** `device unlock`, **no** erase, **no**
+  flash (CLAUDE.md §5.2). The tag stays powered by its battery; VTref
+  only senses the voltage.
 
 ---
 

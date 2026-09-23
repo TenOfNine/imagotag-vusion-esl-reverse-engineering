@@ -66,6 +66,23 @@ Two package variants:
 | `EFR32FG22C121F512GM40-C` | QFN40, 5 × 5 mm | 26 |
 | `EFR32FG22C121F512GM32-C` | QFN32, 4 × 4 mm | 18 |
 
+**Update 2026-09-23:** `[PHOTO]` `pcb-top-mcu-macro.webp`: **10 pads per
+side** counted on top, left and bottom (right side in shadow, ~10 visible)
+→ **QFN40** (`EFR32FG22C121F512GM40-C`). Pin-1 dot top left in that photo.
+
+`[RESEARCH]` SWD on xG22 QFN40 (search results quoting the EFR32BG22
+datasheet and Silicon Labs radio-board schematics — the datasheet itself
+was not reachable from the Claude Code environment): **pin 22 = PA01 =
+SWCLK, pin 23 = PA02 = SWDIO**, pin 21 = PA00, pin 20 = PB00. The FG22 is
+assumed to share the BG22 QFN40 pinout (`[ASSUMPTION]`, same xG22 die
+family). RESETn pin number not found yet.
+`[ASSUMPTION]` Usual QFN numbering: pin 1 at the dot, counting
+counter-clockwise seen from the top → pins 21–30 on the side opposite the
+pin 1 side's neighbour, i.e. **pins 22/23 are the 2nd and 3rd pad from the
+bottom on the right-hand side** in `pcb-top-mcu-macro.webp`.
+→ **Test:** M-011 (continuity).
+
+(Older note:)
 `[ASSUMPTION]` **QFN40** is fitted, estimated from approx. 10 visible pads
 per side in the photo.
 → **Test:** count pads per side under a magnifier. 10 = QFN40, 8 = QFN32.

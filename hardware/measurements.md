@@ -107,13 +107,15 @@ Location: right half of the image, left of the `2 BOT` label.
 
 ## M-003 — QFN package
 
-**Date:** ⬜ not yet measured
+**Date:** 2026-09-23 — counted by Claude Code from the maintainer's macro
+photo `photos/pcb-top-mcu-macro.webp` (so this is `[PHOTO]`, not a
+measurement)
 
 | Question | Answer |
 |---|---|
-| Pads per side | ⬜ |
-| Total | ⬜ |
-| **Type** | ⬜ QFN32 (`…GM32-C`) / ⬜ QFN40 (`…GM40-C`) |
+| Pads per side | **10** (top, left, bottom clearly; right side in shadow, ~10 visible) |
+| Total | **40** |
+| **Type** | ✅ QFN40 (`…GM40-C`) |
 
 ---
 
