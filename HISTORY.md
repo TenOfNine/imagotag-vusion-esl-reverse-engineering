@@ -180,6 +180,44 @@ Nächster Schritt: Messauftrag **M-001** in `docs/measurement-requests.md`
 (Durchklingeln des FPC-Steckers), danach der erste Mitschnitt nach
 `docs/capture-protocol.md`.
 
+## 2026-09-23 — Session 2: Übernahme in Claude Code
+
+### Was versucht wurde
+Projekt aus dem Claude-Chat nach Claude Code (Cloud-Session) übernommen.
+Alle Dateien des Repos gelesen. Decoder mit dem synthetischen Mitschnitt
+geprüft:
+
+```bash
+python3 analysis/make_testcapture.py <scratch>/fake.csv
+python3 analysis/decode_spi.py <scratch>/fake.csv --busy D4 --rst D5 --out-prefix <scratch>/fake
+```
+
+Umgebung: Python 3.11, `numpy` und `pandas` mussten erst nachinstalliert
+werden (im Repo nirgends als Abhängigkeit vermerkt).
+
+### Ergebnis
+- Decoder läuft fehlerfrei durch: 10 Transaktionen, Reset, BUSY-Phase 0,50 s,
+  Fingerprint UC8179 66,7 %, zwei gleich große Blöcke à 2.400 Byte erkannt.
+  Laufzeit ca. 12 s für 10,4 Mio. Samples.
+  → Beweist nur, dass der Decoder seine eigene Testvorrichtung versteht.
+  Über das echte Panel sagt das **nichts** aus.
+- Auffällig am Testmitschnitt: `TRES` meldet `03 20 01 E0` (= 800 × 480),
+  die Blöcke haben aber nur 2.400 Byte (= 19.200 Pixel). Der Decoder
+  gleicht TRES und Blocklänge **nicht** gegeneinander ab. Beim echten
+  Mitschnitt wäre genau dieser Abgleich ein starker Plausibilitätstest.
+- Opcodes `0x15` und `0x60` werden im UC8179-Log ohne Klartext angezeigt.
+- Offene Skalierungsfrage: Ein Durchgang B (40 MSa/s × 30–60 s) ergibt
+  1,2–2,4 Mrd. Samples. Der Decoder lädt die CSV komplett über pandas —
+  ob das im RAM des Maintainer-Rechners durchläuft, ist ungeprüft.
+
+### Was daraus folgt
+Keine neue Hardware-Erkenntnis. Stand unverändert: **nichts gemessen**,
+M-001 bis M-003 offen.
+
+### Nächster Schritt
+Rückfragen an den Maintainer (Multimeter vorhanden? Betriebssystem für
+PulseView? FPC-Verlängerung vorhanden?), danach M-001.
+
 ---
 
 <!--
