@@ -16,7 +16,7 @@ Alles Weitere hängt daran. Die Tabelle in `pinout.md` ist reine Hypothese.
 
 ### 🔴 F-02 Welche Auflösung hat das Panel?
 
-`EL074TS1`, ca. 170 × 112 mm, dreifarbig. `[ANNAHME]` 800 × 480 ist eine
+`EL074TS1`, ca. 170 × 112 mm, vermutlich dreifarbig (siehe F-13). `[ANNAHME]` 800 × 480 ist eine
 reine Größenplausibilität, kein Wert aus einer Quelle.
 
 → Aus den Nutzdaten-Blocklängen im Mitschnitt rückrechnen:
@@ -102,6 +102,15 @@ Unklar. Möglicherweise Produktionstest des Panels. Niedrige Priorität.
 einigen Minuten zwischen Updates; ein Vollbild dauert 15–30 s.
 
 Für ein Dashboard unkritisch, für alles Dynamische ein Ausschlusskriterium.
+
+### ⚪ F-13 Ist das Panel wirklich dreifarbig — und welche Drittfarbe?
+
+`[ANNAHME]` S/W/Rot stammt aus der Erinnerung des Maintainers, nicht aus
+einer Beobachtung am Gerät. VUSION gibt es auch mit Gelb.
+
+→ Mitschnitt: zwei gleich große Frame-Blöcke = zwei Ebenen = dreifarbig.
+→ Die Drittfarbe zeigt erst ein angezeigtes Bild (Originaltag oder eigener
+Treiber).
 
 ---
 

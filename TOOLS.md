@@ -91,7 +91,9 @@ Für Zugriff auf den EFR32FG22.
 Angabe des Maintainers (2026-09-23): **„FTDI1232"**. Einen FTDI-Chip mit
 genau dieser Bezeichnung kenne ich nicht. `[ANNAHME]` Gemeint ist ein
 **FT232R(L)**-Modul — das wäre reines UART.
-→ **Prüfung:** Aufdruck auf dem größten IC des Adapters ablesen.
+Maintainer (2026-09-23): „hat nur UART, soweit ich weiß".
+→ Für das Projekt **nicht relevant**, da ein J-Link vorhanden ist. Wird nur
+dann weiter geklärt, falls der Adapter doch für SWD gebraucht würde.
 
 - **FT232R / FT231X / FT230X** → nur UART. Für SWD unbrauchbar.
 - **FT2232H / FT232H / FT4232H** → haben MPSSE, können SWD via OpenOCD

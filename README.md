@@ -1,12 +1,12 @@
 # ESL E-Ink Reverse Engineering
 
 Reverse Engineering eines **VusionGroup / SES-imagotag** Electronic Shelf Label,
-um das verbaute dreifarbige E-Ink-Panel unter eigener Kontrolle anzusteuern.
+um das verbaute (vermutlich dreifarbige) E-Ink-Panel unter eigener Kontrolle anzusteuern.
 
 ```
 Platine   RFRTx026D  (imagotag, 2,4 GHz)
 MCU       Silicon Labs EFR32FG22  (Marking: FG22 / C121GG / C026ZX / 2419)
-Panel     E Ink EL074TS1, ca. 170 × 112 mm, dreifarbig (S/W/Rot)
+Panel     E Ink EL074TS1, ca. 170 × 112 mm, vermutlich dreifarbig (S/W/Rot, unbestätigt)
 Interface 24-poliger FPC, 0,5 mm Raster
 ```
 

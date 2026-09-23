@@ -23,7 +23,7 @@ Die Infrastruktur besteht aus Server, Access Points und den Tags selbst.
 | Funkband | `2,4 GHz` (aufgedruckt) | `[FOTO]` |
 | Sonstige Bedruckung | `315 17 94V-0`, `13` | `[FOTO]` |
 | Lagen | `1 TOP` / `2 BOT` (aufgedruckt) | `[FOTO]` |
-| Seriennummer (QR) | `060RFRTX026D00A120O262007587` | `[MESSUNG]` |
+| Seriennummer (QR) | `060RFRTX026D00A120O262007587` | `[FOTO]` `pcb-top-overview.webp` |
 
 Die Seriennummer enthält erkennbar die Typenbezeichnung `RFRTX026D`,
 liefert darüber hinaus aber keine technische Information.
@@ -97,12 +97,18 @@ die Originalfirmware.** Werkzeug: Simplicity Commander + J-Link.
 |---|---|---|
 | Bezeichnung | `EL074TS1` | `[FOTO]` |
 | Größe | 7,4 Zoll (aus Typenbezeichnung `074`) | `[RECHERCHE]` |
-| Außenmaße | ca. 170 × 112 mm | `[MESSUNG]` |
-| Farben | dreifarbig, S/W/Rot | `[MESSUNG]` |
-| Seriennummer (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[MESSUNG]` |
+| Außenmaße | ca. 170 × 112 mm | `[MESSUNG]` Messschieber, Session 1 |
+| Farben | dreifarbig, S/W/Rot — **aus Erinnerung, unbestätigt** | `[ANNAHME]` |
+| Seriennummer (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[FOTO]` `panel-label-el074ts1.webp` |
 | Auflösung | **unbekannt** | — |
 | COG-Controller | **unbekannt** | — |
 | Waveform / LUT | **unbekannt** | — |
+
+`[ANNAHME]` Dreifarbig S/W/Rot stammt aus der Erinnerung des Maintainers.
+Die VUSION-Familie gibt es auch mit **Gelb** als Drittfarbe.
+→ **Prüfung:** Im Mitschnitt zwei gleich große Datenblöcke (z. B. `0x10` +
+`0x13`) sprechen für zwei Ebenen, also dreifarbig. Welche Drittfarbe,
+zeigt erst ein angezeigtes Bild.
 
 `[RECHERCHE]` **Kein öffentliches Datenblatt auffindbar.** Gesucht wurde
 direkt nach der Typenbezeichnung sowie über E-Ink- und Distributorenkataloge.

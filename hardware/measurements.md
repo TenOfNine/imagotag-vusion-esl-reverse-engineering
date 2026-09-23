@@ -101,4 +101,5 @@ Lage: rechte Bildhälfte, links neben der `2 BOT`-Beschriftung.
 
 | Datum | Was gemessen | Ergebnis |
 |---|---|---|
+| Session 1 (≤ 2026-09-22) | Außenmaße Panel, **Messschieber** (Angabe Maintainer 2026-09-23) | ca. 170 × 112 mm |
 | ⬜ | ⬜ | ⬜ |

@@ -300,6 +300,39 @@ verwendete Layout.
 
 ---
 
+## 2026-09-23 — Session 2: Rückfragen zu Session 1 beantwortet
+
+Ergänzt „Session 2: Korrektur von Evidenz-Markern aus Session 1".
+
+### QR-Codes → `[FOTO]`
+- Maintainer erinnert sich nicht, vermutet Dekodierung aus den Fotos.
+- `[FOTO]` Nachgeprüft mit OpenCV (`cv2.QRCodeDetector`) direkt an den
+  Fotos im Repo, Ergebnis reproduzierbar:
+  - `pcb-top-overview.webp`, `pcb-top-mcu.webp`, `panel-fpc-overview.webp`
+    → `060RFRTX026D00A120O262007587`
+  - `panel-label-el074ts1.webp` → `H7FZDSPQ0KXYZ5V00DAUAT`
+- Beide Werte stimmen mit Session 1 überein. Der Marker `[MESSUNG]` aus
+  Session 1 ist damit durch `[FOTO]` ersetzt (in `docs/hardware.md`).
+
+### Außenmaße → `[MESSUNG]` bestätigt
+- Maintainer: mit **Messschieber** gemessen, in Session 1. Genaues Datum
+  nicht mehr bekannt. Zeile in `hardware/measurements.md` nachgetragen.
+
+### Dreifarbig → `[ANNAHME]`
+- Maintainer: Farbe **nur aus der Erinnerung**. Bestätigung erst, wenn das
+  Display etwas anzeigt.
+- `[ANNAHME]` Dreifarbig S/W/Rot. VUSION gibt es laut Recherche aus
+  Session 1 auch mit Gelb.
+  → **Prüfung:** Zwei gleich große Frame-Blöcke im Mitschnitt = zwei Ebenen.
+  Die Drittfarbe zeigt erst ein angezeigtes Bild. Neu als F-13 in
+  `docs/open-questions.md`.
+
+### FTDI
+- Maintainer: Adapter kann „nur UART, soweit ich weiß". Nicht geprüft, aber
+  für das Projekt irrelevant (J-Link vorhanden). Nicht weiter verfolgt.
+
+---
+
 <!--
 VORLAGE FÜR NEUE EINTRÄGE — kopieren und ausfüllen:
 
