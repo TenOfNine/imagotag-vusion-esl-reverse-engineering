@@ -833,6 +833,42 @@ edges in the M-008 captures.
 
 ---
 
+## 2026-09-23 — Session 3: Product identified as VUSION 7.4 BWRY (EDG3-0740A)
+
+### Maintainer statement
+- The tag is a **VUSION 7.4 BWRY GU140**, exact model **EDG3-0740A**.
+  Source of this information not stated (presumably the housing label) —
+  a photo of the label would make it `[PHOTO]`.
+
+### Research
+- `[RESEARCH]` FCC ID `2ACQM-EDG3-0740-A` belongs to "SES-imagotag GmbH
+  VUSION 7.4 EDG3-0740-A" (search results; fccid.io not reachable from the
+  Claude Code environment).
+- `[RESEARCH]` VUSION 7.4 **BWR**: 800 × 480 px, 126 dpi (datasheet, via
+  search snippet). Geometry check: 161 × 97 mm active area, 7.40" diagonal
+  — fits the measured 170 × 112 mm outline.
+- `[RESEARCH]` Four-colour BWRY e-paper of this class typically uses
+  2 bpp in a single data plane (e.g. JD7966x-driven Good Display panels).
+
+### What follows
+- **Corrects** the entry "Session 2: Session 1 follow-up questions
+  answered": the colour question is now "four colours", not "red or
+  yellow". `[ASSUMPTION]` B/W/R/Y until the capture or the display shows it.
+- Expected image payload changes: **one block of ~96,000 bytes at 2 bpp**
+  instead of two 48,000-byte planes. The controller is likely **not** a
+  plain UC8179/SSD16xx three-colour type — the fingerprint table in the
+  decoder does not contain a BWRY family yet.
+- `decode_spi.py` got a `--bpp` option (resolution candidates at 2 bpp) and
+  the TRES check now tests 1 and 2 bpp. Re-tested on the synthetic capture:
+  outputs unchanged at the default `--bpp 1`.
+- The 70-byte read at boot may be panel-specific data (OTP/waveform
+  settings) — typical for multi-colour panels, still `[ASSUMPTION]`.
+
+### Next step
+Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

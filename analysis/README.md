@@ -30,6 +30,7 @@ python3 analysis/decode_spi.py captures/<file>.csv \
 | `--lsb-first` | off | if LSB comes first |
 | `--cs-active-high` | off | if CS is inverted |
 | `--rate` | from CSV | sample rate in Hz, if not in the header |
+| `--bpp` | 1 | bits per pixel for the resolution candidates (2 for a four-colour BWRY panel) |
 | `--out-prefix` | — | writes report files |
 
 ### What is output
@@ -128,8 +129,8 @@ For plausibility checks:
 |---|---|
 | SPI clock | 1 – 4 MHz |
 | SPI mode | 0 (CPOL=0, CPHA=0), MSB first, CS active low |
-| Frame blocks | 2 of equal size (B/W plane + red plane) |
-| Block size at 800×480 | 48,000 bytes per plane |
+| Frame blocks | three-colour: 2 of equal size (B/W + red plane, 1bpp); **four-colour BWRY (our panel, `[ASSUMPTION]`): 1 block at 2bpp** |
+| Block size at 800×480 | 48,000 bytes per 1bpp plane; **96,000 bytes at 2bpp** |
 | BUSY phase after DRF | 15 – 30 s |
 
 If the measured values deviate from these, that is **an insight** and

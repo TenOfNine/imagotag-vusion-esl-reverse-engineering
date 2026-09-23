@@ -156,7 +156,7 @@ For plausibility checks, so that a failure is noticed early:
 |---|---|
 | SPI clock | 1 – 4 MHz (typical for e-paper) |
 | SPI mode | Mode 0 (CPOL=0, CPHA=0), MSB first, CS active low |
-| Payload at 800×480, 2 planes | approx. 96 kB |
+| Payload at 800×480 (2 × 1bpp or 1 × 2bpp) | approx. 96 kB either way |
 | Pure transfer time for that at 2 MHz | approx. 0.4 s |
 | Total refresh duration (three-colour) | **15 – 30 s** |
 

@@ -100,12 +100,28 @@ the original firmware.** Tool: Simplicity Commander + J-Link.
 | Designation | `EL074TS1` | `[PHOTO]` |
 | Size | 7.4 inch (from the type designation `074`) | `[RESEARCH]` |
 | Outer dimensions | approx. 170 × 112 mm | `[MEASUREMENT]` calliper, session 1 |
-| Colours | three-colour, B/W/red — **from memory, unconfirmed** | `[ASSUMPTION]` |
+| Product | **VUSION 7.4 BWRY GU140**, model **EDG3-0740A** | maintainer statement (2026-09-23); FCC ID `2ACQM-EDG3-0740-A` `[RESEARCH]` |
+| Colours | **four-colour B/W/R/Y** (from "BWRY" in the product name) — display not yet seen | `[ASSUMPTION]` |
 | Serial number (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[PHOTO]` `panel-label-el074ts1.webp` |
-| Resolution | **unknown** | — |
+| Resolution | 800 × 480 at 126 dpi for the VUSION 7.4 **BWR**; for BWRY not confirmed | `[RESEARCH]` / `[ASSUMPTION]` |
 | COG controller | **unknown** | — |
 | Waveform / LUT | **unknown** | — |
 
+**Update 2026-09-23:** maintainer statement — the tag is a **VUSION 7.4
+BWRY GU140, model EDG3-0740A**. `[ASSUMPTION]` BWRY = black/white/red/
+yellow, i.e. a **four-colour** panel. Such panels usually take **2 bits
+per pixel in one data plane** instead of two 1-bit planes — at 800 × 480
+that is one block of **96,000 bytes** (not 2 × 48,000).
+`[RESEARCH]` The VUSION 7.4 BWR datasheet gives 800 × 480 px at 126 dpi
+(https://www.glds.net/file/datasheet_ESL_VUSION_7_4_BWR_2_4GHz.pdf, via
+search result; not opened). 800/126 × 480/126 in = 161 × 97 mm, diagonal
+7.40" — consistent with the measured 170 × 112 mm outline.
+`[RESEARCH]` Known BWRY panels of this size class use controllers such as
+the JD7966x family (e.g. Good Display GDEM075F53, 800 × 480 BWRY,
+https://www.good-display.com/product/546.html). Nothing says this panel
+uses one of them.
+
+(Older note, superseded:)
 `[ASSUMPTION]` Three-colour B/W/red comes from the maintainer's memory.
 The VUSION family also exists with **yellow** as the third colour.
 → **Test:** two equally sized data blocks in the capture (e.g. `0x10` +

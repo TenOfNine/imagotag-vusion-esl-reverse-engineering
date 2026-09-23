@@ -20,6 +20,10 @@ which pin within 9–14 → the capture settles it. See `pinout.md`,
 
 ### 🔴 F-02 What resolution does the panel have?
 
+**Update 2026-09-23:** `[RESEARCH]` VUSION 7.4 BWR: 800 × 480 px, 126 dpi
+(datasheet, see `hardware.md`). For the BWRY version still to be confirmed
+from the capture — expect one block of 96,000 bytes at 2bpp.
+
 `EL074TS1`, approx. 170 × 112 mm, probably three-colour (see F-13).
 `[ASSUMPTION]` 800 × 480 is purely a size plausibility, not a value from a
 source.
@@ -117,6 +121,11 @@ several minutes between updates; a full frame takes 15–30 s.
 Uncritical for a dashboard, an exclusion criterion for anything dynamic.
 
 ### ⚪ F-13 Is the panel really three-colour — and which third colour?
+
+**Update 2026-09-23:** maintainer statement: product is a **VUSION 7.4
+BWRY GU140 (EDG3-0740A)** → most likely **four colours B/W/R/Y**
+(`[ASSUMPTION]` until a capture shows one 2bpp frame block or the display
+shows yellow). Original text below.
 
 `[ASSUMPTION]` B/W/red comes from the maintainer's memory, not from an
 observation of the device. VUSION also exists with yellow.

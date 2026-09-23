@@ -96,6 +96,23 @@ In addition, on the contact-side issue:
 
 ---
 
+## The tag itself
+
+- **FCC ID 2ACQM-EDG3-0740-A — SES-imagotag VUSION 7.4, EDG3-0740-A**
+  https://fccid.io/2ACQM-EDG3-0740-A
+  → FCC filing incl. user manual; not reachable from the Claude Code
+  environment, content not yet read.
+- **VUSION 7.4 BWR datasheet (2.4 GHz)**
+  https://www.glds.net/file/datasheet_ESL_VUSION_7_4_BWR_2_4GHz.pdf
+  → 800 × 480 px, 126 dpi (value from the search result snippet; the PDF
+  itself was not opened). BWR, not BWRY.
+- **Good Display GDEM075F53** — 7.5" 800 × 480 BWRY, JD79665 driver
+  https://www.good-display.com/product/546.html
+  → example of the controller class used for BWRY panels; no link to our
+  panel established.
+
+---
+
 ## Manufacturer / product family
 
 - **VusionGroup (formerly SES-imagotag)** — https://www.vusion.com/

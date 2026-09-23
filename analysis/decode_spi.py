@@ -417,7 +417,8 @@ def declared_resolutions(cap: Capture) -> list[tuple[int, int, int, str]]:
 # Reporting
 # --------------------------------------------------------------------------
 
-def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
+def report(cap: Capture, clock: float | None, prefix: str | None,
+           bpp: int = 1) -> None:
     p = print
     p("=" * 72)
     p("CAPTURE")
@@ -480,7 +481,7 @@ def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
     else:
         for t in blocks:
             cmd = f"0x{t.cmd:02X}" if t.cmd is not None else "----"
-            p(f"  cmd {cmd}   {t.n_data:>10,} bytes   = {t.n_data * 8:>12,} pixels (1bpp)")
+            p(f"  cmd {cmd}   {t.n_data:>10,} bytes   = {t.n_data * 8 // bpp:>12,} pixels ({bpp}bpp)")
 
         sizes = sorted({t.n_data for t in blocks})
         p("")
@@ -489,7 +490,7 @@ def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
         for s in sizes:
             n = sum(1 for t in blocks if t.n_data == s)
             p(f"  block size {s:,} bytes  (x{n})")
-            pairs = divisor_pairs(s * 8)
+            pairs = divisor_pairs(s * 8 // bpp)
             if not pairs:
                 p("      no plausible width x height factorisation")
             for w, h in pairs[:6]:
@@ -498,7 +499,10 @@ def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
 
         if len(blocks) >= 2 and len({t.n_data for t in blocks}) == 1:
             p(f"  -> {len(blocks)} equally sized blocks: consistent with a")
-            p("     multi-plane (e.g. B/W + RED) three-colour panel.")
+            p("     multi-plane panel (e.g. B/W + RED planes at 1bpp).")
+        elif len(blocks) == 1:
+            p("  -> a single frame block: consistent with one plane holding")
+            p("     all colours (e.g. 2bpp for a four-colour BWRY panel).")
 
     # ---- TRES vs. block length ------------------------------------------
     declared = declared_resolutions(cap)
@@ -509,13 +513,15 @@ def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
         p("=" * 72)
         sizes = sorted({t.n_data for t in blocks})
         for idx, w, h, layout in declared:
-            expect = (w * h + 7) // 8
+            expect = {d: (w * h * d + 7) // 8 for d in (1, 2)}
             p(f"  [{idx:5d}] 0x61 as {layout} layout: {w} x {h}"
-              f"  -> {expect:,} bytes per 1bpp plane")
+              f"  -> {expect[1]:,} bytes at 1bpp, {expect[2]:,} bytes at 2bpp")
+            hits = [d for d in (1, 2) if expect[d] in sizes]
             if not sizes:
                 p("      no frame blocks to compare against")
-            elif expect in sizes:
-                p("      MATCH: a frame block has exactly this length")
+            elif hits:
+                p(f"      MATCH at {' and '.join(f'{d}bpp' for d in hits)}:"
+                  " a frame block has exactly this length")
             else:
                 p(f"      MISMATCH: frame blocks are {', '.join(f'{s:,}' for s in sizes)}"
                   " bytes")
@@ -610,6 +616,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cs-active-high", action="store_true")
     ap.add_argument("--rate", type=float, default=None,
                     help="sample rate in Hz, if not in the CSV header")
+    ap.add_argument("--bpp", type=int, default=1, choices=[1, 2],
+                    help="bits per pixel for resolution candidates "
+                         "(1 = one plane per colour, 2 = four-colour BWRY)")
     ap.add_argument("--out-prefix", default=None,
                     help="write report files with this path prefix")
     a = ap.parse_args(argv)
@@ -631,7 +640,7 @@ def main(argv: list[str] | None = None) -> int:
                  a.busy if a.busy in df.columns else None,
                  a.rst if a.rst in df.columns else None,
                  cpol, cpha, a.lsb_first, a.cs_active_high, rate)
-    report(cap, clock, a.out_prefix)
+    report(cap, clock, a.out_prefix, a.bpp)
     return 0
 
 
