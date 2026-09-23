@@ -290,6 +290,16 @@ auch nach der Änderung rund 7 GB RAM allein für die Rohdaten.
 
 ---
 
+## 2026-09-23 — Session 2: Korrektur zu „Decoder erweitert"
+
+Die TRES-Payload-Layouts (UC8179: 4 Byte, IL0373: 3 Byte) waren dort als
+`[RECHERCHE]` markiert, ohne Quellenlink. Richtig ist `[ANNAHME]`.
+→ **Prüfung:** Gegen die Datenblätter von UC8179 und IL0373 abgleichen,
+oder beim echten Mitschnitt: Ergibt der Abgleich `MATCH`, stützt das das
+verwendete Layout.
+
+---
+
 <!--
 VORLAGE FÜR NEUE EINTRÄGE — kopieren und ausfüllen:
 
