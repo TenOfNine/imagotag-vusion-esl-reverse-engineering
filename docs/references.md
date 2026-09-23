@@ -24,6 +24,12 @@ documents refer to here.
 
 - **Project page** — https://openepaperlink.de/
 - **Tag_FW_EFR32xG22** — https://github.com/OpenEPaperLink/Tag_FW_EFR32xG22
+  → Read on 2026-09-23 (shallow clone): Gecko SDK 4.4.1 + slc build,
+  board table in `firmware/oepl_efr32_hwtypes.c` (dev slots `0xF0…0xFA`),
+  display drivers incl. `ucbwry` (four-colour), `uc8179`, `uc8159`.
+  UC81xx command defines there: `0x70` REVISION, `0x90` PARTIAL_WINDOW,
+  `0x92` PARTIAL_OUT, `0xA2` READ_OTP. Licence CC BY-NC-SA 4.0 (+ Zlib
+  for SDK files).
   → Firmware for EFR32xG22-based tags. Supports Solum M3 (autodetect)
   and Pricer HD150 (via modchip). **No Vusion port.**
   Contains the note that unlocking factory-locked devices requires a

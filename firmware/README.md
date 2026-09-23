@@ -1,5 +1,10 @@
 # firmware — still empty
 
+> **Update 2026-09-23:** the maintainer chose **path B** — a custom
+> firmware on the original EFR32, no ESP32. Current plan, open decisions
+> and bring-up steps: `../docs/firmware-plan.md`. The path A section below
+> is kept for reference.
+
 The driver code is created here **once the capture is available**.
 
 Until then there is nothing to do here. A driver based on an unverified

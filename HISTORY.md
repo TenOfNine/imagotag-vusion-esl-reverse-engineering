@@ -1063,6 +1063,84 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: Path B chosen — custom firmware on the EFR32
+
+### Maintainer decision
+- **Custom firmware flashed onto the original EFR32.** No ESP32, no
+  hardware swap, "everything stays standard". Path B (F-09).
+- Both tracks in parallel: SWD read-out (maintainer, takes a while —
+  vias for pins 22/23 probably found) and firmware concept (Claude Code).
+  How to continue is decided **after** the SWD result.
+
+### Research
+- `[RESEARCH]` OpenEPaperLink `Tag_FW_EFR32xG22` (shallow clone): full
+  EFR32xG22 tag firmware with a board table and a four-colour `ucbwry`
+  driver; its UC8179/UC8159 drivers define `0x70` REVISION, `0x90`
+  PARTIAL_WINDOW, `0x92` PARTIAL_OUT, `0xA2` READ_OTP — the same opcodes
+  as in our boot capture.
+- `[ASSUMPTION]` The panel controller is an **UltraChip UC81xx-family BWRY
+  variant.** → Test: replay the boot reads from our own firmware.
+- `[RESEARCH]` OEPL expects an external SPI flash for image storage.
+  Whether our board has one is unknown (new F-16).
+- The SO-8 marking `8K417 / 0E47AH` could not be identified by web search.
+
+### Conflict raised by Claude Code (not resolved)
+- Flashing needs either an unlocked chip (back up first) or an unlock,
+  which erases the original firmware. The display init/refresh has never
+  been captured and cannot be (M-010 negative). An unlock would therefore
+  break `CLAUDE.md` §5.2. → F-15: **maintainer decision required** if the
+  chip turns out to be locked; the exception must be written into
+  `CLAUDE.md` first.
+
+### Written
+- `docs/firmware-plan.md`: lock-state table, OEPL as base, required
+  information, bring-up steps 0–5 (step 3 = replay of the boot reads as a
+  zero-risk check of pin map and SPI), toolchain notes (slc/Commander not
+  reachable from the Claude Code environment).
+- M-012 (EFR32 pin map incl. SO-8 identification), F-15, F-16.
+
+---
+
+## Open thread at the end of session 3 (2026-09-23)
+
+Resume point. Supersedes "Open thread at the end of session 2".
+
+### Where we stand
+- Pinout FPC 9–14 **fully confirmed** by captures: 9 BUSY, 10 RST,
+  11 D/C, 12 CS, 13 SCK, 14 bidirectional SDA. Capture wiring documented
+  (`pcb-bottom-capture-wiring-v2.webp`, colour table in the entry above).
+- Analyser rule: ≥ 20 MSa/s only with D0–D3 (M-008).
+- Boot sequence decoded (`analysis/out/…_boot-init-4ch_20MHz_frames.txt`):
+  `70`→`0D 04 01`, `90`, `A2`+`00 15 00 00 E0`, `92`→70-byte OTP block
+  with panel serial fragment `SPQ0KX` and `01 E0 03 20` (800 × 480).
+- **No refresh** after boot (134 s) and none via NFC (NFC = write-locked
+  NXP NTAG with a retailer URL).
+- Product: VUSION 7.4 **BWRY** GU140, EDG3-0740A — four colours
+  (assumption until seen).
+- EFR32 = **QFN40**; SWCLK pin 22 (PA01), SWDIO pin 23 (PA02) `[RESEARCH]`.
+- **Path B chosen** (custom firmware on the EFR32), plan in
+  `docs/firmware-plan.md`.
+
+### Waiting for the maintainer
+1. **SWD:** confirm the vias for pins 22/23 (M-011), connect J-Link
+   (SWCLK, SWDIO, GND, VTref), run **only** `commander device info` and
+   `commander security status` on **tag 02**. Report the output.
+2. If not locked: `commander readmem` backup of the whole flash
+   (kept locally, **not** in the repo).
+3. If locked: decision on F-15 before anything else.
+4. M-012 (EFR32 pin map, SO-8 identification) — needed for the board
+   definition regardless of the lock state.
+5. Optional: M-009 (40 MSa/s re-capture), M-005 (`XDt`).
+
+### What Claude Code does next time
+- Read this entry, `docs/firmware-plan.md`, `docs/open-questions.md`.
+- With the SWD result + M-012: write the board definition and the
+  bring-up firmware for steps 1–3 (LED, panel power/reset/BUSY, replay of
+  the boot reads) — verify against the boot capture before any panel
+  init.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

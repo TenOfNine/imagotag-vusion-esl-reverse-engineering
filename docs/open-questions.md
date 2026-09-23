@@ -110,6 +110,10 @@ the panel. Still open: whether a refresh happens later (capture was only
 
 ### ⚪ F-09 Path A or path B?
 
+**Decided 2026-09-23 (maintainer): path B** — custom firmware on the
+original EFR32, no ESP32, board stays standard. Plan:
+`docs/firmware-plan.md`. Open: see F-15, F-16.
+
 | | Path A (ESP32 on carrier board) | Path B (OpenEPaperLink port) |
 |---|---|---|
 | Wireless | no, wired | yes, battery-powered |
@@ -167,6 +171,23 @@ itself.
 Update 2026-09-23: `[MEASUREMENT]` 15/16 are one net, 9.98 kΩ to GND,
 connected to leg 3 of the SOT-23 `XDt`. `[ASSUMPTION]` `XDt` is a P-MOSFET
 load switch. → Measurement request **M-005** (only needed for path A).
+
+### 🔴 F-15 Is the chip locked — and if so, may tag 02's firmware be erased?
+
+Flashing a custom firmware needs either an unlocked chip (then back up
+first) or an unlock, which **erases** the original firmware. The refresh /
+init sequence was never captured and cannot be (M-010), so an unlock
+conflicts with `CLAUDE.md` §5.2.
+→ Lock state: M-011 + `commander security status`.
+→ If locked: **maintainer decision**, written into `CLAUDE.md`, before
+any unlock.
+
+### 🟡 F-16 Does the board have external SPI flash?
+
+OEPL stores received images in external SPI flash. The SO-8 `8K417` was
+assumed to be the NFC chip (session 1); the NFC read showed an NXP
+NTAG-type tag. Could also be an SPI flash.
+→ M-012 item 9.
 
 ---
 

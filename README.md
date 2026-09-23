@@ -42,11 +42,13 @@ therefore still open and will be made once the init sequence is available.
 See `HISTORY.md` for the full history and `docs/open-questions.md` for
 what is still open.
 
-Short version (end of session 2, 2026-09-23): FPC pinout measured (signal
-lines on pins 9–14), first captures taken on tag 02. BUSY, RST, D/C and CS
-behave as expected; **SCK and the data line are not yet captured cleanly**
-because of wiring problems (M-007). The exact resume point is the entry
-"Open thread at the end of session 2" in `HISTORY.md`.
+Short version (session 3, 2026-09-23): FPC pinout measured and all six
+signal roles confirmed by captures; the tag's boot sequence is decoded
+(panel ID/OTP read, 800 × 480). The tag never refreshes without its base
+station, so the display init cannot be sniffed. **Path B chosen: custom
+firmware on the original EFR32** — plan in `docs/firmware-plan.md`,
+waiting for the SWD lock check. The exact resume point is the entry
+"Open thread at the end of session 3" in `HISTORY.md`.
 
 ---
 

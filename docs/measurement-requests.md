@@ -27,7 +27,8 @@ set the request here to `✅ done`.
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | 🟡 open | confidence in write bytes |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
-| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) | 🔴 open | **SWD lock check (F-05)** |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) | 🟠 maintainer: probably found the right vias; J-Link read-out pending | **SWD lock check (F-05)** |
+| M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open | **custom firmware board definition** |
 
 ---
 
@@ -514,6 +515,54 @@ are the **2nd and 3rd pad from the bottom on the right side**.
   `commander security status`. **No** `device unlock`, **no** erase, **no**
   flash (CLAUDE.md §5.2). The tag stays powered by its battery; VTref
   only senses the voltage.
+
+---
+
+## M-012 — EFR32 pin map for the custom firmware
+
+**Priority: high for path B** — the board definition of the firmware is
+exactly this table. Background: `docs/firmware-plan.md`.
+**Tool:** OWON HDS242 (continuity), sharp probe / needle
+**State:** unpowered, battery out, FPC may be unplugged
+
+### Background
+
+`[PHOTO]` EFR32 is QFN40, pin-1 dot top left in
+`hardware/photos/pcb-top-mcu-macro.webp`. `[ASSUMPTION]` Numbering
+counter-clockwise: 1–10 left (top→bottom), 11–20 bottom (left→right),
+21–30 right (bottom→top), 31–40 top (right→left).
+
+### Task
+
+For each item, find the **QFN pin number** it connects to (directly or via
+a resistor — note resistors):
+
+| # | From | To find |
+|---|---|---|
+| 1 | FPC pin 9 (BUSY) | QFN pin |
+| 2 | FPC pin 10 (RST) | QFN pin |
+| 3 | FPC pin 11 (D/C) | QFN pin |
+| 4 | FPC pin 12 (CS) | QFN pin |
+| 5 | FPC pin 13 (SCK) | QFN pin |
+| 6 | FPC pin 14 (SDA) | QFN pin |
+| 7 | `XDt` leg 1 (presumed gate of the panel supply switch) | QFN pin (M-005) |
+| 8 | each LED (clear + yellow, back side), both pads | QFN pin or supply |
+| 9 | SO-8 `8K417`: each of its 8 pins | QFN pin / GND / VDD / NFC coil |
+
+Tip: the capture wires are already on the vias of FPC 9–14 — probe from
+the wire end to the QFN pad toes.
+
+For item 9: if **two** SO-8 pins go to the NFC coil, it is the NFC chip.
+If four pins go to the EFR32 and one each to GND/VDD, it is probably an
+**SPI flash** — important, because OEPL keeps images in external flash.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| All display lines found | Claude Code writes the board definition + the step-1–3 bring-up firmware |
+| SO-8 is SPI flash | OEPL image storage works as designed |
+| SO-8 is the NFC chip, no flash found | images must live in internal flash → firmware change needed |
 
 ---
 
