@@ -748,6 +748,57 @@ then repeat pass B.
 
 ---
 
+## Open thread at the end of session 2 (2026-09-23)
+
+Session paused by the maintainer. This entry is the resume point.
+
+### Where we stand
+- **Pinout (M-001, done):** `[MEASUREMENT]` 6 signal lines on FPC pins
+  **9–14**, GND 17 (also 3, 8), GDR 2, VDDIO/VCI 15+16 (switched supply via
+  SOT-23 `XDt`, not on battery plus). Pin 1 towards the board centre.
+- **Roles from the captures:** `[CAPTURE]` 9 = BUSY (goes high ~50 ms after
+  reset, only with panel), 10 = RST (10 ms low pulse), 11 = D/C,
+  12 = CS (one CS frame per byte). `[ASSUMPTION]` 13 = SCK, 14 = data
+  (SDI, possibly bidirectional).
+- **Boot behaviour:** `[CAPTURE]` after battery insertion the tag resets the
+  panel, waits for BUSY, sends 82 byte frames in three transactions
+  (1+3, 2+5, 1+70), then powers the panel down. **No refresh within 27 s**,
+  nothing visible on the panel. Without panel: three ~10 s BUSY timeouts.
+- **Captures in `captures/`:** `…_boot-overview_2MHz.sr` (no panel),
+  `…_boot-overview-panel_2MHz.sr` (panel, SCK visible, no data),
+  `…_boot-init_20MHz.sr` (panel, 20 MSa/s, SCK and data flat).
+- **Blocking problem:** the wires for pin 13 (SCK) and pin 14 (data) —
+  M-007. Photo of the current wiring:
+  `hardware/photos/pcb-bottom-capture-wiring.webp` (7 wires; green joint
+  may not sit on a via).
+
+### Waiting for the maintainer
+1. **Colour → channel → FPC pin** mapping of the 7 wires in the photo.
+2. **M-007 extended:** per wire, continuity from the SLogic end to its FPC
+   pin (must beep) and to battery minus (must not beep, except GND);
+   neighbour shorts 12↔13, 13↔14, 14↔15.
+3. Fix wiring, then a **short pass A (2 MSa/s, ~15 s)** as a wiring check:
+   all six lines must show edges, the data line *during* the transfers.
+4. Then **pass B: 20 MSa/s, 30 s**, battery inserted after start →
+   byte values of the 82-byte init sequence.
+5. Later: **long pass A (2 MSa/s, ≥ 5 min)** to see whether a refresh ever
+   happens after boot (F-08). If not: plan B (NFC) or another trigger.
+6. Still open, lower priority: scope check of pin 15 level (§2a),
+   M-002/M-003 (SWD), M-005 (`XDt`), strain relief and a second GND lead.
+
+### What Claude Code does next time
+- Read this entry, `docs/open-questions.md`, `docs/measurement-requests.md`.
+- For new `.sr` files: `python3 analysis/sr_overview.py <file>` first
+  (needs `numpy`), store the file in `captures/` with the naming scheme,
+  commit with `git add -f`.
+- Once SCK + data are captured: extend the decoder to read `.sr` directly
+  or export CSV, decode the 82 frames, identify the controller (F-03).
+- Working rules agreed this session: chat in German, repo in English,
+  push directly to `main`, ask before large changes; tag 01 = reference
+  unit (untouched), tag 02 = work tag.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

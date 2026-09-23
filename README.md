@@ -42,9 +42,11 @@ therefore still open and will be made once the init sequence is available.
 See `HISTORY.md` for the full history and `docs/open-questions.md` for
 what is still open.
 
-Short version: the hardware is identified, **nothing has been measured
-electrically yet**. The next step is measurement request M-001, then the
-first capture according to `docs/capture-protocol.md`.
+Short version (end of session 2, 2026-09-23): FPC pinout measured (signal
+lines on pins 9–14), first captures taken on tag 02. BUSY, RST, D/C and CS
+behave as expected; **SCK and the data line are not yet captured cleanly**
+because of wiring problems (M-007). The exact resume point is the entry
+"Open thread at the end of session 2" in `HISTORY.md`.
 
 ---
 
