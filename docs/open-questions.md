@@ -74,6 +74,12 @@ The whole sniffing strategy relies on it. If not: plan B via NFC.
 
 → Becomes apparent at the first recording attempt.
 
+Update 2026-09-23: `[CAPTURE]` `2026-09-23_tag02_boot-overview-panel_2MHz.sr`
+— within 27 s after battery insertion **no refresh**: the tag initialises
+the panel (~80 bytes), then powers it down. Maintainer: nothing visible on
+the panel. Still open: whether a refresh happens later (capture was only
+28 s) → a longer pass A (≥ 5 min).
+
 ---
 
 ## Downstream — only relevant after the capture

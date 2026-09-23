@@ -613,6 +613,72 @@ repeat pass A. Pass B only once BUSY shows activity.
 
 ---
 
+## 2026-09-23 — Session 2: Pass A with panel — BUSY works, no refresh, no data on pin 14
+
+### What was tried
+- Tag 02, panel plugged in, SLogic 2 MSa/s, 28.0 s. Battery inserted after
+  the recording had started. Channel names as before (D0 = pin 9 …
+  D5 = pin 14).
+- Raw file: `captures/2026-09-23_tag02_boot-overview-panel_2MHz.sr`
+  (sha256 `7a1370fc…7a87`, archive timestamp 2026-09-23 18:42:52).
+  Overview: `analysis/out/2026-09-23_tag02_boot-overview-panel_2MHz_overview.txt`.
+- Maintainer statement: **nothing was visible on the panel.**
+
+### Result
+- `[CAPTURE]` 0.81 s: pin 14 high (battery in). 5.8585 s: pin 12 high.
+- `[CAPTURE]` Reset on pin 10: high 5.8786 s, low 5.8887 s (10.05 ms), high
+  5.9088 s — same timing as in the first capture.
+- `[CAPTURE]` **Pin 9 now reacts:** a 0.78 ms high pulse at each rising
+  edge of pin 10, then low, then **high at 5.9584 s** (49.6 ms after the
+  reset) and high throughout the following transfer.
+- `[CAPTURE]` 10.7 ms later, 5.9691–5.9704 s, **82 CS frames** (pin 12
+  low per byte):
+  - frame 1: D/C low, clocks too fast for 2 MSa/s (1 visible pulse);
+    then 3 frames D/C high with 8 clean pulses each (1 µs period);
+  - frames 5–12: mixed D/C, again too fast to resolve (0–1 visible
+    pulses);
+  - frame 13: D/C low (command), then **70 frames with D/C high and 8
+    clean pulses each** (1 µs period, ~14 µs per byte).
+- `[CAPTURE]` 5.9705 s: pins 9–13 all drop low within ~10 µs — the panel
+  is powered down (consistent with F-14). Nothing else until the end.
+- `[CAPTURE]` **Pin 14 never toggles** — high from 0.81 s to 27.65 s,
+  exactly like in the first capture (0 data edges).
+- No large data block — **no image transfer, no refresh.**
+
+### Interpretation
+- `[CAPTURE]` Pin 9 behaves like a BUSY output of the panel: it only
+  moves when the panel is plugged in, goes high ~50 ms after reset and is
+  waited for by the MCU (10.7 ms later the transfer starts).
+  `[ASSUMPTION]` BUSY high = ready (UC81xx convention; the first capture's
+  10 s timeout with pin 9 low fits).
+- `[ASSUMPTION]` Roles now fit the standard order well: 9 BUSY, 10 RST,
+  11 D/C, 12 CS (per byte), 13 SCK.
+- **Two SPI speeds** seem to be in use: commands and some short writes
+  clock faster than 2 MSa/s can show, the 3- and 70-byte blocks at a
+  clean ~1 MHz. `[ASSUMPTION]` The 70-byte block at the slower clock is a
+  **read** from the panel (e.g. OTP/ID/temperature) — reads are often
+  clocked slower.
+- **Pin 14 shows no data at all.** Command bytes must toggle MOSI, so
+  either the D5 wire is not on FPC pin 14 (it follows the battery
+  exactly — looks like a supply net) or pin 14 is not MOSI.
+  → **Test:** M-007.
+- F-08: within 27 s after battery insertion the tag does **not** refresh
+  the panel, it only initialises and powers it down.
+
+### What it does not prove
+- The byte values — the data line was not captured and the command bytes
+  are too fast for 2 MSa/s.
+- That no refresh ever happens after boot — the capture was only 28 s.
+
+### Next step
+1. M-007: check/fix the D5 (pin 14) solder point.
+2. Pass B: **20 MSa/s, 30 s**, battery insertion — captures the ~80-byte
+   init sequence with real byte values.
+3. A longer pass A (2 MSa/s, ≥ 5 min) to see whether a refresh happens
+   later (F-08). If not: plan B (NFC) or a refresh triggered otherwise.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

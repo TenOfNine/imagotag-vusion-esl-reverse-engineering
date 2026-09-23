@@ -22,7 +22,8 @@ set the request here to `✅ done`.
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
-| M-006 | Why BUSY (pin 9) never changed in pass A | 🟠 cause found (panel unplugged), pass A being repeated | **pass B** |
+| M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
+| M-007 | D5 wire (pin 14) shows no data — check solder point | 🔴 open | **pass B** |
 
 ---
 
@@ -296,6 +297,38 @@ never signals "ready". Details in `HISTORY.md`.
 
 Unpowered for step 3. The scope check of pin 15 happens only with the
 probe ground on GND, never near pins 4, 5, 20–24 (±20 V).
+
+---
+
+## M-007 — D5 wire (FPC pin 14) carries no data
+
+**Priority: high** — without the data line, pass B only shows timing.
+**Tool:** OWON HDS242, continuity
+**State:** unpowered, battery out
+
+### Background
+
+`[CAPTURE]` `2026-09-23_tag02_boot-overview-panel_2MHz.sr`: ~80 bytes are
+clocked on pin 13 while CS (pin 12) and D/C (pin 11) behave as expected,
+but **D5 (pin 14) never toggles** — it goes high at 0.81 s (battery in)
+and low at 27.65 s (presumably battery out), in both captures.
+`[ASSUMPTION]` The D5 wire does not sit on FPC pin 14 but on a supply net
+(it follows the battery), or pin 14 is not the data line.
+
+### Task
+
+1. Continuity from the **D5 solder point** to **FPC pin 14** at the
+   connector.
+2. Continuity from the D5 solder point to **battery plus**.
+3. If 1 fails or 2 beeps: find the correct via for pin 14 (M-004) and
+   re-solder.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| 1 fails and/or 2 beeps | wire was on the wrong point → fix, then pass B |
+| 1 beeps, 2 silent | wiring is right; pin 14 is not MOSI → report back, rethink the pin roles |
 
 ---
 
