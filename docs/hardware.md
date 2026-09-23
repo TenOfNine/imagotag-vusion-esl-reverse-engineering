@@ -1,38 +1,39 @@
-# Hardware — Bestandsaufnahme
+# Hardware — inventory
 
-Alles, was über das Prüfobjekt bekannt ist. Evidenz-Marker nach `CLAUDE.md` §3.
-
----
-
-## Gesamtsystem
-
-Electronic Shelf Label der **VUSION**-Familie von VusionGroup
-(vormals SES-imagotag, seit 2024 umbenannt; Mehrheitseigner BOE Technology).
-
-`[RECHERCHE]` Die VUSION-Familie arbeitet auf **2,4 GHz** und umfasst
-Displaygrößen von 1,6" bis 12,2" in Schwarz/Weiß/Rot bzw. Gelb.
-Die Infrastruktur besteht aus Server, Access Points und den Tags selbst.
+Everything known about the test object. Evidence markers per `CLAUDE.md` §3.
 
 ---
 
-## Platine
+## Overall system
 
-| Merkmal | Wert | Evidenz |
+Electronic Shelf Label of the **VUSION** family by VusionGroup
+(formerly SES-imagotag, renamed in 2024; majority owner BOE Technology).
+
+`[RESEARCH]` The VUSION family operates at **2.4 GHz** and covers display
+sizes from 1.6" to 12.2" in black/white/red or yellow.
+The infrastructure consists of server, access points and the tags
+themselves.
+
+---
+
+## Board
+
+| Feature | Value | Evidence |
 |---|---|---|
-| Bedruckung | `imagotag  RFRTx026D` | `[FOTO]` |
-| Funkband | `2,4 GHz` (aufgedruckt) | `[FOTO]` |
-| Sonstige Bedruckung | `315 17 94V-0`, `13` | `[FOTO]` |
-| Lagen | `1 TOP` / `2 BOT` (aufgedruckt) | `[FOTO]` |
-| Seriennummer (QR) | `060RFRTX026D00A120O262007587` | `[FOTO]` `pcb-top-overview.webp` |
+| Silkscreen | `imagotag  RFRTx026D` | `[PHOTO]` |
+| Radio band | `2,4 GHz` (printed) | `[PHOTO]` |
+| Other silkscreen | `315 17 94V-0`, `13` | `[PHOTO]` |
+| Layers | `1 TOP` / `2 BOT` (printed) | `[PHOTO]` |
+| Serial number (QR) | `060RFRTX026D00A120O262007587` | `[PHOTO]` `pcb-top-overview.webp` |
 
-Die Seriennummer enthält erkennbar die Typenbezeichnung `RFRTX026D`,
-liefert darüber hinaus aber keine technische Information.
+The serial number visibly contains the type designation `RFRTX026D`, but
+beyond that provides no technical information.
 
 ---
 
 ## MCU — Silicon Labs EFR32FG22
 
-`[FOTO]` QFN-Marking, vierzeilig:
+`[PHOTO]` QFN marking, four lines:
 
 ```
 FG22
@@ -41,151 +42,152 @@ C026ZX
 2419
 ```
 
-- `FG22` → Produktfamilie EFR32**FG**22 „Flex Gecko", Proprietary 2,4 GHz
-- `C121` → Ausstattungsvariante
-- `2419` → Datumscode **KW 19 / 2024**
+- `FG22` → product family EFR32**FG**22 "Flex Gecko", proprietary 2.4 GHz
+- `C121` → feature variant
+- `2419` → date code **week 19 / 2024**
 
-`[RECHERCHE]` Eckdaten der C121-Variante laut EFR32FG22 Family Data Sheet:
+`[RESEARCH]` Key data of the C121 variant according to the EFR32FG22
+Family Data Sheet:
 
-| Merkmal | Wert |
+| Feature | Value |
 |---|---|
-| Kern | ARM Cortex-M33 |
-| Max. Takt | 38,4 MHz |
+| Core | ARM Cortex-M33 |
+| Max. clock | 38.4 MHz |
 | Flash | 512 kB |
 | RAM | 32 kB |
-| Max. TX-Leistung | 6 dBm |
-| Protokoll | Proprietary |
-| Temperaturbereich | −40 bis 85 °C |
+| Max. TX power | 6 dBm |
+| Protocol | proprietary |
+| Temperature range | −40 to 85 °C |
 
-Zwei Gehäusevarianten:
+Two package variants:
 
-| Bestellcode | Gehäuse | GPIO |
+| Order code | Package | GPIO |
 |---|---|---|
 | `EFR32FG22C121F512GM40-C` | QFN40, 5 × 5 mm | 26 |
 | `EFR32FG22C121F512GM32-C` | QFN32, 4 × 4 mm | 18 |
 
-`[ANNAHME]` Verbaut ist **QFN40**, geschätzt aus ca. 10 sichtbaren Pads pro
-Seite im Foto.
-→ **Prüfung:** Pads pro Seite unter Lupe zählen. 10 = QFN40, 8 = QFN32.
-Das Ergebnis entscheidet, welche Pinout-Tabelle des Datenblatts gilt.
+`[ASSUMPTION]` **QFN40** is fitted, estimated from approx. 10 visible pads
+per side in the photo.
+→ **Test:** count pads per side under a magnifier. 10 = QFN40, 8 = QFN32.
+The result decides which pinout table of the datasheet applies.
 
-### Taktquellen
+### Clock sources
 
-| Bauteil | Marking | Funktion | Evidenz |
+| Component | Marking | Function | Evidence |
 |---|---|---|---|
-| Quarz groß | `38.4  T4F` | HFXO, 38,4 MHz | `[FOTO]` |
-| Quarz klein | `T422C` | LFXO, 32,768 kHz | `[FOTO]` |
+| Large crystal | `38.4  T4F` | HFXO, 38.4 MHz | `[PHOTO]` |
+| Small crystal | `T422C` | LFXO, 32.768 kHz | `[PHOTO]` |
 
-Die 38,4 MHz passen exakt zum Referenztakt der EFR32-Serie — starke
-Bestätigung der MCU-Identifikation.
+The 38.4 MHz exactly matches the reference clock of the EFR32 series —
+strong confirmation of the MCU identification.
 
-### Debug-Interface
+### Debug interface
 
-`[RECHERCHE]` EFR32 Series 2 unterstützt **ausschließlich SWD**, kein JTAG.
-Die SWD-Pins liegen auf **Port A**. Die konkreten Pinnummern hängen vom
-Gehäuse ab → erst nach Klärung QFN32/QFN40 aus dem Datenblatt entnehmen.
+`[RESEARCH]` EFR32 Series 2 supports **SWD only**, no JTAG.
+The SWD pins are on **port A**. The concrete pin numbers depend on the
+package → take them from the datasheet only after QFN32/QFN40 is settled.
 
-`[RECHERCHE]` Werksseitig gesperrte xG22 lassen sich entsperren, solange
-„unauthenticated debug unlock" nicht deaktiviert wurde. **Der Unlock löscht
-die Originalfirmware.** Werkzeug: Simplicity Commander + J-Link.
+`[RESEARCH]` Factory-locked xG22 can be unlocked as long as
+"unauthenticated debug unlock" has not been disabled. **The unlock erases
+the original firmware.** Tool: Simplicity Commander + J-Link.
 
 ---
 
 ## Panel — E Ink EL074TS1
 
-| Merkmal | Wert | Evidenz |
+| Feature | Value | Evidence |
 |---|---|---|
-| Bezeichnung | `EL074TS1` | `[FOTO]` |
-| Größe | 7,4 Zoll (aus Typenbezeichnung `074`) | `[RECHERCHE]` |
-| Außenmaße | ca. 170 × 112 mm | `[MESSUNG]` Messschieber, Session 1 |
-| Farben | dreifarbig, S/W/Rot — **aus Erinnerung, unbestätigt** | `[ANNAHME]` |
-| Seriennummer (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[FOTO]` `panel-label-el074ts1.webp` |
-| Auflösung | **unbekannt** | — |
-| COG-Controller | **unbekannt** | — |
-| Waveform / LUT | **unbekannt** | — |
+| Designation | `EL074TS1` | `[PHOTO]` |
+| Size | 7.4 inch (from the type designation `074`) | `[RESEARCH]` |
+| Outer dimensions | approx. 170 × 112 mm | `[MEASUREMENT]` calliper, session 1 |
+| Colours | three-colour, B/W/red — **from memory, unconfirmed** | `[ASSUMPTION]` |
+| Serial number (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[PHOTO]` `panel-label-el074ts1.webp` |
+| Resolution | **unknown** | — |
+| COG controller | **unknown** | — |
+| Waveform / LUT | **unknown** | — |
 
-`[ANNAHME]` Dreifarbig S/W/Rot stammt aus der Erinnerung des Maintainers.
-Die VUSION-Familie gibt es auch mit **Gelb** als Drittfarbe.
-→ **Prüfung:** Im Mitschnitt zwei gleich große Datenblöcke (z. B. `0x10` +
-`0x13`) sprechen für zwei Ebenen, also dreifarbig. Welche Drittfarbe,
-zeigt erst ein angezeigtes Bild.
+`[ASSUMPTION]` Three-colour B/W/red comes from the maintainer's memory.
+The VUSION family also exists with **yellow** as the third colour.
+→ **Test:** two equally sized data blocks in the capture (e.g. `0x10` +
+`0x13`) indicate two planes, i.e. three-colour. Which third colour is only
+shown by a displayed image.
 
-`[RECHERCHE]` **Kein öffentliches Datenblatt auffindbar.** Gesucht wurde
-direkt nach der Typenbezeichnung sowie über E-Ink- und Distributorenkataloge.
-ESL-Panels werden unter NDA an OEMs geliefert.
+`[RESEARCH]` **No public datasheet can be found.** Searched directly for
+the type designation as well as via E Ink and distributor catalogues.
+ESL panels are supplied to OEMs under NDA.
 
-`[ANNAHME]` Auflösung 800 × 480 — eine reine Größenplausibilität für 7,x",
-**kein belastbarer Wert**.
-→ **Prüfung:** Aus den Nutzdaten-Blocklängen im Mitschnitt rückrechnen.
-Bei zwei Farbebenen gilt `Pixel = Blocklänge × 8` pro Ebene.
+`[ASSUMPTION]` Resolution 800 × 480 — purely a size plausibility for 7.x",
+**not a reliable value**.
+→ **Test:** calculate back from the payload block lengths in the capture.
+With two colour planes, `pixels = block length × 8` per plane.
 
 ### FPC
 
-| Merkmal | Wert | Evidenz |
+| Feature | Value | Evidence |
 |---|---|---|
-| Kontakte | **24** | `[FOTO]` |
-| Raster | 0,5 mm | `[FOTO]` |
-| Beschriftung Kontaktende | `1` und `24` aufgedruckt | `[FOTO]` |
-| Testpunkte auf dem FPC | `TP1`, `TP2`, `TP3` | `[FOTO]` |
+| Contacts | **24** | `[PHOTO]` |
+| Pitch | 0.5 mm | `[PHOTO]` |
+| Label at the contact end | `1` and `24` printed | `[PHOTO]` |
+| Test points on the FPC | `TP1`, `TP2`, `TP3` | `[PHOTO]` |
 
-Kontaktzahl und Raster wurden per Farbsegmentierung und FFT-Periodenanalyse
-an zwei unabhängigen Fotos ermittelt, Ergebnis konsistent.
+Contact count and pitch were determined by colour segmentation and FFT
+period analysis on two independent photos, results consistent.
 
-Belegung → siehe `pinout.md`.
+Pinout → see `pinout.md`.
 
 ---
 
-## Leistungsteil (Boost für die EPD-Spannungen)
+## Power stage (boost for the EPD voltages)
 
-`[FOTO]` Rechts des ZIF-Steckers, Standardmuster für einen E-Ink-COG mit
-integriertem DC/DC:
+`[PHOTO]` To the right of the ZIF connector, standard pattern for an e-ink
+COG with integrated DC/DC:
 
-| Bauteil | Marking | Vermutete Funktion |
+| Component | Marking | Presumed function |
 |---|---|---|
-| Speicherdrossel | — | Boost-Induktivität |
-| SOT-23 | `KM` | Schalt-MOSFET, gate-getrieben von `GDR` |
-| SOD-Dioden | `4`, `BR`, `ZV` | Schottky-Gleichrichter für VGH/VGL/VSH/VSL |
-| MLCCs (groß) | — | Stützkondensatoren der HV-Rails |
+| Storage inductor | — | boost inductor |
+| SOT-23 | `KM` | switching MOSFET, gate-driven by `GDR` |
+| SOD diodes | `4`, `BR`, `ZV` | Schottky rectifiers for VGH/VGL/VSH/VSL |
+| MLCCs (large) | — | reservoir capacitors of the HV rails |
 
-**Das ist der Grund, die Originalplatine zu behalten:** Diese Beschaltung ist
-korrekt dimensioniert und richtig verdrahtet. Genau hier zerstört man sich
-beim Fremdadapter das Panel.
+**This is the reason to keep the original board:** this circuitry is
+correctly dimensioned and correctly wired. This is exactly where a
+third-party adapter destroys the panel.
 
-### Weitere unklare Bauteile
+### Other unclear components
 
-`[FOTO]` SOT-23-Gehäuse mit Markings `S21`, `XDt`, `T0.`, `1R.` —
-Funktion ungeklärt, vermutlich LDO, Lastschalter und/oder Pegelwandler.
+`[PHOTO]` SOT-23 packages with markings `S21`, `XDt`, `T0.`, `1R.` —
+function unclear, probably LDO, load switch and/or level shifter.
 
 ---
 
 ## NFC
 
-| Merkmal | Wert | Evidenz |
+| Feature | Value | Evidence |
 |---|---|---|
-| IC | SO-8, Marking `8K417 / 0E47AH` | `[FOTO]` |
-| Antenne | große Spule auf der Rückseite | `[FOTO]` |
-| Beschriftung in der Spule | handschriftlich `0181` | `[FOTO]` |
+| IC | SO-8, marking `8K417 / 0E47AH` | `[PHOTO]` |
+| Antenna | large coil on the back side | `[PHOTO]` |
+| Label inside the coil | handwritten `0181` | `[PHOTO]` |
 
-`[ANNAHME]` Der SO-8 ist das NFC-Frontend.
-→ **Prüfung:** Durchgang IC ↔ Antennenspule messen.
+`[ASSUMPTION]` The SO-8 is the NFC front end.
+→ **Test:** measure continuity IC ↔ antenna coil.
 
-**Relevanz:** Plan B. Falls das Tag beim Batterieeinlegen keinen Refresh
-zeichnet, ließe sich der Refresh unter Umständen über NFC auslösen — und
-damit der Mitschnitt doch noch gewinnen.
+**Relevance:** plan B. If the tag does not draw a refresh when the battery
+is inserted, the refresh might be triggered via NFC — and the capture
+obtained after all.
 
 ---
 
-## Rückseite
+## Back side
 
-| Merkmal | Evidenz |
+| Feature | Evidence |
 |---|---|
-| NFC-Antennenspule, oberer Bereich | `[FOTO]` |
-| Zwei LEDs (klar + gelb), unten mittig | `[FOTO]` |
-| `2 BOT` — Lagenbezeichnung, **kein** Testpunkt | `[FOTO]` |
-| Vier verlötete Vias unten links = Batteriekontakt-Lötstellen | `[FOTO]` |
-| **Vier offene Vias** rechts, links neben `2 BOT` | `[FOTO]` |
+| NFC antenna coil, upper area | `[PHOTO]` |
+| Two LEDs (clear + yellow), bottom centre | `[PHOTO]` |
+| `2 BOT` — layer label, **not** a test point | `[PHOTO]` |
+| Four soldered vias bottom left = battery contact solder joints | `[PHOTO]` |
+| **Four open vias** on the right, left of `2 BOT` | `[PHOTO]` |
 
-`[ANNAHME]` Die vier offenen Vias sind der **SWD-Port**
-(SWDIO, SWCLK, GND, VDD, ggf. RESET). Anordnung: eines links, eines rechts,
-zwei dicht nebeneinander darunter, größere Bohrung darüber.
-→ **Prüfung:** Messauftrag M-002.
+`[ASSUMPTION]` The four open vias are the **SWD port**
+(SWDIO, SWCLK, GND, VDD, possibly RESET). Arrangement: one on the left, one
+on the right, two close together below, larger hole above.
+→ **Test:** measurement request M-002.

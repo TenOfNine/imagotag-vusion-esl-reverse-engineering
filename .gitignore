@@ -1,24 +1,23 @@
-# --- Mitschnitte -----------------------------------------------------------
-# Rohe CSV-Exporte werden mehrere hundert MB gross und sind aus den
-# .sr-Dateien reproduzierbar.
+# --- Captures -----------------------------------------------------------
+# Raw CSV exports grow to several hundred MB and are reproducible from
+# the .sr files.
 captures/*.csv
 captures/*.vcd
 captures/*.bin
 
-# Grosse sigrok-Sessions. Kleine (< 20 MB) bitte mit
-#   git add -f captures/<datei>.sr
-# ausdruecklich aufnehmen.
+# Large sigrok sessions. Add small ones (< 20 MB) explicitly with
+#   git add -f captures/<file>.sr
 captures/*.sr
 !captures/README.md
 
-# --- Auswertungsergebnisse -------------------------------------------------
-# Die Reports SOLLEN ins Repo - sie sind das eigentliche Ergebnis.
+# --- Analysis results -------------------------------------------------
+# The reports SHOULD go into the repo - they are the actual result.
 !analysis/out/*_transactions.txt
 !analysis/out/*_init_sequence.py
 !analysis/out/*_blocks.csv
 
 # --- Firmware-Images -------------------------------------------------------
-# Ausgelesene Originalfirmware gehoert nicht in ein oeffentliches Repo.
+# Read-out original firmware does not belong in a public repo.
 *.s37
 *.hex
 *.elf

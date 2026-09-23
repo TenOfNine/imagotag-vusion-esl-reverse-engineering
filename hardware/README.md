@@ -1,10 +1,10 @@
 # hardware
 
-| Datei | Inhalt |
+| File | Content |
 |---|---|
-| `measurements.md` | **Messprotokoll** — vom Maintainer ausgefüllt, siehe `CLAUDE.md` §2 |
-| `photos/` | Platinen- und Panelfotos |
+| `measurements.md` | **Measurement log** — filled in by the maintainer, see `CLAUDE.md` §2 |
+| `photos/` | board and panel photos |
 
-Sobald eine Zeile in `measurements.md` ausgefüllt ist, gilt sie als
-`[MESSUNG]` und darf als Fakt behandelt werden. Leere Zeilen sind
-**keine** Erlaubnis zu schätzen.
+As soon as a row in `measurements.md` is filled in, it counts as
+`[MEASUREMENT]` and may be treated as fact. Empty rows are **not**
+permission to estimate.

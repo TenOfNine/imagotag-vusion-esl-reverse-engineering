@@ -1,4 +1,4 @@
-# analysis — Auswertung der Mitschnitte
+# analysis — evaluating the captures
 
 ## Installation
 
@@ -6,116 +6,117 @@
 python3 -m pip install -r analysis/requirements.txt
 ```
 
-Unter Windows: `py -m pip install -r analysis/requirements.txt`
+On Windows: `py -m pip install -r analysis/requirements.txt`
 
 ---
 
 ## decode_spi.py
 
-Zerlegt einen PulseView-CSV-Export in Kommandos und Datenblöcke.
+Splits a PulseView CSV export into commands and data blocks.
 
 ```bash
-python3 analysis/decode_spi.py captures/<datei>.csv \
+python3 analysis/decode_spi.py captures/<file>.csv \
     --sck D0 --mosi D1 --cs D2 --dc D3 --busy D4 --rst D5 \
     --out-prefix analysis/out/2026-09-25_tag03
 ```
 
-### Optionen
+### Options
 
-| Option | Default | Zweck |
+| Option | Default | Purpose |
 |---|---|---|
-| `--sck --mosi --cs --dc` | D0–D3 | Kanalzuordnung |
-| `--busy --rst` | D4, D5 | optional, für BUSY-Dauer und Reset-Erkennung |
-| `--mode` | 0 | SPI-Modus 0–3 |
-| `--lsb-first` | aus | falls LSB zuerst |
-| `--cs-active-high` | aus | falls CS invertiert |
-| `--rate` | aus CSV | Samplerate in Hz, falls nicht im Header |
-| `--out-prefix` | — | schreibt Reportdateien |
+| `--sck --mosi --cs --dc` | D0–D3 | channel mapping |
+| `--busy --rst` | D4, D5 | optional, for BUSY duration and reset detection |
+| `--mode` | 0 | SPI mode 0–3 |
+| `--lsb-first` | off | if LSB comes first |
+| `--cs-active-high` | off | if CS is inverted |
+| `--rate` | from CSV | sample rate in Hz, if not in the header |
+| `--out-prefix` | — | writes report files |
 
-### Was ausgegeben wird
+### What is output
 
-**Auf der Konsole:**
+**On the console:**
 
-1. **Capture-Übersicht** — Dauer, geschätzter SPI-Takt, Reset-Flanken, lange
-   BUSY-Phasen. Warnt, wenn die Samplerate unter dem 5-fachen SPI-Takt liegt.
-2. **Controller-Fingerprint** — wie viele der bekannten Opcodes je
-   Controller-Familie vorkommen (UC8179, IL0373, SSD16xx).
-3. **Kommandolog** — jede Transaktion mit Opcode, Klartextbedeutung und Payload.
-4. **Frame-Blöcke** — alle Datenblöcke ≥ 1024 Byte, plus **Auflösungs-
-   kandidaten** durch Faktorisierung von `Blocklänge × 8`.
-5. **TRES-Abgleich** — falls ein `0x61`-Kommando vorkommt: die dort
-   angekündigte Auflösung wird gegen die Blocklängen geprüft
-   (`MATCH` / `MISMATCH`). Ein `MISMATCH` ist ein Befund, kein Fehler.
-6. **LUT-Kandidaten** — Blöcke zwischen 20 und 512 Byte. Wenn hier die
-   Waveform drinsteckt, muss sie nicht aus dem OTP rekonstruiert werden.
+1. **Capture overview** — duration, estimated SPI clock, reset edges, long
+   BUSY phases. Warns if the sample rate is below 5× the SPI clock.
+2. **Controller fingerprint** — how many of the known opcodes per
+   controller family occur (UC8179, IL0373, SSD16xx).
+3. **Command log** — every transaction with opcode, plain-text meaning and
+   payload.
+4. **Frame blocks** — all data blocks ≥ 1024 bytes, plus **resolution
+   candidates** by factorising `block length × 8`.
+5. **TRES check** — if a `0x61` command occurs: the resolution announced
+   there is checked against the block lengths (`MATCH` / `MISMATCH`).
+   A `MISMATCH` is a finding, not an error.
+6. **LUT candidates** — blocks between 20 and 512 bytes. If the waveform is
+   in here, it does not need to be reconstructed from the OTP.
 
-**Als Dateien** (mit `--out-prefix`):
+**As files** (with `--out-prefix`):
 
-| Datei | Inhalt |
+| File | Content |
 |---|---|
-| `*_transactions.txt` | vollständiges Log, kleine Payloads im Klartext |
-| `*_init_sequence.py` | nachspielbare Sequenz, Bilddaten als `FRAME`-Platzhalter |
-| `*_blocks.csv` | Tabelle aller Transaktionen für eigene Auswertung |
+| `*_transactions.txt` | full log, small payloads in plain text |
+| `*_init_sequence.py` | replayable sequence, image data as a `FRAME` placeholder |
+| `*_blocks.csv` | table of all transactions for your own evaluation |
 
 ---
 
-## Wichtige Einschränkung
+## Important limitation
 
-> Das Skript prüft die **Pinzuordnung nicht**. Sind die Kanäle falsch
-> zugeordnet, ist die Ausgabe überzeugend und falsch.
+> The script does **not check the pin mapping**. If the channels are
+> mapped wrongly, the output is convincing and wrong.
 
-Der Fingerprint ist ein **Hinweis, kein Beweis**. Ein Treffer von 60 % heißt
-nur, dass viele Opcodes zu einer Familie passen — die Familien überlappen
-sich stark (UC8179 und IL0373 teilen fast alle Opcodes).
+The fingerprint is a **hint, not proof**. A 60 % hit only means that many
+opcodes fit a family — the families overlap heavily (UC8179 and IL0373
+share almost all opcodes).
 
-Belastbar wird das erst, wenn:
+It only becomes reliable when:
 
-- die Auflösung aus den Blocklängen zu den physischen Panelmaßen passt, und
-- ein Replay der Sequenz auf der Hardware tatsächlich ein Bild zeichnet.
+- the resolution from the block lengths matches the physical panel
+  dimensions, and
+- a replay of the sequence on the hardware actually draws an image.
 
 ---
 
-## Speicherbedarf
+## Memory requirements
 
-Der Decoder lädt nur die benötigten Kanäle, jeweils 1 Byte pro Sample.
-Richtwert: **Samples × Kanalzahl** Byte, plus Arbeitsspeicher für die
-Auswertung. Ein Durchgang B mit 20 MSa/s × 60 s × 6 Kanälen braucht damit
-rund **7 GB** allein für die Rohdaten. Wenn der Rechner das nicht hat:
-Aufnahme kürzer schneiden (in PulseView nur den Bereich um den Refresh
-exportieren).
+The decoder loads only the required channels, 1 byte per sample each.
+Rule of thumb: **samples × channel count** bytes, plus working memory for
+the evaluation. A pass B at 20 MSa/s × 60 s × 6 channels therefore needs
+about **7 GB** for the raw data alone. If the computer does not have that:
+cut the recording shorter (in PulseView, export only the region around the
+refresh).
 
 ---
 
 ## make_testcapture.py
 
-Erzeugt einen **synthetischen** Mitschnitt, um den Decoder ohne Hardware zu
-prüfen:
+Generates a **synthetic** capture to test the decoder without hardware:
 
 ```bash
 python3 analysis/make_testcapture.py /tmp/fake.csv
 python3 analysis/decode_spi.py /tmp/fake.csv
 ```
 
-Simuliert einen UC8179-artigen dreifarbigen Refresh: Reset, Init, zwei
-Farbebenen, DRF, lange BUSY-Phase.
+Simulates a UC8179-style three-colour refresh: reset, init, two colour
+planes, DRF, long BUSY phase.
 
-**Das ist eine Testvorrichtung.** Sie beweist, dass der Decoder funktioniert
-— über das echte Panel sagt sie nichts aus.
+**This is a test fixture.** It proves that the decoder works — it says
+nothing about the real panel.
 
 ---
 
-## Erwartete Werte beim echten Mitschnitt
+## Expected values for the real capture
 
-Zur Plausibilitätskontrolle:
+For plausibility checks:
 
-| Größe | Erwartung |
+| Quantity | Expectation |
 |---|---|
-| SPI-Takt | 1 – 4 MHz |
-| SPI-Modus | 0 (CPOL=0, CPHA=0), MSB first, CS low-aktiv |
-| Frame-Blöcke | 2 gleich große (S/W-Ebene + Rot-Ebene) |
-| Blockgröße bei 800×480 | 48.000 Byte je Ebene |
-| BUSY-Phase nach DRF | 15 – 30 s |
+| SPI clock | 1 – 4 MHz |
+| SPI mode | 0 (CPOL=0, CPHA=0), MSB first, CS active low |
+| Frame blocks | 2 of equal size (B/W plane + red plane) |
+| Block size at 800×480 | 48,000 bytes per plane |
+| BUSY phase after DRF | 15 – 30 s |
 
-Weichen die gemessenen Werte davon ab, ist das **eine Erkenntnis** und
-gehört nach `HISTORY.md` — nicht ein Grund, die Parameter so lange zu
-drehen, bis das erwartete Ergebnis herauskommt.
+If the measured values deviate from these, that is **an insight** and
+belongs in `HISTORY.md` — not a reason to keep turning the parameters until
+the expected result comes out.

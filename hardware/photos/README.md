@@ -1,38 +1,38 @@
-# Fotos
+# Photos
 
-| Datei | Inhalt |
+| File | Content |
 |---|---|
-| `panel-label-el074ts1.webp` | Panelrückseite mit Typenbezeichnung `EL074TS1` |
-| `panel-fpc-overview.webp` | FPC mit den Testpunkten `TP1`–`TP3` |
-| `pcb-top-overview.webp` | Platinenoberseite komplett, mit QR-Code |
-| `pcb-top-zif-powerstage.webp` | ZIF-Stecker und Boost-Beschaltung, scharf |
-| `pcb-top-mcu.webp` | EFR32FG22 mit Marking, beide Quarze, NFC-IC |
-| `pcb-bottom.webp` | Rückseite: NFC-Spule, LEDs, offene Vias |
-| `pcb-top-annotated-pinout.webp` | Oberseite mit **hypothetischer** Pinbelegung |
+| `panel-label-el074ts1.webp` | panel back side with type designation `EL074TS1` |
+| `panel-fpc-overview.webp` | FPC with the test points `TP1`–`TP3` |
+| `pcb-top-overview.webp` | complete board top side, with QR code |
+| `pcb-top-zif-powerstage.webp` | ZIF connector and boost circuitry, sharp |
+| `pcb-top-mcu.webp` | EFR32FG22 with marking, both crystals, NFC IC |
+| `pcb-bottom.webp` | back side: NFC coil, LEDs, open vias |
+| `pcb-top-annotated-pinout.webp` | top side with **hypothetical** pinout |
 
 ---
 
-## ⚠ Zum annotierten Bild
+## ⚠ About the annotated image
 
-`pcb-top-annotated-pinout.webp` zeigt die 24 Kontakte mit dem
-**Waveshare-Standard** als Arbeitshypothese darübergelegt.
+`pcb-top-annotated-pinout.webp` shows the 24 contacts with the
+**Waveshare standard** overlaid as a working hypothesis.
 
-**Gemessen sind daran nur:** Kontaktzahl (24), Raster (0,5 mm) und die Lage
-von Drossel, MOSFET, HV-Kondensatoren und Batteriekontakt.
+**The only things measured on it are:** contact count (24), pitch (0.5 mm)
+and the position of inductor, MOSFET, HV capacitors and battery contact.
 
-**Nicht gemessen sind:** alle Signalnamen und die Zählrichtung auf der
-Platine. Das Bild taugt als gemeinsames Koordinatensystem („Pin 12"), nicht
-als Verdrahtungsvorlage.
+**Not measured are:** all signal names and the counting direction on the
+board. The image serves as a shared coordinate system ("pin 12"), not as a
+wiring template.
 
-Nach Abschluss von M-001 wird es durch eine gemessene Fassung ersetzt.
+After M-001 is complete it will be replaced by a measured version.
 
 ---
 
-## Gewünschte Nachlieferungen
+## Requested additional photos
 
-Für eine brauchbare Markierung der Rückseite fehlt noch:
+For a usable annotation of the back side, still missing:
 
-- Kamera **senkrecht** über der Platine, parallel zur Oberfläche
-- **diffuses Licht** (Fenster ohne direkte Sonne, oder Papier als Diffusor)
-- zusätzlich ein **Makro** nur vom Bereich um die vier offenen Vias
-- ein Makro vom **QFN-Gehäuse**, scharf genug zum Pads zählen (→ M-003)
+- camera **perpendicular** above the board, parallel to the surface
+- **diffuse light** (window without direct sun, or paper as a diffuser)
+- additionally a **macro** of just the area around the four open vias
+- a **macro** of the QFN package, sharp enough to count pads (→ M-003)

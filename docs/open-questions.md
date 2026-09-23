@@ -1,119 +1,125 @@
-# Offene Fragen
+# Open questions
 
-Der Arbeitsvorrat. Beantwortete Fragen wandern mit Ergebnis nach
-`../HISTORY.md` und werden hier auf `✅` gesetzt — **nicht gelöscht**, damit
-der Weg nachvollziehbar bleibt.
+The work backlog. Answered questions move with their result to
+`../HISTORY.md` and are set to `✅` here — **not deleted**, so that the path
+remains traceable.
+
+The IDs (`F-01` …) are kept from the German original ("Frage") so that
+existing references stay valid.
 
 ---
 
-## Blockierend — ohne diese Antworten geht nichts
+## Blocking — nothing works without these answers
 
-### 🔴 F-01 Wie ist der FPC tatsächlich belegt?
+### 🔴 F-01 What is the actual FPC pinout?
 
-Alles Weitere hängt daran. Die Tabelle in `pinout.md` ist reine Hypothese.
+Everything else depends on it. The table in `pinout.md` is pure hypothesis.
 
-→ Messauftrag **M-001**
+→ Measurement request **M-001**
 
-### 🔴 F-02 Welche Auflösung hat das Panel?
+### 🔴 F-02 What resolution does the panel have?
 
-`EL074TS1`, ca. 170 × 112 mm, vermutlich dreifarbig (siehe F-13). `[ANNAHME]` 800 × 480 ist eine
-reine Größenplausibilität, kein Wert aus einer Quelle.
+`EL074TS1`, approx. 170 × 112 mm, probably three-colour (see F-13).
+`[ASSUMPTION]` 800 × 480 is purely a size plausibility, not a value from a
+source.
 
-→ Aus den Nutzdaten-Blocklängen im Mitschnitt rückrechnen:
-`Pixel pro Ebene = Blocklänge in Byte × 8`. Bei dreifarbig zwei Ebenen.
+→ Calculate back from the payload block lengths in the capture:
+`pixels per plane = block length in bytes × 8`. Two planes if three-colour.
 
-### 🔴 F-03 Welcher COG-Controller steckt im Panel?
+### 🔴 F-03 Which COG controller is in the panel?
 
-Bestimmt, ob GxEPD2 direkt nutzbar ist oder ein eigener Treiber nötig wird.
+Determines whether GxEPD2 can be used directly or a custom driver is
+needed.
 
-→ Kommandobytes aus dem Mitschnitt gegen die üblichen Kandidaten matchen:
+→ Match the command bytes from the capture against the usual candidates:
 UC8179, SSD16xx, IL0373.
 
 ---
 
-## Wichtig, aber nicht blockierend
+## Important, but not blocking
 
-### 🟡 F-04 Wird die Waveform-LUT vom MCU geschrieben oder liegt sie im OTP?
+### 🟡 F-04 Is the waveform LUT written by the MCU or stored in OTP?
 
-- **Vom MCU geschrieben** → steht im Mitschnitt, wir haben sie geschenkt.
-- **Im OTP des COG** → brauchen wir sie gar nicht, der Controller kennt sie.
+- **Written by the MCU** → it is in the capture, we get it for free.
+- **In the COG's OTP** → we don't need it at all, the controller knows it.
 
-→ Fällt bei der Auswertung des Mitschnitts automatisch ab: ein auffällig
-langer Datenblock direkt nach dem Init ist ein LUT-Kandidat.
+→ Falls out automatically when evaluating the capture: a conspicuously long
+data block right after the init is a LUT candidate.
 
-### 🟡 F-05 Ist der EFR32 debug-gesperrt?
+### 🟡 F-05 Is the EFR32 debug-locked?
 
-Falls **nein**: Originalfirmware auslesen und sichern. Das wäre für den
-EPD-Treiber deutlich wertvoller als jeder Mitschnitt, weil die
-Init-Sequenz dann im Klartext im Binary steht.
+If **no**: read out and save the original firmware. That would be much
+more valuable for the EPD driver than any capture, because the init
+sequence is then in plain form in the binary.
 
-Falls **ja**: Unlock löscht sie unwiderruflich → erst sniffen.
+If **yes**: the unlock erases it irrevocably → sniff first.
 
-→ `commander device info` und `commander security status`, **bevor**
-irgendetwas geschrieben wird.
+→ `commander device info` and `commander security status`, **before**
+anything is written.
 
-### 🟡 F-06 Wo liegt der SWD-Port?
+### 🟡 F-06 Where is the SWD port?
 
-→ Messauftrag **M-002**
+→ Measurement request **M-002**
 
-### 🟡 F-07 QFN32 oder QFN40?
+### 🟡 F-07 QFN32 or QFN40?
 
-Entscheidet, welche Pinout-Tabelle des Datenblatts gilt.
+Decides which pinout table of the datasheet applies.
 
-→ Messauftrag **M-003**
+→ Measurement request **M-003**
 
-### 🟡 F-08 Zeichnet das Tag beim Batterieeinlegen überhaupt ein Bild?
+### 🟡 F-08 Does the tag draw an image at all when the battery is inserted?
 
-Die gesamte Sniffing-Strategie setzt das voraus. Falls nicht: Plan B über NFC.
+The whole sniffing strategy relies on it. If not: plan B via NFC.
 
-→ Fällt beim ersten Aufnahmeversuch auf.
+→ Becomes apparent at the first recording attempt.
 
 ---
 
-## Nachgelagert — erst nach dem Mitschnitt relevant
+## Downstream — only relevant after the capture
 
-### ⚪ F-09 Weg A oder Weg B?
+### ⚪ F-09 Path A or path B?
 
-| | Weg A (ESP32 am Trägerboard) | Weg B (OpenEPaperLink-Port) |
+| | Path A (ESP32 on carrier board) | Path B (OpenEPaperLink port) |
 |---|---|---|
-| Funk | nein, verkabelt | ja, batteriebetrieben |
-| Aufwand | mittel | hoch |
-| Risiko | gering | Unlock ist irreversibel |
+| Wireless | no, wired | yes, battery-powered |
+| Effort | medium | high |
+| Risk | low | unlock is irreversible |
 
-Die Entscheidung fällt **nach** dem Mitschnitt, wenn klar ist, wie
-aufwendig der EPD-Treiber wird.
+The decision is made **after** the capture, once it is clear how complex
+the EPD driver will be.
 
-### ⚪ F-10 Lässt sich der EFR32 zerstörungsfrei stilllegen?
+### ⚪ F-10 Can the EFR32 be disabled non-destructively?
 
-Hypothese: RESETn dauerhaft auf GND → GPIOs gehen in Hi-Z, SPI-Bus wird frei.
+Hypothesis: RESETn permanently to GND → GPIOs go Hi-Z, the SPI bus is
+freed.
 
-→ An **einem** Tag ausprobieren, bevor irgendwo Heißluft zum Einsatz kommt.
+→ Try it on **one** tag before hot air is used anywhere.
 
-Stand 2026-09-23: **Keine Heißluftstation vorhanden.** Solange das so
-bleibt, ist RESETn auf GND die einzige durchführbare Variante.
+Status 2026-09-23: **no hot-air station available.** As long as that
+remains so, RESETn to GND is the only feasible variant.
 
-### ⚪ F-11 Was machen die Testpunkte TP1/TP2/TP3 auf dem FPC?
+### ⚪ F-11 What do the test points TP1/TP2/TP3 on the FPC do?
 
-Unklar. Möglicherweise Produktionstest des Panels. Niedrige Priorität.
+Unclear. Possibly production test of the panel. Low priority.
 
-### ⚪ F-12 Welche Refreshrate verträgt das Panel im Dauerbetrieb?
+### ⚪ F-12 What refresh rate does the panel tolerate in continuous operation?
 
-`[RECHERCHE]` E Ink empfiehlt bei dreifarbigen Panels Mindestabstände von
-einigen Minuten zwischen Updates; ein Vollbild dauert 15–30 s.
+`[RESEARCH]` For three-colour panels E Ink recommends minimum intervals of
+several minutes between updates; a full frame takes 15–30 s.
 
-Für ein Dashboard unkritisch, für alles Dynamische ein Ausschlusskriterium.
+Uncritical for a dashboard, an exclusion criterion for anything dynamic.
 
-### ⚪ F-13 Ist das Panel wirklich dreifarbig — und welche Drittfarbe?
+### ⚪ F-13 Is the panel really three-colour — and which third colour?
 
-`[ANNAHME]` S/W/Rot stammt aus der Erinnerung des Maintainers, nicht aus
-einer Beobachtung am Gerät. VUSION gibt es auch mit Gelb.
+`[ASSUMPTION]` B/W/red comes from the maintainer's memory, not from an
+observation of the device. VUSION also exists with yellow.
 
-→ Mitschnitt: zwei gleich große Frame-Blöcke = zwei Ebenen = dreifarbig.
-→ Die Drittfarbe zeigt erst ein angezeigtes Bild (Originaltag oder eigener
-Treiber).
+→ Capture: two equally sized frame blocks = two planes = three-colour.
+→ The third colour is only shown by a displayed image (original tag or our
+own driver).
 
 ---
 
-## Beantwortet
+## Answered
 
-*(noch leer — Einträge wandern mit Ergebnis und Datum hierher)*
+*(still empty — entries move here with result and date)*

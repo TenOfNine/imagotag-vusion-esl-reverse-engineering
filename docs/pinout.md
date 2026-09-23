@@ -1,107 +1,108 @@
-# Pinout — 24-poliger FPC
+# Pinout — 24-pin FPC
 
-> **⚠ Nichts in diesem Dokument ist gemessen.**
-> Die Tabelle unten ist der Waveshare-/Good-Display-Standard als
-> Arbeitshypothese. ESL-Panels weichen davon regelmäßig ab.
-> Solange die Spalte „gemessen" leer ist, darf **kein** Treiber und **keine**
-> Verdrahtung darauf aufgebaut werden.
+> **⚠ Nothing in this document has been measured.**
+> The table below is the Waveshare / Good Display standard as a working
+> hypothesis. ESL panels regularly deviate from it.
+> As long as the "measured" column is empty, **no** driver and **no**
+> wiring may be built on it.
 
 ---
 
-## Hypothese: Standardbelegung 24-Pin E-Paper
+## Hypothesis: standard 24-pin e-paper pinout
 
-`[RECHERCHE]` Übereinstimmend aus Waveshare E-Paper Driver HAT Schematic,
-Electronic Assembly ePaper-Datenblatt und Midas MDE0154A152152RBW Spec.
+`[RESEARCH]` Consistent across the Waveshare E-Paper Driver HAT schematic,
+the Electronic Assembly ePaper datasheet and the Midas MDE0154A152152RBW
+spec.
 
-| Pin | Signal | Bedeutung | Klasse |
+| Pin | Signal | Meaning | Class |
 |---:|---|---|---|
-| 1 | HLT_CTL | Halt Control | sonstig |
-| 2 | **GDR** | N-Ch MOSFET Gate Drive Control | Boost |
-| 3 | **RESE** | Current Sense Input (Shunt) | Boost |
-| 4 | VGL | negative Gate-Spannung, ca. −20 V | ⚡ HV |
-| 5 | VGH | positive Gate-Spannung, ca. +22 V | ⚡ HV |
-| 6 | TSCL | I²C-Takt Temperatursensor | sonstig |
-| 7 | TSDA | I²C-Daten Temperatursensor | sonstig |
-| 8 | BS | Bus Selector | sonstig |
-| 9 | **BUSY** | Busy-Ausgang | 🟢 digital |
-| 10 | **RST** | Reset, active low | 🟢 digital |
-| 11 | **D/C** | Data (high) / Command (low) | 🟢 digital |
-| 12 | **CS** | Chip Select, active low | 🟢 digital |
-| 13 | **SCK** | SPI-Takt | 🟢 digital |
-| 14 | **SDI** | SPI-Daten (MOSI) | 🟢 digital |
-| 15 | VDDIO | Versorgung I/O-Logik | 🔵 Power |
-| 16 | VCI | Versorgung Displaytreiber | 🔵 Power |
-| 17 | VSS | Ground | 🔵 Power |
-| 18 | VDD | Versorgung | 🔵 Power |
-| 19 | VPP | OTP-Programmierspannung | sonstig |
-| 20 | VSH | positive Source-Spannung | ⚡ HV |
-| 21 | PREVGH | Versorgung für VGH/VSH | ⚡ HV |
-| 22 | VSL | negative Source-Spannung | ⚡ HV |
-| 23 | PREVGL | Versorgung für VCOM/VGL/VSL | ⚡ HV |
-| 24 | VCOM | Common-Elektrode | ⚡ HV |
+| 1 | HLT_CTL | halt control | other |
+| 2 | **GDR** | N-ch MOSFET gate drive control | boost |
+| 3 | **RESE** | current sense input (shunt) | boost |
+| 4 | VGL | negative gate voltage, approx. −20 V | ⚡ HV |
+| 5 | VGH | positive gate voltage, approx. +22 V | ⚡ HV |
+| 6 | TSCL | I²C clock temperature sensor | other |
+| 7 | TSDA | I²C data temperature sensor | other |
+| 8 | BS | bus selector | other |
+| 9 | **BUSY** | busy output | 🟢 digital |
+| 10 | **RST** | reset, active low | 🟢 digital |
+| 11 | **D/C** | data (high) / command (low) | 🟢 digital |
+| 12 | **CS** | chip select, active low | 🟢 digital |
+| 13 | **SCK** | SPI clock | 🟢 digital |
+| 14 | **SDI** | SPI data (MOSI) | 🟢 digital |
+| 15 | VDDIO | I/O logic supply | 🔵 power |
+| 16 | VCI | display driver supply | 🔵 power |
+| 17 | VSS | ground | 🔵 power |
+| 18 | VDD | supply | 🔵 power |
+| 19 | VPP | OTP programming voltage | other |
+| 20 | VSH | positive source voltage | ⚡ HV |
+| 21 | PREVGH | supply for VGH/VSH | ⚡ HV |
+| 22 | VSL | negative source voltage | ⚡ HV |
+| 23 | PREVGL | supply for VCOM/VGL/VSL | ⚡ HV |
+| 24 | VCOM | common electrode | ⚡ HV |
 
-**⚡ HV = Hochspannung.** Der SLogic verträgt max. 3,6 V. Ein abgerutschter
-Tastkopf zerstört ihn.
-
----
-
-## Was bereits geklärt ist
-
-`[FOTO]` Das **FPC ist selbst beschriftet**: am Kontaktende steht auf einer
-Seite `24`, auf der anderen `1`. Die Zählrichtung des Kabels ist damit
-eindeutig.
-
-`[ANNAHME]` **Noch offen:** an welchem Ende des Steckers auf der Platine Pin 1
-liegt. Vorder- und Rückseite sind spiegelverkehrt.
-→ FPC einstecken und nachsehen, an welchem Ende die `1` sitzt.
+**⚡ HV = high voltage.** The SLogic tolerates max. 3.6 V. A slipped probe
+destroys it.
 
 ---
 
-## Verifikation — Messauftrag M-001
+## What is already settled
 
-Alles stromlos, Batterie entfernt, Multimeter auf Durchgang.
+`[PHOTO]` The **FPC itself is labelled**: at the contact end there is `24`
+on one side and `1` on the other. The counting direction of the cable is
+thereby unambiguous.
 
-### Schritt 1 — Ankerpunkte finden
+`[ASSUMPTION]` **Still open:** at which end of the connector on the board
+pin 1 is. Front and back are mirror images.
+→ Insert the FPC and look at which end the `1` is.
 
-| Suche | Erkennungsmerkmal | Erwartung bei Standard |
+---
+
+## Verification — measurement request M-001
+
+Everything unpowered, battery removed, multimeter on continuity.
+
+### Step 1 — find anchor points
+
+| Search | Identifying feature | Expected with standard |
 |---|---|---|
-| **GND** | Durchgang zum Batterie-Minuspol | Pin 17 (VSS) |
-| **RESE** | ca. 0,5 – 3 Ω gegen GND (der kleine Shunt) | Pin 3 |
-| **GDR** | Durchgang zum **Gate** des SOT-23 `KM` | Pin 2 |
-| **HV-Pins** | enden an den dicken MLCCs | 4, 5, 20–24 |
+| **GND** | continuity to the battery minus terminal | pin 17 (VSS) |
+| **RESE** | approx. 0.5 – 3 Ω to GND (the small shunt) | pin 3 |
+| **GDR** | continuity to the **gate** of the SOT-23 `KM` | pin 2 |
+| **HV pins** | end at the bulky MLCCs | 4, 5, 20–24 |
 
-### Schritt 2 — Digitalleitungen identifizieren
+### Step 2 — identify the digital lines
 
-Die entscheidende Messung: **Welche FPC-Pins haben Durchgang direkt zu einem
-QFN-Pin des FG22?**
+The decisive measurement: **which FPC pins have continuity directly to a
+QFN pin of the FG22?**
 
-Es sollten **genau 6** sein: BUSY, RST, D/C, CS, SCK, SDI.
+There should be **exactly 6**: BUSY, RST, D/C, CS, SCK, SDI.
 
-- Liegen sie **zusammenhängend auf 9–14** → Standard bestätigt, der Rest der
-  Tabelle ist glaubwürdig.
-- Liegen sie **woanders** → Hypothese verwerfen, Belegung komplett aus den
-  Messwerten rekonstruieren.
+- If they are **contiguous on 9–14** → standard confirmed, the rest of the
+  table is credible.
+- If they are **elsewhere** → discard the hypothesis, reconstruct the
+  pinout entirely from the measured values.
 
-### Schritt 3 — Plausibilitätsprobe
+### Step 3 — plausibility check
 
-Ist GND der **8. Pin von einem Ende**, ist dieses Ende Pin 24 — dann ist die
-Zählrichtung auf der Platine gespiegelt gegenüber der Annahme.
-
----
-
-## Messergebnis
-
-Wird in `../hardware/measurements.md` eingetragen. Sobald dort die
-Digitalleitungen bestätigt sind, wird **diese Datei** mit `[MESSUNG]`-Markern
-aktualisiert und die Hypothesenwarnung oben entfernt.
+If GND is the **8th pin from one end**, that end is pin 24 — then the
+counting direction on the board is mirrored relative to the assumption.
 
 ---
 
-## Hinweis zur Kontaktseite
+## Measurement result
 
-`[RECHERCHE]` ESL-Displays haben die Kupferkontakte des FPC typischerweise
-auf der **Unterseite**, Waveshare-Displays auf der **Oberseite**.
+Is entered in `../hardware/measurements.md`. As soon as the digital lines
+are confirmed there, **this file** is updated with `[MEASUREMENT]` markers
+and the hypothesis warning above is removed.
 
-Relevant, falls doch ein Fremdadapter oder ein FPC-Verlängerungskabel zum
-Einsatz kommt: Dann wird ein **A-B-Kabel** („D-Type") als Wender gebraucht,
-kein A-A-Kabel. Vor dem Kauf prüfen, auf welcher Seite die Kontakte liegen.
+---
+
+## Note on the contact side
+
+`[RESEARCH]` ESL displays typically have the FPC copper contacts on the
+**bottom side**, Waveshare displays on the **top side**.
+
+Relevant if a third-party adapter or an FPC extension cable is used after
+all: then an **A-B cable** ("D-type") is needed as a reverser, not an A-A
+cable. Before buying, check which side the contacts are on.

@@ -1,53 +1,53 @@
-# Capture-Protokoll — SPI-Mitschnitt des Panel-Refresh
+# Capture protocol — SPI capture of the panel refresh
 
-Der zentrale Arbeitsschritt des Projekts. Aus diesem Mitschnitt fallen
-Controller-Typ, Auflösung, Init-Sequenz und ggf. die Waveform-LUT auf einmal ab.
+The central work step of the project. Controller type, resolution, init
+sequence and possibly the waveform LUT all fall out of this capture at once.
 
-> **Voraussetzung:** Messauftrag **M-001** (`pinout.md`) ist abgeschlossen.
-> Ohne bestätigte Pinbelegung wird nichts angeklemmt.
-
----
-
-## 0. Sicherheit zuerst
-
-- Am FPC liegen im Betrieb ca. **+22 V und −20 V** — der SLogic verträgt
-  max. **3,6 V**.
-- Nur an Pins klemmen, die als **MCU-verbunden verifiziert** sind.
-- Das Tag läuft auf ca. 3 V. Das passt, hat aber **null Reserve** nach oben.
+> **Prerequisite:** measurement request **M-001** (`pinout.md`) is complete.
+> Nothing is connected without a confirmed pinout.
 
 ---
 
-## 1. Abgriff herstellen
+## 0. Safety first
 
-Zwei Wege, in dieser Reihenfolge:
-
-> **Stand 2026-09-23:** Keine FPC-Verlängerung vorhanden → **Weg B
-> (Löten) ist der aktuelle Weg.** Weg A bleibt als Option, falls ein Set
-> beschafft wird.
-
-### A — FPC-Verlängerung einschleifen (bevorzugt, lötfrei)
-
-24-poliges FPC-Verlängerungsset (Adapter + Kabel, 0,5 mm) zwischen Panel und
-Platine. Liefert 2,54-mm-Testpunkte ohne einen einzigen Lötpunkt.
-
-**Kabeltyp beachten:** A-A oder A-B, je nachdem auf welcher Seite die
-Kontakte des Original-FPC liegen. Siehe `pinout.md`, Abschnitt
-„Hinweis zur Kontaktseite".
-
-### B — An die Durchkontaktierungen löten
-
-Die Vias in der Auffächerung rechts des Steckers sind mit ca. 0,3 mm
-deutlich dankbarer als die Pads selbst.
-
-- 0,1 mm Kupferlackdraht
-- Drähte **kurz halten** (< 10 cm)
-- **Mindestens zwei GND-Leitungen** zum Analyzer
+- In operation the FPC carries approx. **+22 V and −20 V** — the SLogic
+  tolerates max. **3.6 V**.
+- Only clip onto pins that have been **verified as MCU-connected**.
+- The tag runs at approx. 3 V. That fits, but leaves **zero headroom**.
 
 ---
 
-## 2. Kanalbelegung
+## 1. Establishing the tap
 
-| Kanal | Signal |
+Two ways, in this order:
+
+> **Status 2026-09-23:** no FPC extension available → **way B
+> (soldering) is the current way.** Way A remains an option if a set is
+> bought.
+
+### A — Insert an FPC extension (preferred, solder-free)
+
+24-pin FPC extension set (adapter + cable, 0.5 mm) between panel and
+board. Provides 2.54 mm test points without a single solder joint.
+
+**Mind the cable type:** A-A or A-B, depending on which side the contacts
+of the original FPC are on. See `pinout.md`, section "Note on the contact
+side".
+
+### B — Solder to the vias
+
+The vias in the fan-out to the right of the connector, at approx. 0.3 mm,
+are much more forgiving than the pads themselves.
+
+- 0.1 mm enamelled copper wire
+- Keep wires **short** (< 10 cm)
+- **At least two GND leads** to the analyser
+
+---
+
+## 2. Channel assignment
+
+| Channel | Signal |
 |---|---|
 | D0 | SCK |
 | D1 | SDI / MOSI |
@@ -55,135 +55,136 @@ deutlich dankbarer als die Pads selbst.
 | D3 | D/C |
 | D4 | BUSY |
 | D5 | RST |
-| D6 | frei |
-| D7 | **auf GND legen** |
+| D6 | free |
+| D7 | **tie to GND** |
 
-**D7 nicht offen lassen** — bekannter SLogic-Bug: unbenutztes D7 kann eine
-Pegelinversion zeigen (siehe `TOOLS.md`).
+**Do not leave D7 open** — known SLogic bug: an unused D7 can show a level
+inversion (see `TOOLS.md`).
 
-**Das Panel muss angesteckt bleiben.** Ohne Panel verhält sich BUSY anders
-und das Tag bricht den Refresh womöglich ab.
+**The panel must stay connected.** Without the panel, BUSY behaves
+differently and the tag may abort the refresh.
 
 ---
 
-## 2a. Pegelkontrolle mit dem Oszilloskop (OWON HDS242)
+## 2a. Level check with the oscilloscope (OWON HDS242)
 
-Vor dem ersten Anklemmen des SLogic, **nur an den in M-001 als
-MCU-verbunden verifizierten Leitungen**:
+Before connecting the SLogic for the first time, **only on the lines
+verified as MCU-connected in M-001**:
 
-1. Tag in Betrieb nehmen, Refresh auslösen.
-2. Mit dem Oszilloskop an **SCK** den High-Pegel ablesen.
-3. Wenn möglich gleich die **SCK-Frequenz** während eines Datenblocks.
+1. Power up the tag, trigger a refresh.
+2. Read the high level on **SCK** with the oscilloscope.
+3. If possible, also the **SCK frequency** during a data block.
 
-| Ergebnis | Folge |
+| Result | Consequence |
 |---|---|
-| High-Pegel 2,5 – 3,6 V | SLogic kann direkt angeschlossen werden |
-| High-Pegel < 2 V (z. B. 1,8-V-Logik) | SLogic erkennt kein High (VIH > 2 V) → **nicht** aufnehmen, Rückmeldung an Claude Code |
-| High-Pegel > 3,6 V | **SLogic nicht anschließen** — Rückmeldung an Claude Code |
-| SCK > 4 MHz | Durchgang B mit 4 statt 8 Kanälen fahren (siehe `TOOLS.md`) |
+| High level 2.5 – 3.6 V | SLogic can be connected directly |
+| High level < 2 V (e.g. 1.8 V logic) | SLogic does not detect high (VIH > 2 V) → do **not** record, report back to Claude Code |
+| High level > 3.6 V | **Do not connect the SLogic** — report back to Claude Code |
+| SCK > 4 MHz | Run pass B with 4 instead of 8 channels (see `TOOLS.md`) |
 
-⚠ Tastkopf-Masse an GND, **nie** in die Nähe der HV-Pins (±20 V).
+⚠ Probe ground to GND, **never** near the HV pins (±20 V).
 
 ---
 
-## 3. Aufnahme
+## 3. Recording
 
-### Durchgang A — Übersicht
+### Pass A — overview
 
-| Einstellung | Wert |
+| Setting | Value |
 |---|---|
-| Kanäle | 8 |
-| Samplerate | **2 MSa/s** |
-| Dauer | ca. 60 s |
-| Datenmenge | ca. 120 MB |
+| Channels | 8 |
+| Sample rate | **2 MSa/s** |
+| Duration | approx. 60 s |
+| Data volume | approx. 120 MB |
 
-Ziel ist **nicht** das Dekodieren, sondern die Orientierung:
+The goal is **not** decoding, but orientation:
 
-- Wie schnell taktet SCK tatsächlich?
-- Wo im Zeitstrahl liegt der Reset, wo der Datenblock?
-- Wie lange hängt BUSY?
+- How fast does SCK actually clock?
+- Where on the timeline is the reset, where is the data block?
+- How long does BUSY hold?
 
-### Durchgang B — Nutzdaten
+### Pass B — payload
 
-| Einstellung | Wert |
+| Setting | Value |
 |---|---|
-| Kanäle | 8 |
-| Samplerate | **20 MSa/s** (Windows — Setup des Maintainers) bzw. 40 MSa/s (Linux) |
-| Dauer | 30–60 s |
-| Datenmenge | ca. 600 MB bzw. 1,2 GB |
+| Channels | 8 |
+| Sample rate | **20 MSa/s** (Windows — the maintainer's setup) or 40 MSa/s (Linux) |
+| Duration | 30–60 s |
+| Data volume | approx. 600 MB or 1.2 GB |
 
-**Faustregel:** mindestens 5× SCK, besser 10×. Nach Durchgang A ist die
-tatsächliche SCK-Frequenz bekannt — danach richten.
+**Rule of thumb:** at least 5× SCK, better 10×. After pass A the actual SCK
+frequency is known — adjust to it.
 
-PulseView hält alles im RAM. Vorher genug frei machen.
-
----
-
-## 4. Refresh auslösen
-
-1. Aufnahme **starten**
-2. **Dann** Batterie einlegen
-
-Das Tag funkt typischerweise erst ein paar Sekunden und zeichnet den Screen
-danach. Deshalb die Aufnahme vorher starten.
-
-### Wenn nichts passiert
-
-- Batterie 30 s draußen lassen (Elkos entladen), erneut versuchen
-- Anderes Tag probieren
-- **Plan B:** Refresh über NFC auslösen. Auf der Platine sitzt ein
-  NFC-Frontend mit Antennenspule (siehe `hardware.md`). Ein NFC-fähiges
-  Telefon in Reichweite kann das Tag unter Umständen aufwecken.
+PulseView keeps everything in RAM. Free up enough beforehand.
 
 ---
 
-## 5. Erwartete Größenordnungen
+## 4. Triggering the refresh
 
-Zur Plausibilitätskontrolle, damit ein Fehlschlag früh auffällt:
+1. **Start** the recording
+2. **Then** insert the battery
 
-| Größe | Erwartung |
+The tag typically transmits for a few seconds first and draws the screen
+afterwards. That is why the recording is started beforehand.
+
+### If nothing happens
+
+- Leave the battery out for 30 s (discharge the capacitors), try again
+- Try another tag
+- **Plan B:** trigger the refresh via NFC. The board carries an NFC front
+  end with an antenna coil (see `hardware.md`). An NFC-capable phone in
+  range may be able to wake the tag.
+
+---
+
+## 5. Expected orders of magnitude
+
+For plausibility checks, so that a failure is noticed early:
+
+| Quantity | Expectation |
 |---|---|
-| SPI-Takt | 1 – 4 MHz (typisch bei E-Paper) |
-| SPI-Modus | Mode 0 (CPOL=0, CPHA=0), MSB first, CS active low |
-| Nutzdaten bei 800×480, 2 Ebenen | ca. 96 kB |
-| Reine Übertragungszeit dafür bei 2 MHz | ca. 0,4 s |
-| Gesamtdauer Refresh (dreifarbig) | **15 – 30 s** |
+| SPI clock | 1 – 4 MHz (typical for e-paper) |
+| SPI mode | Mode 0 (CPOL=0, CPHA=0), MSB first, CS active low |
+| Payload at 800×480, 2 planes | approx. 96 kB |
+| Pure transfer time for that at 2 MHz | approx. 0.4 s |
+| Total refresh duration (three-colour) | **15 – 30 s** |
 
-Der Löwenanteil der Zeit ist **Warten auf BUSY**, nicht Datenübertragung.
+The lion's share of the time is **waiting for BUSY**, not data transfer.
 
 ---
 
-## 6. Export und Ablage
+## 6. Export and storage
 
-Aus PulseView exportieren als **CSV, alle 8 Kanäle, roh** —
-nicht die Decoder-Ausgabe.
+Export from PulseView as **CSV, all 8 channels, raw** —
+not the decoder output.
 
-Ablage in `captures/` nach dem Schema:
+Store in `captures/` following the scheme:
 
 ```
-YYYY-MM-DD_<tag-id>_<zweck>_<rate>.csv
+YYYY-MM-DD_<tag-id>_<purpose>_<rate>.csv
 ```
 
-Beispiel: `2026-09-25_tag03_boot-refresh_20MHz.csv`
+Example: `2026-09-25_tag03_boot-refresh_20MHz.csv`
 
-Zusätzlich die native `.sr`-Datei aufheben, falls vorhanden — sie ist
-verlustfrei und deutlich kompakter.
+Also keep the native `.sr` file if available — it is lossless and much
+more compact.
 
 ---
 
-## 7. Auswertung
+## 7. Analysis
 
 ```bash
-python3 analysis/decode_spi.py captures/<datei>.csv \
+python3 analysis/decode_spi.py captures/<file>.csv \
     --sck D0 --mosi D1 --cs D2 --dc D3 --busy D4 --rst D5
 ```
 
-Unter Windows statt `python3` den Launcher `py` verwenden.
+On Windows use the `py` launcher instead of `python3`.
 
-Siehe `analysis/README.md`.
+See `analysis/README.md`.
 
 ---
 
-## 8. Danach: Eintrag in HISTORY.md
+## 8. Afterwards: entry in HISTORY.md
 
-Pflicht, auch bei Fehlschlag. Format siehe Vorlage am Ende von `HISTORY.md`.
+Mandatory, even on failure. Format: see the template at the end of
+`HISTORY.md`.

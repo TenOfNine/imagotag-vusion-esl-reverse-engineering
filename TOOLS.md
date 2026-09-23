@@ -1,60 +1,61 @@
-# TOOLS — verfügbare Messtechnik
+# TOOLS — available instruments
 
-Was physikalisch auf dem Labortisch liegt. Claude Code darf **nur** Messaufträge
-formulieren, die mit dieser Ausstattung durchführbar sind — oder explizit
-sagen, dass ein Gerät fehlt und welches gebraucht würde.
+What is physically on the bench. Claude Code may **only** write measurement
+requests that can be carried out with this equipment — or state explicitly
+that an instrument is missing and which one would be needed.
 
-Legende: **✅ vorhanden** · **❓ unklar** · **❌ fehlt**
+Legend: **✅ available** · **❓ unclear** · **❌ missing**
 
 ---
 
-## ✅ Sipeed SLogic Combo 8 — Logic Analyzer
+## ✅ Sipeed SLogic Combo 8 — logic analyser
 
-Das zentrale Werkzeug dieses Projekts.
+The central tool of this project.
 
-| Eigenschaft | Wert |
+| Property | Value |
 |---|---|
-| Kanäle | 8 |
-| Max. Samplerate | 80 MHz |
-| Übertragungsbandbreite | 320 Mb/s |
-| Sampling-Modus | **Streaming** (kein Onboard-Speicher) |
-| Eingangsbereich | 0 – 3,6 V |
-| Pegelschwellen | VIH > 2 V, VIL < 0,8 V |
+| Channels | 8 |
+| Max. sample rate | 80 MHz |
+| Transfer bandwidth | 320 Mb/s |
+| Sampling mode | **Streaming** (no on-board memory) |
+| Input range | 0 – 3.6 V |
+| Logic thresholds | VIH > 2 V, VIL < 0.8 V |
 | Software | PulseView (sigrok) |
 
-**Praktisch nutzbare Raten** (limitiert durch USB-Stabilität):
+**Practically usable rates** (limited by USB stability):
 
-| OS | Konfiguration |
+| OS | Configuration |
 |---|---|
-| Linux | 80 MHz @ 4 Kanäle · **40 MHz @ 8 Kanäle** |
-| Windows | 80 MHz @ 2 Kanäle · **20 MHz @ 8 Kanäle** |
+| Linux | 80 MHz @ 4 channels · **40 MHz @ 8 channels** |
+| Windows | 80 MHz @ 2 channels · **20 MHz @ 8 channels** |
 
-→ **Linux bevorzugen**, wenn verfügbar.
+→ **Prefer Linux** if available.
 
-**Stand 2026-09-23:** Maintainer nutzt PulseView unter **Windows**.
-→ Praktische Grenze für dieses Projekt: **20 MSa/s bei 8 Kanälen.**
-Bei einem SPI-Takt bis 4 MHz sind das 5 Samples pro Takt — gerade an der
-Grenze. Liegt der Takt höher, auf 4 Kanäle reduzieren (SCK, MOSI, CS, D/C)
-oder Linux (z. B. Live-USB) in Betracht ziehen.
+**Status 2026-09-23:** the maintainer runs PulseView on **Windows**.
+→ Practical limit for this project: **20 MSa/s at 8 channels.**
+With an SPI clock of up to 4 MHz that is 5 samples per clock — right at the
+limit. If the clock is higher, reduce to 4 channels (SCK, MOSI, CS, D/C)
+or consider Linux (e.g. a live USB stick).
 
-### Konsequenzen für die Nutzung
+### Consequences for use
 
-- **Streaming** heißt: alles geht live über USB ins RAM. Lange Aufnahmen
-  (30–60 s) sind möglich, während ein speicherbasierter Analyzer längst voll
-  wäre. Preis: RAM-Verbrauch und meist **kein Hardware-Trigger**.
-  → Bei 20 MSa/s × 8 Kanälen × 30 s ≈ 600 MB. Bei 40 MSa/s ≈ 1,2 GB.
-- **Bekannter Bug:** Wird D7 während der Aufnahme nicht benutzt, kann auf
-  diesem Kanal eine **Pegelinversion** auftreten.
-  → D7 immer auf GND legen oder belegen.
-- **GND-Führung:** Die Masseleitung so nah wie möglich an den Messpunkt.
-  Laut Hersteller kann schon 1 cm näher die Signalqualität verbessern.
-  → Mindestens zwei GND-Strippen verwenden.
-- **Kein Spannungsschutz.** 3,6 V ist das Ende. Am FPC liegen daneben
-  ±20 V. Siehe Sicherheitsregel 3 in `CLAUDE.md`.
+- **Streaming** means: everything goes live over USB into RAM. Long
+  recordings (30–60 s) are possible where a memory-based analyser would
+  long be full. The price: RAM usage and usually **no hardware trigger**.
+  → At 20 MSa/s × 8 channels × 30 s ≈ 600 MB. At 40 MSa/s ≈ 1.2 GB.
+- **Known bug:** if D7 is unused during a recording, a **level inversion**
+  can appear on that channel.
+  → Always tie D7 to GND or use it.
+- **GND routing:** keep the ground lead as close as possible to the
+  measurement point. According to the manufacturer, even 1 cm closer can
+  improve signal quality.
+  → Use at least two GND leads.
+- **No voltage protection.** 3.6 V is the end. The FPC carries ±20 V right
+  next to it. See safety rule 3 in `CLAUDE.md`.
 
-### Kanalbelegung (Standard für dieses Projekt)
+### Channel assignment (standard for this project)
 
-| Kanal | Signal |
+| Channel | Signal |
 |---|---|
 | D0 | SCK |
 | D1 | SDI / MOSI |
@@ -62,115 +63,115 @@ oder Linux (z. B. Live-USB) in Betracht ziehen.
 | D3 | D/C |
 | D4 | BUSY |
 | D5 | RST |
-| D6 | frei |
-| D7 | **auf GND** (siehe Bug oben) |
+| D6 | free |
+| D7 | **to GND** (see bug above) |
 
 ---
 
-## ✅ SEGGER J-Link — SWD-Debugger
+## ✅ SEGGER J-Link — SWD debugger
 
-Für Zugriff auf den EFR32FG22.
+For access to the EFR32FG22.
 
-- **Wichtig:** EFR32 Series 2 kann **nur SWD, kein JTAG**.
-- Verkabelung: `SWCLK`, `SWDIO`, `GND` und **`VTref`**.
-  → Ohne VTref rührt sich der J-Link nicht. Häufigster Anfängerfehler.
-  `RESET` ist optional, hilft aber bei Connect-under-Reset.
-- Software: **Simplicity Commander** (Silicon Labs, kostenlos).
-- Unlock-Kommando: `commander device unlock`
-  **Löscht die Originalfirmware.** Erst nach erfolgreichem Mitschnitt
-  verwenden — siehe `CLAUDE.md` §5.2.
-- Zustand vorher abfragen: `commander device info`, `commander security status`
-  → Möglicherweise ist der Chip gar nicht gesperrt. Dann kann die
-  Originalfirmware **ausgelesen und gesichert** werden, was für den
-  EPD-Treiber wertvoller wäre als jeder Mitschnitt.
-
----
-
-## ❓ FTDI USB-Seriell-Adapter
-
-Angabe des Maintainers (2026-09-23): **„FTDI1232"**. Einen FTDI-Chip mit
-genau dieser Bezeichnung kenne ich nicht. `[ANNAHME]` Gemeint ist ein
-**FT232R(L)**-Modul — das wäre reines UART.
-Maintainer (2026-09-23): „hat nur UART, soweit ich weiß".
-→ Für das Projekt **nicht relevant**, da ein J-Link vorhanden ist. Wird nur
-dann weiter geklärt, falls der Adapter doch für SWD gebraucht würde.
-
-- **FT232R / FT231X / FT230X** → nur UART. Für SWD unbrauchbar.
-- **FT2232H / FT232H / FT4232H** → haben MPSSE, können SWD via OpenOCD
-  (mit Widerstandstrick TDI↔TDO, ~470 Ω–1 kΩ).
-
-→ Für dieses Projekt **nicht kritisch**, da ein J-Link vorhanden ist.
-Nur relevant, falls parallel eine UART-Debugausgabe mitgelesen werden soll.
+- **Important:** EFR32 Series 2 supports **only SWD, no JTAG**.
+- Wiring: `SWCLK`, `SWDIO`, `GND` and **`VTref`**.
+  → Without VTref the J-Link does nothing. The most common beginner's
+  mistake. `RESET` is optional, but helps with connect-under-reset.
+- Software: **Simplicity Commander** (Silicon Labs, free).
+- Unlock command: `commander device unlock`
+  **Erases the original firmware.** Only use after a successful capture —
+  see `CLAUDE.md` §5.2.
+- Query the state first: `commander device info`,
+  `commander security status`
+  → The chip may not be locked at all. Then the original firmware can be
+  **read out and saved**, which would be more valuable for the EPD driver
+  than any capture.
 
 ---
 
-## ✅ OWON HDS242 — Hand-Oszilloskop mit Multimeter
+## ❓ FTDI USB serial adapter
 
-Angabe des Maintainers (2026-09-23). Deckt **Multimeter und Oszilloskop** ab.
+Maintainer statement (2026-09-23): **"FTDI1232"**. I know of no FTDI chip
+with exactly this designation. `[ASSUMPTION]` An **FT232R(L)** module is
+meant — that would be UART only.
+Maintainer (2026-09-23): "only has UART, as far as I know".
+→ **Not relevant** for the project, since a J-Link is available. Will only
+be clarified further if the adapter were needed for SWD after all.
 
-`[RECHERCHE]` Eckdaten laut Händlerangaben
+- **FT232R / FT231X / FT230X** → UART only. Useless for SWD.
+- **FT2232H / FT232H / FT4232H** → have MPSSE, can do SWD via OpenOCD
+  (with the resistor trick TDI↔TDO, ~470 Ω–1 kΩ).
+
+→ **Not critical** for this project, since a J-Link is available.
+Only relevant if a UART debug output should be read in parallel.
+
+---
+
+## ✅ OWON HDS242 — handheld oscilloscope with multimeter
+
+Maintainer statement (2026-09-23). Covers **multimeter and oscilloscope**.
+
+`[RESEARCH]` Key data according to retailer listings
 (https://vishaworld.com/products/owon-hds242-handheld-digital-oscilloscope-bandwidth-40-mhz-2-channel-sample-rate-250-msa-s-single-channel-125-msa-s-dual-channel,
 https://toolboom.com/en/handheld-digital-oscilloscope-owon-hds242/):
 
-| Eigenschaft | Wert |
+| Property | Value |
 |---|---|
-| Kanäle | 2 |
-| Bandbreite | 40 MHz |
-| Samplerate | 250 MSa/s (1 Kanal), 125 MSa/s (2 Kanäle) |
-| Speichertiefe | 8 k Punkte |
-| Multimeter | 20.000 Counts, Spannung, Strom, Widerstand, Kapazität, Diode, **Durchgang** |
-| Versorgung | 18650-Akku, USB-C |
+| Channels | 2 |
+| Bandwidth | 40 MHz |
+| Sample rate | 250 MSa/s (1 channel), 125 MSa/s (2 channels) |
+| Record length | 8 k points |
+| Multimeter | 20,000 counts, voltage, current, resistance, capacitance, diode, **continuity** |
+| Power | 18650 battery, USB-C |
 
-### Konsequenzen für die Nutzung
+### Consequences for use
 
-- **Durchgangsprüfer vorhanden** → M-001 bis M-003 sind durchführbar.
-- **Oszilloskop vorhanden** → damit lassen sich vor dem Anklemmen des
-  SLogic die **Logikpegel** und der **SPI-Takt** kontrollieren, und
-  diagnostisch die Boost-Spannungen (VGH/VGL).
-- **8 k Punkte Speicher** → zum Mitschneiden eines ganzen Refresh
-  **ungeeignet**. Das bleibt Aufgabe des SLogic.
-- Maximale Eingangsspannung der Oszilloskop-Eingänge bei 1×/10×-Tastkopf
-  **nicht recherchiert** → vor Messungen an den HV-Rails im Handbuch
-  nachsehen und 10× verwenden.
+- **Continuity tester available** → M-001 to M-003 can be carried out.
+- **Oscilloscope available** → before connecting the SLogic, the
+  **logic levels** and the **SPI clock** can be checked, and — for
+  diagnosis — the boost voltages (VGH/VGL).
+- **8 k points of memory** → **unsuitable** for capturing a whole refresh.
+  That remains the SLogic's job.
+- Maximum input voltage of the scope inputs with 1×/10× probe **not
+  researched** → check the manual before measuring on the HV rails and use
+  10×.
 
-## ✅ Lötstation
+## ✅ Soldering station
 
-Angabe des Maintainers (2026-09-23): normale Lötstation, **keine
-Heißluft**. Reicht für Kupferlackdraht an Vias (Capture-Weg B).
+Maintainer statement (2026-09-23): regular soldering station, **no hot
+air**. Sufficient for enamelled copper wire on vias (capture path B).
 
 ---
 
-## Prüfobjekte
+## Test objects
 
-| Position | Menge | Status |
+| Item | Quantity | Status |
 |---|---|---|
-| ESL-Tags `RFRTx026D` | > 5 | verfügbar |
-| davon **Referenzexemplar** | 1 | **unangetastet**, siehe `CLAUDE.md` §5.1 |
+| ESL tags `RFRTx026D` | > 5 | available |
+| of which **reference unit** | 1 | **untouched**, see `CLAUDE.md` §5.1 |
 
 ---
 
-## ❌ Nützlich, aber nicht vorhanden
+## ❌ Useful, but not available
 
-Claude Code darf das vorschlagen, wenn es einen Schritt entscheidend
-vereinfacht — aber keinen Arbeitsplan darauf aufbauen.
+Claude Code may suggest these if they simplify a step decisively — but must
+not build a work plan on them.
 
-| Gerät | Wofür | Grobpreis |
+| Instrument | Purpose | Rough price |
 |---|---|---|
-| 24-pol. FPC-Verlängerungsset (0,5 mm, Adapter + Kabel) | Abgriff am FPC **ohne Löten**. Achtung: A-A vs. A-B je nach Kontaktseite. **Bestätigt nicht vorhanden** (2026-09-23). | 10–20 € |
-| Heißluftstation | Auslöten des EFR32 (Weg A, Variante 2). **Bestätigt nicht vorhanden** (2026-09-23) → Variante 2 derzeit nicht durchführbar. | — |
-| Mikroskop / Lupe mit Beleuchtung | Pads am QFN zählen, Markings lesen | — |
+| 24-pin FPC extension set (0.5 mm, adapter + cable) | Tapping the FPC **without soldering**. Note: A-A vs. A-B depending on the contact side. **Confirmed not available** (2026-09-23). | €10–20 |
+| Hot-air station | Desoldering the EFR32 (path A, variant 2). **Confirmed not available** (2026-09-23) → variant 2 currently not feasible. | — |
+| Microscope / illuminated magnifier | Counting QFN pads, reading markings | — |
 
 ---
 
-## Werkzeuge, die Claude Code selbst hat
+## Tools Claude Code has itself
 
-Zur Klarstellung, was **ohne** Hardwarezugriff möglich ist:
+To make clear what is possible **without** hardware access:
 
-- Auswertung von Mitschnitten (CSV/sigrok) mit Python
-- Decoder- und Treibercode schreiben
-- Datenblätter und fremde Reverse-Engineering-Arbeiten recherchieren
-- Fotos analysieren: Bauteil-Markings lesen, Kontakte zählen, QR-Codes
-  dekodieren, Geometrie vermessen
+- Evaluating captures (CSV/sigrok) with Python
+- Writing decoder and driver code
+- Researching datasheets and other people's reverse-engineering work
+- Analysing photos: reading component markings, counting contacts,
+  decoding QR codes, measuring geometry
 
-**Nicht** möglich: irgendeine elektrische Messung, irgendein Zugriff auf
-Hardware.
+**Not** possible: any electrical measurement, any access to hardware.

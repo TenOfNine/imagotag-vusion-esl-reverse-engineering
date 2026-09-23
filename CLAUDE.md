@@ -1,143 +1,164 @@
-# CLAUDE.md — Arbeitsregeln für dieses Projekt
+# CLAUDE.md — Working rules for this project
 
-Diese Datei ist verbindlich. Sie wird von Claude Code bei jedem Sessionstart gelesen.
-
----
-
-## 1. Was dieses Projekt ist
-
-Reverse Engineering eines **VusionGroup/SES-imagotag Electronic Shelf Label**
-(Platine `RFRTx026D`, MCU Silicon Labs EFR32FG22, E-Ink-Panel `EL074TS1`)
-mit dem Ziel, das Panel unter eigener Kontrolle anzusteuern.
-
-**Für Claude Code ist das ein reines Software-Projekt.** Die Hardware liegt
-beim Maintainer auf dem Tisch. Claude Code schreibt Decoder, analysiert Mitschnitte,
-rekonstruiert Protokolle und baut Treibercode — aber misst nichts selbst.
+This file is binding. Claude Code reads it at the start of every session.
 
 ---
 
-## 2. Die wichtigste Regel: Claude Code misst nicht
+## 1. What this project is
 
-Claude Code hat **keinen Zugriff auf Messgeräte, Platinen oder Panels**.
-Jede physikalische Information kommt ausschließlich vom Maintainer.
+Reverse engineering of a **VusionGroup/SES-imagotag Electronic Shelf Label**
+(board `RFRTx026D`, MCU Silicon Labs EFR32FG22, e-ink panel `EL074TS1`)
+with the goal of driving the panel under our own control.
 
-**Verboten:**
-
-- Messwerte erfinden, schätzen oder „plausibel annehmen"
-- Aus einem Foto eine Pinbelegung *ableiten* und als Fakt behandeln
-- Behaupten, etwas sei „bestätigt", wenn es nur recherchiert oder vermutet ist
-- Einen Treiber schreiben, der auf einer ungeprüften Pinbelegung basiert,
-  ohne das im Code und in der Antwort deutlich zu kennzeichnen
-
-**Stattdessen:** Wenn eine Information fehlt, formuliere einen
-**Messauftrag** nach dem Schema in `docs/measurement-requests.md` und
-lege ihn dort ab. Der Maintainer arbeitet ihn ab und trägt die Ergebnisse in
-`hardware/measurements.md` ein.
+**For Claude Code this is a pure software project.** The hardware is on the
+maintainer's bench. Claude Code writes decoders, analyses captures,
+reconstructs protocols and builds driver code — but measures nothing itself.
 
 ---
 
-## 3. Evidenz-Kennzeichnung
+## 2. The most important rule: Claude Code does not measure
 
-Jede Tatsachenbehauptung in diesem Repo trägt genau einen Marker:
+Claude Code has **no access to instruments, boards or panels**.
+All physical information comes exclusively from the maintainer.
 
-| Marker | Bedeutung |
+**Forbidden:**
+
+- Inventing, estimating or "plausibly assuming" measured values
+- *Deriving* a pinout from a photo and treating it as fact
+- Claiming something is "confirmed" when it has only been researched or guessed
+- Writing a driver based on an unverified pinout without clearly flagging
+  that in the code and in the reply
+
+**Instead:** When information is missing, write a
+**measurement request** following the scheme in `docs/measurement-requests.md`
+and file it there. The maintainer works through it and enters the results in
+`hardware/measurements.md`.
+
+---
+
+## 3. Evidence markers
+
+Every factual claim in this repo carries exactly one marker:
+
+| Marker | Meaning |
 |---|---|
-| `[MESSUNG]` | Der Maintainer hat es mit einem Gerät gemessen. Datum + Methode dazu. |
-| `[MITSCHNITT]` | Aus einer Aufzeichnung in `captures/` abgeleitet. Dateiname dazu. |
-| `[FOTO]` | Aus einem Bild in `hardware/photos/` abgelesen (Beschriftung, Bauteilzahl). |
-| `[RECHERCHE]` | Aus einem Datenblatt oder einer Quelle. Link dazu. |
-| `[ANNAHME]` | Vermutung. Muss einen Test nennen, der sie prüfen würde. |
-| `[WIDERLEGT]` | War mal angenommen, ist gemessen widerlegt. **Nicht löschen** — stehen lassen, damit der Irrweg nicht wiederholt wird. |
+| `[MEASUREMENT]` | The maintainer measured it with an instrument. Include date + method. |
+| `[CAPTURE]` | Derived from a recording in `captures/`. Include the file name. |
+| `[PHOTO]` | Read from an image in `hardware/photos/` (marking, part count). |
+| `[RESEARCH]` | From a datasheet or a source. Include the link. |
+| `[ASSUMPTION]` | A guess. Must name a test that would check it. |
+| `[REFUTED]` | Was once assumed, has been refuted by measurement. **Do not delete** — leave it in place so the dead end is not walked again. |
 
-Eine `[ANNAHME]` wird **nur** durch `[MESSUNG]` oder `[MITSCHNITT]` zu einem
-Fakt. Nicht durch Plausibilität, nicht durch Wiederholung, nicht dadurch,
-dass drei Quellen dasselbe behaupten.
+An `[ASSUMPTION]` becomes a fact **only** through `[MEASUREMENT]` or
+`[CAPTURE]`. Not through plausibility, not through repetition, not because
+three sources say the same thing.
 
----
-
-## 4. HISTORY.md ist das Langzeitgedächtnis
-
-`HISTORY.md` ist der wichtigste Zustand dieses Projekts. Claude Code hat
-zwischen Sessions kein Gedächtnis — diese Datei ersetzt es.
-
-**Regeln:**
-
-- Bei **Sessionstart**: `HISTORY.md` und `docs/open-questions.md` lesen,
-  bevor irgendetwas anderes passiert.
-- Bei **jedem Erkenntnisgewinn**: sofort einen Eintrag anhängen. Nicht am
-  Ende der Session sammeln — Sessions brechen ab.
-- **Auch Fehlschläge eintragen.** Ein dokumentierter Sackgassenweg ist
-  genauso wertvoll wie ein Erfolg. „Panel reagierte nicht auf Init-Variante X"
-  gehört rein.
-- Einträge werden **angehängt, nie umgeschrieben**. Korrekturen kommen als
-  neuer Eintrag mit Verweis auf den alten.
+Statements the maintainer makes without having measured them (e.g. "I own
+more than 5 tags") are written as **"maintainer statement"** and carry no
+evidence marker.
 
 ---
 
-## 5. Sicherheitsregeln (nicht verhandelbar)
+## 4. HISTORY.md is the long-term memory
 
-Diese Regeln schützen Hardware, die nicht nachbestellbar ist.
+`HISTORY.md` is the most important state of this project. Claude Code has
+no memory between sessions — this file replaces it.
 
-1. **Ein Tag bleibt unangetastet** als Referenzexemplar. Kein Löten, kein
-   Flashen, kein Unlock. Claude Code schlägt niemals vor, das Referenzexemplar
-   anzufassen.
-2. **Sniffen vor Unlock.** Das Entsperren des EFR32 löscht die
-   Originalfirmware unwiderruflich. Solange die Init-Sequenz des Panels nicht
-   mitgeschnitten und gesichert ist, wird kein Unlock vorgeschlagen.
-3. **Hochspannung am FPC.** Mehrere Pins des 24-poligen Steckers führen im
-   Betrieb ca. +22 V / −20 V. Der Logic Analyzer verträgt max. 3,6 V.
-   Claude Code weist bei jedem Messauftrag, der den FPC betrifft, explizit
-   darauf hin, vorher stromlos durchzuklingeln.
-4. **Keine Pinbelegung ohne Messung.** Siehe Regel 2.
+**Rules:**
 
----
+- At **session start**: read `HISTORY.md` and `docs/open-questions.md`
+  before anything else happens.
+- On **every new insight**: append an entry immediately. Do not collect them
+  for the end of the session — sessions get cut off.
+- **Record failures too.** A documented dead end is just as valuable as a
+  success. "Panel did not respond to init variant X" belongs in there.
+- Entries are **appended, never rewritten**. Corrections come as a new
+  entry referring to the old one.
 
-## 6. Arbeitsweise
-
-- **Deutsch** in Fließtext und Dokumentation. Code, Bezeichner und
-  Commit-Messages auf Englisch.
-- **Keine Gefälligkeitszustimmung.** Wenn ein Ansatz des Maintainers technisch
-  fragwürdig ist, sag das mit Begründung. Widerspruch ist hier nützlicher
-  als Zustimmung.
-- **Unsicherheit benennen.** „Ich weiß nicht, ob das Panel 800×480 hat"
-  ist eine bessere Antwort als eine erfundene Zahl mit Nachkommastellen.
-- **Kleine Schritte.** Lieber eine geprüfte Erkenntnis als fünf vermutete.
-- Wenn etwas unklar ist: **nachfragen**, statt zu raten. Der Maintainer hat womöglich
-  nur vergessen, eine Information mitzuliefern.
+One-time exception: on 2026-09-23 the maintainer approved translating the
+whole repo into English, including existing `HISTORY.md` entries. The
+unaltered German original is kept in `docs/archive/HISTORY.de.md`.
 
 ---
 
-## 7. Repo-Struktur
+## 5. Safety rules (not negotiable)
+
+These rules protect hardware that cannot be re-ordered.
+
+1. **One tag stays untouched** as the reference unit. No soldering, no
+   flashing, no unlock. Claude Code never suggests touching the reference
+   unit.
+2. **Sniff before unlock.** Unlocking the EFR32 irrevocably erases the
+   original firmware. As long as the panel's init sequence has not been
+   captured and saved, no unlock is suggested.
+3. **High voltage on the FPC.** Several pins of the 24-pin connector carry
+   about +22 V / −20 V in operation. The logic analyser tolerates max.
+   3.6 V. For every measurement request that involves the FPC, Claude Code
+   explicitly points out that continuity must be checked unpowered first.
+4. **No pinout without measurement.** See rule 2.
+
+---
+
+## 6. Way of working
+
+- **Language:**
+  - **Chat** with the maintainer: **German**.
+  - **Everything stored in the repo** — documentation, `HISTORY.md`,
+    measurement requests, code, identifiers, comments, commit messages:
+    **English**.
+- **Git workflow:**
+  - Commit and **push directly to `main`**. No pull requests needed.
+  - **Ask first for large changes**, for example: changes to the rules in
+    this file, restructuring or deleting files, rewriting existing content
+    (as opposed to appending), mass edits across many files, or
+    architectural changes to the analysis tools.
+  - Small, self-contained changes (a new `HISTORY.md` entry, a new
+    measurement request, a bug fix, a doc correction) are pushed without
+    asking.
+- **No agreeing for the sake of it.** If one of the maintainer's approaches
+  is technically questionable, say so and give reasons. Disagreement is more
+  useful here than agreement.
+- **Name uncertainty.** "I don't know whether the panel is 800×480" is a
+  better answer than an invented number with decimal places.
+- **Small steps.** Better one verified insight than five guessed ones.
+- If something is unclear: **ask** instead of guessing. The maintainer may
+  simply have forgotten to provide a piece of information.
+
+---
+
+## 7. Repo structure
 
 ```
-CLAUDE.md                  diese Datei
-README.md                  Projektüberblick
-HISTORY.md                 Langzeitgedächtnis, chronologisch
-TOOLS.md                   verfügbare Messtechnik
+CLAUDE.md                  this file
+README.md                  project overview
+HISTORY.md                 long-term memory, chronological
+TOOLS.md                   available instruments
 docs/
-  hardware.md              Bauteil- und Plattformwissen
-  pinout.md                FPC-Belegung: Hypothese + Verifikation
-  capture-protocol.md      Anleitung für den Logic-Analyzer-Mitschnitt
-  measurement-requests.md  offene Messaufträge an den Maintainer
-  open-questions.md        was ungeklärt ist
-  references.md            Quellen
-captures/                  Rohmitschnitte (.sr, .csv) — nicht im Git
-analysis/                  Decoder und Auswertungsskripte
+  hardware.md              component and platform knowledge
+  pinout.md                FPC pinout: hypothesis + verification
+  capture-protocol.md      instructions for the logic analyser capture
+  measurement-requests.md  open measurement requests to the maintainer
+  open-questions.md        what is unresolved
+  references.md            sources
+  archive/                 superseded originals (e.g. German HISTORY)
+captures/                  raw captures (.sr, .csv) — not in git
+analysis/                  decoders and evaluation scripts
+  requirements.txt         Python dependencies
 hardware/
-  measurements.md          Messprotokoll (vom Maintainer ausgefüllt)
-  photos/                  Platinenfotos
-firmware/                  späterer Treiber-/Firmwarecode
+  measurements.md          measurement log (filled in by the maintainer)
+  photos/                  board photos
+firmware/                  later driver / firmware code
 ```
 
 ---
 
-## 8. Definition of Done für eine Erkenntnis
+## 8. Definition of done for an insight
 
-Eine Erkenntnis gilt als gesichert, wenn:
+An insight counts as established when:
 
-1. sie in `HISTORY.md` steht, mit Datum und Methode,
-2. sie einen Evidenz-Marker aus Abschnitt 3 trägt,
-3. bei `[MITSCHNITT]` die Rohdatei in `captures/` reproduzierbar vorliegt,
-4. bei `[MESSUNG]` die Zeile in `hardware/measurements.md` ausgefüllt ist.
+1. it is in `HISTORY.md`, with date and method,
+2. it carries an evidence marker from section 3,
+3. for `[CAPTURE]`, the raw file is reproducibly available in `captures/`,
+4. for `[MEASUREMENT]`, the row in `hardware/measurements.md` is filled in.
 
-Alles andere ist eine Hypothese und wird auch so genannt.
+Everything else is a hypothesis and is called that.

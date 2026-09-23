@@ -1,142 +1,143 @@
-# Messaufträge
+# Measurement requests
 
-Claude Code kann nicht messen. Fehlende physikalische Information wird hier
-als Auftrag formuliert, den der Maintainer abarbeitet.
+Claude Code cannot measure. Missing physical information is written here as
+a request that the maintainer works through.
 
-**Für Claude Code:** Neue Aufträge unten anhängen, fortlaufend nummeriert
-(`M-003`, `M-004`, …). Jeder Auftrag muss beantworten: *Was genau messen?
-Womit? Und was folgt aus welchem Ergebnis?* Ein Auftrag, dessen Ergebnis
-nichts entscheidet, ist überflüssig.
+**For Claude Code:** append new requests at the bottom, numbered
+consecutively (`M-004`, `M-005`, …). Every request must answer: *What
+exactly is to be measured? With what? And what follows from which result?*
+A request whose result decides nothing is superfluous.
 
-**Für den Maintainer:** Ergebnisse nach `../hardware/measurements.md`, dann den Auftrag
-hier auf `✅ erledigt` setzen.
+**For the maintainer:** results go to `../hardware/measurements.md`, then
+set the request here to `✅ done`.
 
 ---
 
 ## Status
 
-| ID | Thema | Status | Blockiert |
+| ID | Topic | Status | Blocks |
 |---|---|---|---|
-| M-001 | FPC-Pinbelegung durchklingeln | 🔴 offen | **alles** |
-| M-002 | Vier offene Vias = SWD? | 🔴 offen | J-Link-Zugriff |
-| M-003 | QFN-Gehäuse: 32 oder 40 Pins? | 🔴 offen | SWD-Pinnummern |
+| M-001 | Continuity-check the FPC pinout | 🔴 open | **everything** |
+| M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
+| M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 
 ---
 
-## M-001 — FPC-Pinbelegung durchklingeln
+## M-001 — Continuity-check the FPC pinout
 
-**Priorität: höchste.** Ohne dieses Ergebnis geht nichts weiter.
+**Priority: highest.** Nothing moves forward without this result.
 
-**Werkzeug:** Multimeter mit Durchgangsprüfer
-**Zustand:** stromlos, Batterie entfernt
+**Tool:** multimeter with continuity tester (OWON HDS242)
+**State:** unpowered, battery removed
 
-### Aufgabe
+### Task
 
-Für jeden der 24 FPC-Pins bestimmen, wohin er führt. Tabelle in
-`../hardware/measurements.md` ausfüllen.
+For each of the 24 FPC pins, determine where it leads. Fill in the table in
+`../hardware/measurements.md`.
 
-Reihenfolge des Vorgehens:
+Order of procedure:
 
-1. **Zählrichtung klären.** FPC einstecken, nachsehen, an welchem Ende des
-   Steckers die aufgedruckte `1` sitzt. Ergebnis notieren.
-2. **GND finden:** Durchgang zum Batterie-Minuspol.
-3. **RESE finden:** ca. 0,5 – 3 Ω gegen GND (der kleine Shunt).
-4. **GDR finden:** Durchgang zum Gate des SOT-23 mit Marking `KM`.
-5. **Digitalleitungen finden:** welche Pins haben Durchgang **direkt zu einem
-   QFN-Pin des FG22**? Die QFN-Pinnummer mitnotieren.
-6. Rest als „endet an MLCC" oder „unklar" markieren.
+1. **Settle the counting direction.** Insert the FPC, check at which end of
+   the connector the printed `1` is. Note the result.
+2. **Find GND:** continuity to the battery minus terminal.
+3. **Find RESE:** approx. 0.5 – 3 Ω to GND (the small shunt).
+4. **Find GDR:** continuity to the gate of the SOT-23 marked `KM`.
+5. **Find the digital lines:** which pins have continuity **directly to a
+   QFN pin of the FG22**? Note the QFN pin number as well.
+6. Mark the rest as "ends at MLCC" or "unclear".
 
-### Entscheidungsregel
+### Decision rule
 
-| Ergebnis | Folge |
+| Result | Consequence |
 |---|---|
-| Genau 6 Digitalleitungen, zusammenhängend auf 9–14 | Waveshare-Standard bestätigt → `pinout.md` wird zu `[MESSUNG]` |
-| 6 Digitalleitungen, aber woanders | Standard verwerfen, Belegung aus Messwerten rekonstruieren |
-| Nicht 6 | Annahme über den Controller-Typ überdenken, Rückmeldung an Claude Code |
+| Exactly 6 digital lines, contiguous on 9–14 | Waveshare standard confirmed → `pinout.md` becomes `[MEASUREMENT]` |
+| 6 digital lines, but elsewhere | Discard the standard, reconstruct the pinout from the measured values |
+| Not 6 | Reconsider the assumption about the controller type, report back to Claude Code |
 
-### ⚠ Sicherheit
+### ⚠ Safety
 
-Mehrere Pins führen im Betrieb ±20 V. **Nur stromlos messen.** Erst nach
-dieser Messung darf der Logic Analyzer angeklemmt werden.
+Several pins carry ±20 V in operation. **Measure unpowered only.** Only
+after this measurement may the logic analyser be connected.
 
 ---
 
-## M-002 — Sind die vier offenen Vias der SWD-Port?
+## M-002 — Are the four open vias the SWD port?
 
-**Werkzeug:** Multimeter
-**Zustand:** stromlos
+**Tool:** multimeter (OWON HDS242)
+**State:** unpowered
 
-### Aufgabe
+### Task
 
-Auf der Rückseite, rechts neben der `2 BOT`-Beschriftung, liegen vier offene
-Vias (eines links, eines rechts, zwei dicht nebeneinander darunter) plus eine
-größere Bohrung darüber.
+On the back side, to the right of the `2 BOT` label, there are four open
+vias (one on the left, one on the right, two close together below) plus a
+larger hole above.
 
-Für jedes Via prüfen:
+For each via check:
 
-| Test | Bedeutung |
+| Test | Meaning |
 |---|---|
-| Durchgang zu Batterie-Minus | GND |
-| Durchgang zu Batterie-Plus | VDD |
-| Durchgang zu einem FG22-Pin | Kandidat für SWDIO / SWCLK / RESET |
+| Continuity to battery minus | GND |
+| Continuity to battery plus | VDD |
+| Continuity to an FG22 pin | candidate for SWDIO / SWCLK / RESET |
 
-Bei Treffern auf FG22-Pins: **QFN-Pinnummer notieren** und gegen die
-Port-A-Belegung im EFR32FG22-Datenblatt prüfen (Port A trägt bei xG22 die
-SWD-Funktion).
+On hits on FG22 pins: **note the QFN pin number** and check it against the
+port A assignment in the EFR32FG22 datasheet (on xG22, port A carries the
+SWD function).
 
-### Entscheidungsregel
+### Decision rule
 
-| Ergebnis | Folge |
+| Result | Consequence |
 |---|---|
-| GND + VDD + 2 Port-A-Pins gefunden | SWD-Port bestätigt → J-Link kann dort angeschlossen werden |
-| Nur GND/VDD, keine Port-A-Pins | Andere Funktion (z. B. Testpunkte der Produktion) → SWD direkt an den QFN-Pins abgreifen |
+| GND + VDD + 2 port A pins found | SWD port confirmed → the J-Link can be connected there |
+| Only GND/VDD, no port A pins | Other function (e.g. production test points) → tap SWD directly at the QFN pins |
 
-### Hinweis
+### Note
 
-Für den J-Link zusätzlich **VTref** verbinden (an VDD) — ohne VTref
-verweigert der J-Link den Dienst.
+For the J-Link, additionally connect **VTref** (to VDD) — without VTref the
+J-Link refuses to work.
 
 ---
 
-## M-003 — QFN-Gehäuse: 32 oder 40 Pins?
+## M-003 — QFN package: 32 or 40 pins?
 
-**Werkzeug:** Lupe oder Mikroskop, gutes Seitenlicht
+**Tool:** magnifier or microscope, good side light (not available — see
+`TOOLS.md`; a phone camera macro shot may be enough)
 
-### Aufgabe
+### Task
 
-Pads pro Seite am EFR32FG22 zählen.
+Count the pads per side on the EFR32FG22.
 
-| Ergebnis | Typ | GPIO |
+| Result | Type | GPIO |
 |---|---|---|
-| 8 pro Seite = 32 gesamt | `EFR32FG22C121F512GM32-C` | 18 |
-| 10 pro Seite = 40 gesamt | `EFR32FG22C121F512GM40-C` | 26 |
+| 8 per side = 32 total | `EFR32FG22C121F512GM32-C` | 18 |
+| 10 per side = 40 total | `EFR32FG22C121F512GM40-C` | 26 |
 
-### Warum das zählt
+### Why it matters
 
-Die Pinout-Tabellen der beiden Gehäuse sind **nicht identisch**. Ohne diese
-Information lassen sich die SWD-Pins nicht sicher zuordnen — und ein
-falscher Anschluss des J-Link kann den Chip beschädigen.
+The pinout tables of the two packages are **not identical**. Without this
+information the SWD pins cannot be assigned reliably — and connecting the
+J-Link wrongly can damage the chip.
 
 ---
 
 <!--
-VORLAGE:
+TEMPLATE:
 
-## M-00N — <Titel>
+## M-00N — <title>
 
-**Priorität:** <hoch/mittel/niedrig>
-**Werkzeug:** <Gerät>
-**Zustand:** <stromlos / in Betrieb>
+**Priority:** <high/medium/low>
+**Tool:** <instrument>
+**State:** <unpowered / in operation>
 
-### Aufgabe
-<was genau zu tun ist, Schritt für Schritt>
+### Task
+<what exactly to do, step by step>
 
-### Entscheidungsregel
-| Ergebnis | Folge |
+### Decision rule
+| Result | Consequence |
 |---|---|
-| <Fall A> | <was dann passiert> |
-| <Fall B> | <was dann passiert> |
+| <case A> | <what happens then> |
+| <case B> | <what happens then> |
 
-### ⚠ Sicherheit
-<falls relevant>
+### ⚠ Safety
+<if relevant>
 -->

@@ -1,89 +1,92 @@
 # ESL E-Ink Reverse Engineering
 
-Reverse Engineering eines **VusionGroup / SES-imagotag** Electronic Shelf Label,
-um das verbaute (vermutlich dreifarbige) E-Ink-Panel unter eigener Kontrolle anzusteuern.
+Reverse engineering of a **VusionGroup / SES-imagotag** Electronic Shelf Label
+in order to drive its built-in (probably three-colour) e-ink panel under our
+own control.
 
 ```
-Platine   RFRTx026D  (imagotag, 2,4 GHz)
-MCU       Silicon Labs EFR32FG22  (Marking: FG22 / C121GG / C026ZX / 2419)
-Panel     E Ink EL074TS1, ca. 170 × 112 mm, vermutlich dreifarbig (S/W/Rot, unbestätigt)
-Interface 24-poliger FPC, 0,5 mm Raster
+Board     RFRTx026D  (imagotag, 2.4 GHz)
+MCU       Silicon Labs EFR32FG22  (marking: FG22 / C121GG / C026ZX / 2419)
+Panel     E Ink EL074TS1, approx. 170 × 112 mm, probably three-colour (B/W/red, unconfirmed)
+Interface 24-pin FPC, 0.5 mm pitch
 ```
 
 ---
 
-## Warum es dieses Repo gibt
+## Why this repo exists
 
-Zu diesem Panel gibt es **kein öffentliches Datenblatt**. ESL-Panels laufen
-unter NDA an OEMs; weder Pinbelegung noch Auflösung, Controller-Typ oder
-Waveform sind dokumentiert.
+There is **no public datasheet** for this panel. ESL panels are supplied to
+OEMs under NDA; neither the pinout nor the resolution, controller type or
+waveform is documented.
 
-Der Weg dorthin führt deshalb über den Mitschnitt: Das Originaltag zeichnet
-beim Einlegen der Batterie ein Bild. Dieser Refresh wird auf dem SPI-Bus
-mitgeschnitten und daraus die Init-Sequenz, die Geometrie und der
-Controller-Typ rekonstruiert.
+The way there is therefore the capture: the original tag draws an image
+when the battery is inserted. This refresh is captured on the SPI bus, and
+the init sequence, geometry and controller type are reconstructed from it.
 
 ---
 
-## Zwei mögliche Endziele
+## Two possible end goals
 
-| Weg | Ergebnis | Aufwand |
+| Path | Result | Effort |
 |---|---|---|
-| **A — Originalplatine als Trägerboard** | EFR32 stilllegen, eigenen ESP32 an den vorhandenen ZIF-Stecker. Boost-Beschaltung bleibt erhalten. | mittel |
-| **B — OpenEPaperLink-Port** | EFR32 neu flashen. Tag bleibt batteriebetrieben und funkt drahtlos. | hoch, aber elegant |
+| **A — original board as carrier** | Disable the EFR32, connect our own ESP32 to the existing ZIF connector. The boost circuitry is kept. | medium |
+| **B — OpenEPaperLink port** | Reflash the EFR32. The tag stays battery-powered and wireless. | high, but elegant |
 
-Beide Wege brauchen dieselbe Vorarbeit: **den Mitschnitt**. Deshalb ist die
-Entscheidung noch offen und wird erst getroffen, wenn die Init-Sequenz
-vorliegt.
-
----
-
-## Aktueller Stand
-
-Siehe `HISTORY.md` für den vollständigen Verlauf und
-`docs/open-questions.md` für das, was noch offen ist.
-
-Kurzfassung: Hardware ist identifiziert, **es wurde noch nichts gemessen**.
-Der nächste Schritt ist der erste Mitschnitt nach
-`docs/capture-protocol.md`.
+Both paths need the same groundwork: **the capture**. The decision is
+therefore still open and will be made once the init sequence is available.
 
 ---
 
-## Einstieg für Claude Code
+## Current status
 
-1. `CLAUDE.md` lesen — Arbeitsregeln, besonders die Evidenz-Kennzeichnung
-2. `HISTORY.md` lesen — was bisher geschah
-3. `docs/open-questions.md` lesen — woran gearbeitet wird
-4. `TOOLS.md` lesen — was an Messtechnik da ist
+See `HISTORY.md` for the full history and `docs/open-questions.md` for
+what is still open.
 
-**Wichtig:** Claude Code hat keinen Hardwarezugriff. Fehlende Messwerte
-werden als Messauftrag in `docs/measurement-requests.md` formuliert, nicht
-geschätzt.
+Short version: the hardware is identified, **nothing has been measured
+electrically yet**. The next step is measurement request M-001, then the
+first capture according to `docs/capture-protocol.md`.
 
 ---
 
-## Einstieg für den Maintainer
+## Getting started for Claude Code
 
-Der nächste konkrete Schritt steht immer oben in
+1. Read `CLAUDE.md` — working rules, especially the evidence markers
+2. Read `HISTORY.md` — what has happened so far
+3. Read `docs/open-questions.md` — what is being worked on
+4. Read `TOOLS.md` — which instruments are available
+
+**Important:** Claude Code has no hardware access. Missing measurements are
+written as a measurement request in `docs/measurement-requests.md`, not
+estimated.
+
+---
+
+## Getting started for the maintainer
+
+The next concrete step is always at the top of
 `docs/measurement-requests.md`.
 
-Mitschnitte landen in `captures/`, Messwerte in `hardware/measurements.md`.
+Captures go into `captures/`, measured values into
+`hardware/measurements.md`.
 
 ---
 
-## Auswertung
+## Analysis
 
 ```bash
-python3 analysis/decode_spi.py captures/<datei>.csv --sck D0 --mosi D1 --cs D2 --dc D3
+python3 -m pip install -r analysis/requirements.txt
+python3 analysis/decode_spi.py captures/<file>.csv --sck D0 --mosi D1 --cs D2 --dc D3
 ```
 
-Der Decoder zerlegt den Mitschnitt in Kommandos und Datenblöcke, ermittelt
-die Blocklängen und leitet daraus Kandidaten für die Panelauflösung ab.
+On Windows use `py` instead of `python3`.
+
+The decoder splits the capture into commands and data blocks, determines
+the block lengths and derives candidate panel resolutions from them.
 Details in `analysis/README.md`.
 
 ---
 
-## Lizenz
+## Licence
 
-Noch nicht festgelegt. Die Mitschnitte und Analysen sind eigene Arbeit;
-Firmware-Images oder Herstellerdokumente gehören **nicht** in dieses Repo.
+Not decided yet. The captures and analyses are our own work; firmware
+images or manufacturer documents do **not** belong in this repo.

@@ -1,16 +1,15 @@
-# firmware — noch leer
+# firmware — still empty
 
-Hier entsteht der Treibercode, **sobald der Mitschnitt vorliegt**.
+The driver code is created here **once the capture is available**.
 
-Vorher ist hier nichts zu tun. Ein Treiber auf Basis einer ungeprüften
-Pinbelegung wäre Zeitverschwendung im besten und Hardwareschaden im
-schlechtesten Fall.
+Until then there is nothing to do here. A driver based on an unverified
+pinout would be a waste of time at best and hardware damage at worst.
 
 ---
 
-## Geplante Struktur, je nach Weg
+## Planned structure, depending on the path
 
-### Weg A — ESP32 am Trägerboard
+### Path A — ESP32 on the carrier board
 
 ```
 firmware/
@@ -18,41 +17,40 @@ firmware/
     platformio.ini
     src/
       main.cpp
-      epd_el074ts1.h     aus analysis/*_init_sequence.py abgeleitet
+      epd_el074ts1.h     derived from analysis/*_init_sequence.py
       epd_el074ts1.cpp
 ```
 
-Ansatz: die mitgeschnittene Init-Sequenz 1:1 nachspielen. Erst wenn ein
-Bild erscheint, auf GxEPD2 umstellen — falls der Controller dort überhaupt
-unterstützt wird.
+Approach: replay the captured init sequence 1:1. Only once an image
+appears, switch to GxEPD2 — if the controller is supported there at all.
 
-Benötigte Leitungen: `3V3, GND, SCK, MOSI, CS, D/C, RST, BUSY`
+Required lines: `3V3, GND, SCK, MOSI, CS, D/C, RST, BUSY`
 
-### Weg B — OpenEPaperLink-Port
+### Path B — OpenEPaperLink port
 
 ```
 firmware/
   oepl-rfrtx026d/
-    README.md            Portierungsnotizen
-    patches/             Diff gegen Tag_FW_EFR32xG22
+    README.md            porting notes
+    patches/             diff against Tag_FW_EFR32xG22
 ```
 
-Basis: https://github.com/OpenEPaperLink/Tag_FW_EFR32xG22
+Base: https://github.com/OpenEPaperLink/Tag_FW_EFR32xG22
 
-Zu tun wäre: Board-Definition für `RFRTx026D` anlegen, GPIO-Mapping aus
-M-001/M-002 eintragen, EPD-Treiber für `EL074TS1` ergänzen.
-
----
-
-## Reihenfolge
-
-1. Mitschnitt auswerten → Controller und Auflösung stehen fest
-2. Entscheidung Weg A oder B (→ `docs/open-questions.md`, F-09)
-3. **Dann** hier anfangen
+To do: create a board definition for `RFRTx026D`, enter the GPIO mapping
+from M-001/M-002, add an EPD driver for `EL074TS1`.
 
 ---
 
-## Was hier nicht hingehört
+## Order
 
-- Ausgelesene Original-Firmware-Images (urheberrechtlich geschützt)
-- Herstellerdokumente unter NDA
+1. Evaluate the capture → controller and resolution are settled
+2. Decide path A or B (→ `docs/open-questions.md`, F-09)
+3. **Then** start here
+
+---
+
+## What does not belong here
+
+- Read-out original firmware images (copyright-protected)
+- Manufacturer documents under NDA

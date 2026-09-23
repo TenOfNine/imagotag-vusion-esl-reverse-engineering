@@ -1,12 +1,12 @@
-# captures — Rohmitschnitte
+# captures — raw captures
 
-## Namensschema
+## Naming scheme
 
 ```
-YYYY-MM-DD_<tag-id>_<zweck>_<rate>.<ext>
+YYYY-MM-DD_<tag-id>_<purpose>_<rate>.<ext>
 ```
 
-Beispiele:
+Examples:
 
 ```
 2026-09-25_tag03_boot-refresh_20MHz.csv
@@ -14,38 +14,38 @@ Beispiele:
 2026-09-25_tag03_overview_2MHz.sr
 ```
 
-`<tag-id>` ist die laufende Nummer des Prüfobjekts. **Tag 01 ist das
-Referenzexemplar** und taucht hier nie auf.
+`<tag-id>` is the running number of the test object. **Tag 01 is the
+reference unit** and never appears here.
 
 ---
 
-## Was ins Git gehört
+## What goes into git
 
-| Typ | Git | Begründung |
+| Type | Git | Reason |
 |---|---|---|
-| `.sr` (sigrok nativ) | ✅ wenn < 20 MB | verlustfrei und kompakt |
-| `.csv` roh | ❌ | mehrere hundert MB, aus `.sr` reproduzierbar |
-| `*_transactions.txt` | ✅ | das eigentliche Ergebnis, klein |
-| `*_init_sequence.py` | ✅ | das eigentliche Ergebnis |
-| `*_blocks.csv` | ✅ | klein |
+| `.sr` (sigrok native) | ✅ if < 20 MB | lossless and compact |
+| raw `.csv` | ❌ | several hundred MB, reproducible from `.sr` |
+| `*_transactions.txt` | ✅ | the actual result, small |
+| `*_init_sequence.py` | ✅ | the actual result |
+| `*_blocks.csv` | ✅ | small |
 
-Die `.gitignore` setzt das bereits um. Große CSVs bleiben lokal.
-
----
-
-## Zu jedem Mitschnitt gehört ein Eintrag in `../HISTORY.md`
-
-Mindestens:
-
-- Datum, Tag-Nummer, Samplerate, Kanalbelegung
-- Wie der Refresh ausgelöst wurde (Batterie / NFC / sonstiges)
-- Ob überhaupt etwas kam
-- Was der Decoder daraus gemacht hat
-
-**Auch ein leerer Mitschnitt ist ein Ergebnis** und wird dokumentiert.
+The `.gitignore` already implements this. Large CSVs stay local.
 
 ---
 
-## Ablauf
+## Every capture needs an entry in `../HISTORY.md`
 
-Siehe `../docs/capture-protocol.md`.
+At least:
+
+- date, tag number, sample rate, channel assignment
+- how the refresh was triggered (battery / NFC / other)
+- whether anything came at all
+- what the decoder made of it
+
+**An empty capture is a result too** and gets documented.
+
+---
+
+## Procedure
+
+See `../docs/capture-protocol.md`.

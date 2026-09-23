@@ -1,352 +1,416 @@
-# HISTORY — Langzeitgedächtnis des Projekts
+# HISTORY — long-term memory of the project
 
-Chronologisches Protokoll aller Erkenntnisse, Versuche und Sackgassen.
+Chronological log of all insights, attempts and dead ends.
 
-**Regeln für diese Datei** (siehe auch `CLAUDE.md` §4):
+**Rules for this file** (see also `CLAUDE.md` §4):
 
-- Neue Einträge werden **unten angehängt**, alte nie umgeschrieben.
-- Eine Korrektur ist ein **neuer Eintrag mit Verweis** auf den alten.
-- **Fehlschläge gehören rein.** Ein dokumentierter Irrweg verhindert, dass
-  er wiederholt wird.
-- Jede Tatsachenbehauptung trägt einen Evidenz-Marker:
-  `[MESSUNG] [MITSCHNITT] [FOTO] [RECHERCHE] [ANNAHME] [WIDERLEGT]`
+- New entries are **appended at the bottom**, old ones are never rewritten.
+- A correction is a **new entry with a reference** to the old one.
+- **Failures belong in here.** A documented wrong turn prevents it from
+  being repeated.
+- Every factual claim carries an evidence marker:
+  `[MEASUREMENT] [CAPTURE] [PHOTO] [RESEARCH] [ASSUMPTION] [REFUTED]`
+
+> **Translation note:** Up to and including the entry "Session 2: Session 1
+> follow-up questions answered", this file was originally written in German
+> and was translated into English on 2026-09-23 with the maintainer's
+> approval (see the last entry). The unaltered German original is in
+> `docs/archive/HISTORY.de.md`. The German evidence markers were mapped
+> 1:1: `[MESSUNG]` → `[MEASUREMENT]`, `[MITSCHNITT]` → `[CAPTURE]`,
+> `[FOTO]` → `[PHOTO]`, `[RECHERCHE]` → `[RESEARCH]`,
+> `[ANNAHME]` → `[ASSUMPTION]`, `[WIDERLEGT]` → `[REFUTED]`.
+> Markers were translated as they stood, **not** corrected — corrections
+> are in later entries.
 
 ---
 
-## 2026-09-22 — Session 1: Identifikation der Hardware
+## 2026-09-22 — Session 1: Identifying the hardware
 
-Ausgangspunkt: Der Maintainer hat mehr als fünf ausgemusterte ESL-Tags und möchte die
-Panels mit eigenem ESP32 ansteuern. Erste Fotos von Panel und Platinenoberseite.
+Starting point: the maintainer has more than five decommissioned ESL tags
+and wants to drive the panels with their own ESP32. First photos of the
+panel and the top side of the board.
 
 ### Panel
 
-- `[FOTO]` Panel trägt die Bezeichnung **`EL074TS1`** → E Ink, 7,4 Zoll.
-- `[MESSUNG]` Maintainer: Außenmaße ca. **170 × 112 mm**. Passt zum üblichen
-  7,x-Zoll-Rohpanel-Umriss.
-- `[MESSUNG]` Maintainer: Panel ist **dreifarbig** (Schwarz/Weiß/Rot).
-- `[RECHERCHE]` Zu `EL074TS1` ist **kein öffentliches Datenblatt auffindbar.**
-  Gesucht wurde direkt nach der Typenbezeichnung sowie über E-Ink- und
-  Distributorenkataloge. ESL-Panels werden unter NDA an OEMs geliefert.
-  → Das ist die zentrale Hürde des Projekts.
-- `[FOTO]` Auf dem FPC sind drei Testpunkte **`TP1`, `TP2`, `TP3`**
-  aufgedruckt. Funktion unbekannt.
+- `[PHOTO]` The panel carries the designation **`EL074TS1`** → E Ink,
+  7.4 inch.
+- `[MEASUREMENT]` Maintainer: outer dimensions approx. **170 × 112 mm**.
+  Matches the usual 7.x-inch raw panel outline.
+- `[MEASUREMENT]` Maintainer: the panel is **three-colour**
+  (black/white/red).
+- `[RESEARCH]` **No public datasheet can be found** for `EL074TS1`.
+  Searched directly for the part number as well as via E Ink and
+  distributor catalogues. ESL panels are supplied to OEMs under NDA.
+  → This is the central hurdle of the project.
+- `[PHOTO]` Three test points **`TP1`, `TP2`, `TP3`** are printed on the
+  FPC. Function unknown.
 
-### Platine
+### Board
 
-- `[FOTO]` Bedruckung: **`imagotag  RFRTx026D`**, dazu `2,4 GHz`,
-  `315 17 94V-0`, `13`, Lagenbezeichnungen `1 TOP` / `2 BOT`.
-- `[MESSUNG]` QR-Code auf der Platine dekodiert zu
+- `[PHOTO]` Silkscreen: **`imagotag  RFRTx026D`**, plus `2,4 GHz`,
+  `315 17 94V-0`, `13`, layer labels `1 TOP` / `2 BOT`.
+- `[MEASUREMENT]` QR code on the board decodes to
   `060RFRTX026D00A120O262007587`.
-- `[MESSUNG]` QR-Code auf dem Panel dekodiert zu `H7FZDSPQ0KXYZ5V00DAUAT`.
-  → Beides Seriennummern, **kein technischer Zusatznutzen**. Sackgasse.
+- `[MEASUREMENT]` QR code on the panel decodes to `H7FZDSPQ0KXYZ5V00DAUAT`.
+  → Both are serial numbers, **no additional technical value**. Dead end.
 
 ### MCU
 
-- `[FOTO]` QFN-Marking: **`FG22 / C121GG / C026ZX / 2419`**
-  → **Silicon Labs EFR32FG22**, Datumscode KW19/2024.
-- `[RECHERCHE]` Die Variante `C121` gibt es in zwei Gehäusen:
-  QFN40 mit 26 GPIO und QFN32 mit 18 GPIO. Beide: Proprietary 2,4 GHz,
-  6 dBm, 512 kB Flash, 32 kB RAM, ARM Cortex-M33, max. 38,4 MHz.
-  Quelle: EFR32FG22 Family Data Sheet.
-- `[ANNAHME]` Gehäuse ist **QFN40** (`EFR32FG22C121F512GM40`), abgeleitet aus
-  ca. 10 sichtbaren Pads pro Seite im Foto.
-  → **Prüfung:** Pads pro Seite unter Lupe nachzählen. 10/Seite = QFN40,
-  8/Seite = QFN32.
-- `[FOTO]` Zwei Quarze: **38,4 MHz** (Marking `38.4 T4F`, HFXO) und
-  **32,768 kHz** (Marking `T422C`, LFXO). Die 38,4 MHz passen exakt zum
-  Referenztakt der EFR32-Serie.
+- `[PHOTO]` QFN marking: **`FG22 / C121GG / C026ZX / 2419`**
+  → **Silicon Labs EFR32FG22**, date code week 19/2024.
+- `[RESEARCH]` The `C121` variant exists in two packages:
+  QFN40 with 26 GPIO and QFN32 with 18 GPIO. Both: proprietary 2.4 GHz,
+  6 dBm, 512 kB flash, 32 kB RAM, ARM Cortex-M33, max. 38.4 MHz.
+  Source: EFR32FG22 Family Data Sheet.
+- `[ASSUMPTION]` The package is **QFN40** (`EFR32FG22C121F512GM40`),
+  derived from approx. 10 visible pads per side in the photo.
+  → **Test:** count pads per side under a magnifier. 10/side = QFN40,
+  8/side = QFN32.
+- `[PHOTO]` Two crystals: **38.4 MHz** (marking `38.4 T4F`, HFXO) and
+  **32.768 kHz** (marking `T422C`, LFXO). The 38.4 MHz exactly matches the
+  reference clock of the EFR32 series.
 
-### Weitere Bauteile
+### Other components
 
-- `[FOTO]` SO-8 mit Marking **`8K417 / 0E47AH`**.
-  `[ANNAHME]` NFC-Frontend, da auf der Rückseite eine NFC-Antennenspule sitzt.
-  → **Prüfung:** Durchgang von diesem IC zur Spule messen.
-- `[FOTO]` Boost-Beschaltung rechts des ZIF-Steckers: Speicherdrossel,
-  SOT-23-MOSFET (Marking `KM`), mehrere Schottky-Dioden (`4`, `BR`, `ZV`),
-  dicke MLCCs.
-  → Entspricht dem Standardmuster für einen E-Ink-COG mit integriertem DC/DC.
-- `[FOTO]` Weitere SOT-23: `S21`, `XDt`, `T0.`, `1R.` — Funktion ungeklärt.
+- `[PHOTO]` SO-8 with marking **`8K417 / 0E47AH`**.
+  `[ASSUMPTION]` NFC front end, since there is an NFC antenna coil on the
+  back side.
+  → **Test:** measure continuity from this IC to the coil.
+- `[PHOTO]` Boost circuitry to the right of the ZIF connector: storage
+  inductor, SOT-23 MOSFET (marking `KM`), several Schottky diodes (`4`,
+  `BR`, `ZV`), bulky MLCCs.
+  → Matches the standard pattern for an e-ink COG with integrated DC/DC.
+- `[PHOTO]` Further SOT-23: `S21`, `XDt`, `T0.`, `1R.` — function unclear.
 
-### FPC-Stecker
+### FPC connector
 
-- `[FOTO]` **24 Kontakte, 0,5 mm Raster.** Ermittelt per Farbsegmentierung
-  und FFT-Periodenanalyse an zwei unabhängigen Fotos, Ergebnis konsistent.
-  Entspricht dem De-facto-Standard bei E-Paper.
+- `[PHOTO]` **24 contacts, 0.5 mm pitch.** Determined by colour
+  segmentation and FFT period analysis on two independent photos, results
+  consistent. Matches the de-facto standard for e-paper.
 
-### Recherche zum Ökosystem
+### Research on the ecosystem
 
-- `[RECHERCHE]` Die VUSION-Familie (2,4 GHz) gibt es von 1,6" bis 12,2" in
-  Schwarz/Weiß/Rot bzw. Gelb.
-- `[RECHERCHE]` Es existieren mehrere dokumentierte Imagotag-Hacks, aber alle
-  für **ältere, andere Hardware**: CC2510-basierte Vusion 2.2/2.6 BWR,
-  AX8052-basierte UU340. Keiner davon passt auf `RFRTx026D`.
-  → Diese Arbeiten sind methodisch nützlich, nicht direkt übertragbar.
-- `[RECHERCHE]` **OpenEPaperLink** hat eine Firmware für EFR32xG22-basierte
-  Tags (`Tag_FW_EFR32xG22`). Unterstützt werden bisher **Solum M3** und
-  **Pricer HD150** (letzterer per Modchip). Kein Vusion-Port vorhanden.
-  → Damit wäre Weg B ein **Portierungs-**, kein Neuentwicklungsprojekt.
-- `[RECHERCHE]` Debug-gesperrte EFR32xG22 lassen sich entsperren, solange
-  „unauthenticated debug unlock" nicht deaktiviert wurde. **Das Unlock löscht
-  die Originalfirmware.** Empfohlenes Werkzeug: Simplicity Commander mit
-  J-Link-basiertem Debugger.
-  → Daraus folgt die Reihenfolge: **erst sniffen, dann unlocken.**
-
----
-
-## 2026-09-22 — Session 1: Strategiewechsel
-
-**Ursprünglicher Plan:** Panel vom Originalboard trennen, an ein
-Waveshare-Treiberboard hängen.
-
-**Verworfen**, weil: Die Originalplatine enthält die komplette, korrekt
-dimensionierte Boost-Beschaltung für VGH/VGL/VSH/VSL/VCOM. Genau dort
-zerstört man beim Fremdadapter das Panel — vertauschte VGH/VGL (±20 V)
-killen es sofort. Außerdem haben ESL-FPCs die Kupferkontakte typischerweise
-auf der Gegenseite gegenüber Waveshare-Displays, was ein A-B-Wendekabel
-nötig macht.
-
-**Neuer Plan:** Originalplatine als Trägerboard behalten. Nur 8 Leitungen
-zum ESP32 nötig: 3V3, GND, SCK, MOSI, CS, D/C, RST, BUSY.
-
-Zum Stilllegen des EFR32 zwei Optionen, in dieser Reihenfolge:
-1. **RESETn dauerhaft auf GND** — GPIOs gehen in Hi-Z, zerstörungsfrei,
-   reversibel. Zuerst probieren.
-2. QFN mit Heißluft entfernen — endgültig, aber bei >5 Tags vertretbar.
+- `[RESEARCH]` The VUSION family (2.4 GHz) exists from 1.6" to 12.2" in
+  black/white/red or yellow.
+- `[RESEARCH]` Several documented Imagotag hacks exist, but all for
+  **older, different hardware**: CC2510-based Vusion 2.2/2.6 BWR,
+  AX8052-based UU340. None of them fits `RFRTx026D`.
+  → This work is methodologically useful, not directly transferable.
+- `[RESEARCH]` **OpenEPaperLink** has firmware for EFR32xG22-based tags
+  (`Tag_FW_EFR32xG22`). Supported so far: **Solum M3** and **Pricer HD150**
+  (the latter via modchip). No Vusion port exists.
+  → Path B would therefore be a **porting** project, not a new development.
+- `[RESEARCH]` Debug-locked EFR32xG22 can be unlocked as long as
+  "unauthenticated debug unlock" has not been disabled. **The unlock erases
+  the original firmware.** Recommended tool: Simplicity Commander with a
+  J-Link-based debugger.
+  → Hence the order: **sniff first, then unlock.**
 
 ---
 
-## 2026-09-22 — Session 1: Randbedingungen des Maintainers
+## 2026-09-22 — Session 1: Change of strategy
 
-- `[MESSUNG]` Maintainer besitzt **mehr als 5 Tags**.
-- Maintainer: Originalplatine darf geopfert werden.
-- Maintainer: Zielsetzung noch offen zwischen „genau dieses Panel ansteuern" und
-  „schnell ein E-Ink-Dashboard".
-- `[MESSUNG]` Messtechnik vorhanden: **Sipeed SLogic Combo 8** (mit PulseView),
-  **SEGGER J-Link**, FTDI-USB-Seriell-Adapter. Details in `TOOLS.md`.
+**Original plan:** separate the panel from the original board and connect
+it to a Waveshare driver board.
 
-### Klärung zum FTDI
+**Rejected**, because: the original board contains the complete, correctly
+dimensioned boost circuitry for VGH/VGL/VSH/VSL/VCOM. That is exactly where
+a third-party adapter destroys the panel — swapped VGH/VGL (±20 V) kill it
+immediately. In addition, ESL FPCs typically have their copper contacts on
+the opposite side compared to Waveshare displays, which requires an A-B
+reversing cable.
 
-Der Maintainer fragte, ob der FTDI-Adapter für den JTAG-Part genügt.
+**New plan:** keep the original board as a carrier board. Only 8 lines to
+the ESP32 are needed: 3V3, GND, SCK, MOSI, CS, D/C, RST, BUSY.
 
-- `[RECHERCHE]` **Nein.** Erstens kann EFR32 Series 2 ausschließlich **SWD,
-  kein JTAG**. Zweitens beherrschen nur FTDI-Chips mit MPSSE-Engine
-  (FT2232H, FT232H, FT4232H) überhaupt SWD via OpenOCD, und das nur mit
-  Widerstandstrick zwischen TDI und TDO. Klassische FT232R/FT231X können
-  nur UART.
-- `[RECHERCHE]` Selbst mit FT2232H bleibt das Problem: Das Unlock läuft bei
-  Series 2 über den **Authentication Access Port der Secure Engine**.
-  Simplicity Commander spricht dafür ausschließlich J-Link.
-  → Hinfällig, da ein J-Link vorhanden ist.
+Two options for disabling the EFR32, in this order:
+1. **Tie RESETn permanently to GND** — GPIOs go Hi-Z, non-destructive,
+   reversible. Try this first.
+2. Remove the QFN with hot air — final, but acceptable with >5 tags.
 
 ---
 
-## 2026-09-23 — Session 1: Rückseite der Platine
+## 2026-09-22 — Session 1: Maintainer's constraints
 
-### Durchbruch bei der Zählrichtung
+- `[MEASUREMENT]` The maintainer owns **more than 5 tags**.
+- Maintainer: the original board may be sacrificed.
+- Maintainer: goal still open between "drive exactly this panel" and
+  "quickly get an e-ink dashboard".
+- `[MEASUREMENT]` Available instruments: **Sipeed SLogic Combo 8** (with
+  PulseView), **SEGGER J-Link**, FTDI USB serial adapter. Details in
+  `TOOLS.md`.
 
-- `[FOTO]` Das **FPC ist selbst beschriftet**: am Kontaktende steht auf der
-  einen Seite **`24`**, auf der anderen **`1`**.
-  → Die Zählrichtung ist damit an der Quelle geklärt, keine Hypothese nötig.
-- `[ANNAHME]` **Noch offen:** Welches Ende des Steckers auf der Platine Pin 1
-  ist. Vorder- und Rückseite sind spiegelverkehrt; aus den bisherigen Fotos
-  lässt sich das nicht zuordnen.
-  → **Prüfung:** FPC einstecken und schauen, an welchem Ende die `1` sitzt.
+### Clarification on the FTDI
 
-### Weitere Beobachtungen Rückseite
+The maintainer asked whether the FTDI adapter is sufficient for the JTAG
+part.
 
-- `[FOTO]` Große **NFC-Antennenspule** im oberen Bereich, mit
-  handschriftlicher `0181` in der Mitte. Bestätigt indirekt den NFC-Chip.
-- `[FOTO]` Zwei **LEDs** (eine klar, eine gelb) unten mittig — vermutlich die
-  Locate-/Status-LEDs des Tags.
-- `[FOTO]` `2 BOT` ist eine **Lagenbezeichnung**, kein Testpunkt.
-- `[FOTO]` Die vier verlöteten Durchkontaktierungen unten links sind die
-  **Lötstellen der Batterie-Federkontakte** von der Vorderseite.
-  Keine Testpunkte. (Korrigiert eine frühere Vermutung des Maintainers.)
-- `[ANNAHME]` **Vier offene, unbedeckte Vias** in der rechten Bildhälfte,
-  links neben der `2 BOT`-Beschriftung: eines links, eines rechts, zwei dicht
-  nebeneinander darunter, dazu eine größere Bohrung darüber.
-  Anzahl und Anordnung passen zu **SWD** (SWDIO, SWCLK, GND, VDD, ggf. RESET).
-  → **Prüfung:** Durchklingeln gegen Batterie-Minus, Batterie-Plus und die
-  Port-A-Pins des FG22.
+- `[RESEARCH]` **No.** First, EFR32 Series 2 supports **only SWD, no
+  JTAG**. Second, only FTDI chips with an MPSSE engine (FT2232H, FT232H,
+  FT4232H) can do SWD via OpenOCD at all, and only with a resistor trick
+  between TDI and TDO. Classic FT232R/FT231X can only do UART.
+- `[RESEARCH]` Even with an FT2232H the problem remains: on Series 2 the
+  unlock goes through the **Authentication Access Port of the Secure
+  Engine**. Simplicity Commander supports only J-Link for that.
+  → Moot, since a J-Link is available.
 
 ---
 
-## Offener Faden am Ende von Session 1
+## 2026-09-23 — Session 1: Back side of the board
 
-Es wurde **noch nichts elektrisch gemessen**. Alle Pinbelegungen sind
-Hypothesen auf Basis des Waveshare-Standards.
+### Breakthrough on the counting direction
 
-Nächster Schritt: Messauftrag **M-001** in `docs/measurement-requests.md`
-(Durchklingeln des FPC-Steckers), danach der erste Mitschnitt nach
-`docs/capture-protocol.md`.
+- `[PHOTO]` The **FPC itself is labelled**: at the contact end there is
+  **`24`** on one side and **`1`** on the other.
+  → The counting direction is thereby settled at the source, no hypothesis
+  needed.
+- `[ASSUMPTION]` **Still open:** which end of the connector on the board is
+  pin 1. Front and back are mirror images; this cannot be determined from
+  the photos so far.
+  → **Test:** insert the FPC and look at which end the `1` is.
 
-## 2026-09-23 — Session 2: Übernahme in Claude Code
+### Further observations on the back side
 
-### Was versucht wurde
-Projekt aus dem Claude-Chat nach Claude Code (Cloud-Session) übernommen.
-Alle Dateien des Repos gelesen. Decoder mit dem synthetischen Mitschnitt
-geprüft:
+- `[PHOTO]` Large **NFC antenna coil** in the upper area, with a
+  handwritten `0181` in the middle. Indirectly confirms the NFC chip.
+- `[PHOTO]` Two **LEDs** (one clear, one yellow) at the bottom centre —
+  probably the tag's locate/status LEDs.
+- `[PHOTO]` `2 BOT` is a **layer label**, not a test point.
+- `[PHOTO]` The four soldered vias at the bottom left are the **solder
+  joints of the battery spring contacts** from the front side.
+  Not test points. (Corrects an earlier guess by the maintainer.)
+- `[ASSUMPTION]` **Four open, uncovered vias** in the right half of the
+  image, to the left of the `2 BOT` label: one on the left, one on the
+  right, two close together below, plus a larger hole above.
+  Number and arrangement fit **SWD** (SWDIO, SWCLK, GND, VDD, possibly
+  RESET).
+  → **Test:** continuity against battery minus, battery plus and the
+  port A pins of the FG22.
+
+---
+
+## Open thread at the end of session 1
+
+**Nothing has been measured electrically yet.** All pinouts are hypotheses
+based on the Waveshare standard.
+
+Next step: measurement request **M-001** in `docs/measurement-requests.md`
+(continuity check of the FPC connector), then the first capture according
+to `docs/capture-protocol.md`.
+
+---
+
+## 2026-09-23 — Session 2: Handover to Claude Code
+
+### What was tried
+Project taken over from Claude chat into Claude Code (cloud session).
+Read every file in the repo. Checked the decoder with the synthetic
+capture:
 
 ```bash
 python3 analysis/make_testcapture.py <scratch>/fake.csv
 python3 analysis/decode_spi.py <scratch>/fake.csv --busy D4 --rst D5 --out-prefix <scratch>/fake
 ```
 
-Umgebung: Python 3.11, `numpy` und `pandas` mussten erst nachinstalliert
-werden (im Repo nirgends als Abhängigkeit vermerkt).
+Environment: Python 3.11; `numpy` and `pandas` had to be installed first
+(not listed as a dependency anywhere in the repo).
 
-### Ergebnis
-- Decoder läuft fehlerfrei durch: 10 Transaktionen, Reset, BUSY-Phase 0,50 s,
-  Fingerprint UC8179 66,7 %, zwei gleich große Blöcke à 2.400 Byte erkannt.
-  Laufzeit ca. 12 s für 10,4 Mio. Samples.
-  → Beweist nur, dass der Decoder seine eigene Testvorrichtung versteht.
-  Über das echte Panel sagt das **nichts** aus.
-- Auffällig am Testmitschnitt: `TRES` meldet `03 20 01 E0` (= 800 × 480),
-  die Blöcke haben aber nur 2.400 Byte (= 19.200 Pixel). Der Decoder
-  gleicht TRES und Blocklänge **nicht** gegeneinander ab. Beim echten
-  Mitschnitt wäre genau dieser Abgleich ein starker Plausibilitätstest.
-- Opcodes `0x15` und `0x60` werden im UC8179-Log ohne Klartext angezeigt.
-- Offene Skalierungsfrage: Ein Durchgang B (40 MSa/s × 30–60 s) ergibt
-  1,2–2,4 Mrd. Samples. Der Decoder lädt die CSV komplett über pandas —
-  ob das im RAM des Maintainer-Rechners durchläuft, ist ungeprüft.
+### Result
+- The decoder runs without errors: 10 transactions, reset, BUSY phase
+  0.50 s, fingerprint UC8179 66.7 %, two equally sized blocks of 2,400
+  bytes each detected. Runtime approx. 12 s for 10.4 million samples.
+  → Only proves that the decoder understands its own test fixture.
+  It says **nothing** about the real panel.
+- Notable in the test capture: `TRES` reports `03 20 01 E0` (= 800 × 480),
+  but the blocks only have 2,400 bytes (= 19,200 pixels). The decoder does
+  **not** cross-check TRES against the block length. With the real capture,
+  exactly this check would be a strong plausibility test.
+- Opcodes `0x15` and `0x60` are shown without a description in the UC8179
+  log.
+- Open scaling question: a pass B (40 MSa/s × 30–60 s) yields 1.2–2.4
+  billion samples. The decoder loads the whole CSV via pandas — whether
+  that fits in the RAM of the maintainer's computer is untested.
 
-### Was daraus folgt
-Keine neue Hardware-Erkenntnis. Stand unverändert: **nichts gemessen**,
-M-001 bis M-003 offen.
+### What follows
+No new hardware insight. Status unchanged: **nothing measured**,
+M-001 to M-003 open.
 
-### Nächster Schritt
-Rückfragen an den Maintainer (Multimeter vorhanden? Betriebssystem für
-PulseView? FPC-Verlängerung vorhanden?), danach M-001.
-
-## 2026-09-23 — Session 2: Messtechnik geklärt
-
-### Angaben des Maintainers
-- Multimeter: **OWON HDS242** — Hand-Oszilloskop (2 Kanäle, 40 MHz) mit
-  eingebautem Multimeter inkl. Durchgangsprüfer. Eckdaten `[RECHERCHE]`,
-  Quellen in `TOOLS.md`.
-- FTDI-Adapter: Angabe „FTDI1232". `[ANNAHME]` FT232R(L), also nur UART.
-  → **Prüfung:** Chipaufdruck ablesen. Für das Projekt nicht kritisch.
-- **Keine FPC-Verlängerung**, **keine Heißluftstation**, nur eine normale
-  Lötstation.
-- PulseView läuft unter **Windows**.
-
-### Was daraus folgt
-- M-001 bis M-003 sind mit dem HDS242 durchführbar.
-- Mitschnitt nur über **Löten an die Vias** (Capture-Weg B).
-- Samplerate-Obergrenze **20 MSa/s bei 8 Kanälen**. Bei SPI > 4 MHz auf
-  4 Kanäle reduzieren.
-- Mit dem Oszilloskop lassen sich **vor** dem Anklemmen des SLogic
-  Logikpegel und SPI-Takt prüfen → neuer Abschnitt 2a in
-  `docs/capture-protocol.md`. Das schützt den SLogic vor Pegeln > 3,6 V und
-  deckt 1,8-V-Logik auf, die er nicht sehen würde.
-- Auslöten des EFR32 (Weg A, Variante 2) ist ohne Heißluft **derzeit nicht
-  durchführbar**. Bleibt nur RESETn auf GND (F-10).
+### Next step
+Questions to the maintainer (multimeter available? operating system for
+PulseView? FPC extension available?), then M-001.
 
 ---
 
-## 2026-09-23 — Session 2: Korrektur von Evidenz-Markern aus Session 1
+## 2026-09-23 — Session 2: Instruments clarified
 
-Korrigiert Einträge aus „Session 1: Identifikation der Hardware" und
-„Session 1: Randbedingungen des Maintainers". Die alten Einträge bleiben
-unverändert stehen.
+### Maintainer statements
+- Multimeter: **OWON HDS242** — handheld oscilloscope (2 channels,
+  40 MHz) with built-in multimeter including continuity tester. Key data
+  `[RESEARCH]`, sources in `TOOLS.md`.
+- FTDI adapter: stated as "FTDI1232". `[ASSUMPTION]` FT232R(L), i.e. UART
+  only.
+  → **Test:** read the chip marking. Not critical for the project.
+- **No FPC extension**, **no hot-air station**, only a regular soldering
+  station.
+- PulseView runs on **Windows**.
 
-- „Maintainer besitzt mehr als 5 Tags" und „Messtechnik vorhanden" waren
-  als `[MESSUNG]` markiert. Das sind **Angaben des Maintainers**, keine
-  Messungen. `CLAUDE.md` §3 hat dafür keinen eigenen Marker; sie werden ab
-  hier als „Angabe des Maintainers" ohne Evidenz-Marker geführt.
-- QR-Codes von Platine und Panel: als `[MESSUNG]` markiert. Wie sie
-  dekodiert wurden (Scanner des Maintainers oder aus dem Foto), ist aus dem
-  Repo nicht nachvollziehbar. Aus dem Foto wäre es `[FOTO]`.
-  → **Offene Rückfrage an den Maintainer.**
-- Außenmaße „ca. 170 × 112 mm" und „dreifarbig": als `[MESSUNG]` markiert,
-  aber ohne Datum und Methode, die `CLAUDE.md` §3 verlangt.
-  → **Offene Rückfrage:** Womit gemessen (Lineal, Messschieber)? Dreifarbig
-  gesehen an einem angezeigten Bild?
-
----
-
-## 2026-09-23 — Session 2: Decoder erweitert
-
-### Was geändert wurde
-- `analysis/requirements.txt` angelegt (`numpy`, `pandas`).
-- `decode_spi.py` gleicht ein `0x61`-Kommando (TRES) jetzt gegen die
-  Blocklängen ab. Zwei Payload-Layouts: 4 Byte (UC8179) und 3 Byte (IL0373).
-  `[RECHERCHE]` Layouts aus dem Gedächtnis der Controller-Familien, nicht
-  gegen ein Datenblatt im Repo geprüft.
-- `decode_spi.py` lädt nur noch die benötigten Kanäle als `uint8`, statt
-  alle Spalten als `int64`. Senkt den RAM-Bedarf grob um Faktor 10.
-
-### Ergebnis
-- Testmitschnitt: Transaktionslog, `_blocks.csv` und `_init_sequence.py`
-  **bytegleich** zur Ausgabe vor der Änderung.
-- Der TRES-Abgleich meldet beim Testmitschnitt korrekt `MISMATCH`
-  (800 × 480 angekündigt = 48.000 Byte, Blöcke haben 2.400 Byte).
-  Der Widerspruch steckt in `make_testcapture.py`, nicht im Decoder.
-
-### Was es nicht beweist
-Dass der Decoder einen echten PulseView-Export verarbeitet. Das zeigt erst
-der erste echte Mitschnitt. Ein Durchgang B mit 20 MSa/s × 60 s braucht
-auch nach der Änderung rund 7 GB RAM allein für die Rohdaten.
+### What follows
+- M-001 to M-003 can be carried out with the HDS242.
+- Capture only by **soldering to the vias** (capture path B).
+- Sample-rate ceiling **20 MSa/s at 8 channels**. With SPI > 4 MHz,
+  reduce to 4 channels.
+- With the oscilloscope, logic levels and SPI clock can be checked
+  **before** connecting the SLogic → new section 2a in
+  `docs/capture-protocol.md`. This protects the SLogic against levels
+  > 3.6 V and reveals 1.8 V logic it would not see.
+- Desoldering the EFR32 (path A, variant 2) is **currently not feasible**
+  without hot air. Only RESETn to GND remains (F-10).
 
 ---
 
-## 2026-09-23 — Session 2: Korrektur zu „Decoder erweitert"
+## 2026-09-23 — Session 2: Correction of evidence markers from session 1
 
-Die TRES-Payload-Layouts (UC8179: 4 Byte, IL0373: 3 Byte) waren dort als
-`[RECHERCHE]` markiert, ohne Quellenlink. Richtig ist `[ANNAHME]`.
-→ **Prüfung:** Gegen die Datenblätter von UC8179 und IL0373 abgleichen,
-oder beim echten Mitschnitt: Ergibt der Abgleich `MATCH`, stützt das das
-verwendete Layout.
+Corrects entries from "Session 1: Identifying the hardware" and
+"Session 1: Maintainer's constraints". The old entries remain unchanged.
+
+- "Maintainer owns more than 5 tags" and "instruments available" were
+  marked `[MEASUREMENT]` (German original: `[MESSUNG]`). These are
+  **maintainer statements**, not measurements. `CLAUDE.md` §3 has no marker
+  of its own for them; from here on they are recorded as "maintainer
+  statement" without an evidence marker.
+- QR codes of board and panel: marked `[MEASUREMENT]`. How they were
+  decoded (maintainer's scanner or from the photo) cannot be traced from
+  the repo. From the photo it would be `[PHOTO]`.
+  → **Open question to the maintainer.**
+- Outer dimensions "approx. 170 × 112 mm" and "three-colour": marked
+  `[MEASUREMENT]`, but without the date and method required by
+  `CLAUDE.md` §3.
+  → **Open question:** measured with what (ruler, calliper)? Three-colour
+  seen on a displayed image?
 
 ---
 
-## 2026-09-23 — Session 2: Rückfragen zu Session 1 beantwortet
+## 2026-09-23 — Session 2: Decoder extended
 
-Ergänzt „Session 2: Korrektur von Evidenz-Markern aus Session 1".
+### What was changed
+- Created `analysis/requirements.txt` (`numpy`, `pandas`).
+- `decode_spi.py` now cross-checks a `0x61` command (TRES) against the
+  block lengths. Two payload layouts: 4 bytes (UC8179) and 3 bytes
+  (IL0373). `[RESEARCH]` Layouts from memory of the controller families,
+  not checked against a datasheet in the repo.
+- `decode_spi.py` now loads only the required channels as `uint8` instead
+  of all columns as `int64`. Reduces RAM requirements roughly tenfold.
 
-### QR-Codes → `[FOTO]`
-- Maintainer erinnert sich nicht, vermutet Dekodierung aus den Fotos.
-- `[FOTO]` Nachgeprüft mit OpenCV (`cv2.QRCodeDetector`) direkt an den
-  Fotos im Repo, Ergebnis reproduzierbar:
+### Result
+- Test capture: transaction log, `_blocks.csv` and `_init_sequence.py`
+  **byte-identical** to the output before the change.
+- The TRES check correctly reports `MISMATCH` for the test capture
+  (800 × 480 announced = 48,000 bytes, blocks have 2,400 bytes).
+  The contradiction lies in `make_testcapture.py`, not in the decoder.
+
+### What it does not prove
+That the decoder can process a real PulseView export. Only the first real
+capture will show that. Even after the change, a pass B at 20 MSa/s × 60 s
+needs roughly 7 GB of RAM for the raw data alone.
+
+---
+
+## 2026-09-23 — Session 2: Correction to "Decoder extended"
+
+The TRES payload layouts (UC8179: 4 bytes, IL0373: 3 bytes) were marked
+`[RESEARCH]` there, without a source link. Correct is `[ASSUMPTION]`.
+→ **Test:** compare against the UC8179 and IL0373 datasheets, or with the
+real capture: if the check yields `MATCH`, that supports the layout used.
+
+---
+
+## 2026-09-23 — Session 2: Session 1 follow-up questions answered
+
+Supplements "Session 2: Correction of evidence markers from session 1".
+
+### QR codes → `[PHOTO]`
+- The maintainer does not remember, presumes decoding from the photos.
+- `[PHOTO]` Re-checked with OpenCV (`cv2.QRCodeDetector`) directly on the
+  photos in the repo, result reproducible:
   - `pcb-top-overview.webp`, `pcb-top-mcu.webp`, `panel-fpc-overview.webp`
     → `060RFRTX026D00A120O262007587`
   - `panel-label-el074ts1.webp` → `H7FZDSPQ0KXYZ5V00DAUAT`
-- Beide Werte stimmen mit Session 1 überein. Der Marker `[MESSUNG]` aus
-  Session 1 ist damit durch `[FOTO]` ersetzt (in `docs/hardware.md`).
+- Both values match session 1. The `[MEASUREMENT]` marker from session 1
+  is hereby replaced by `[PHOTO]` (in `docs/hardware.md`).
 
-### Außenmaße → `[MESSUNG]` bestätigt
-- Maintainer: mit **Messschieber** gemessen, in Session 1. Genaues Datum
-  nicht mehr bekannt. Zeile in `hardware/measurements.md` nachgetragen.
+### Outer dimensions → `[MEASUREMENT]` confirmed
+- Maintainer: measured with a **calliper**, in session 1. Exact date no
+  longer known. Row added to `hardware/measurements.md`.
 
-### Dreifarbig → `[ANNAHME]`
-- Maintainer: Farbe **nur aus der Erinnerung**. Bestätigung erst, wenn das
-  Display etwas anzeigt.
-- `[ANNAHME]` Dreifarbig S/W/Rot. VUSION gibt es laut Recherche aus
-  Session 1 auch mit Gelb.
-  → **Prüfung:** Zwei gleich große Frame-Blöcke im Mitschnitt = zwei Ebenen.
-  Die Drittfarbe zeigt erst ein angezeigtes Bild. Neu als F-13 in
+### Three-colour → `[ASSUMPTION]`
+- Maintainer: colour **from memory only**. Confirmation only once the
+  display shows something.
+- `[ASSUMPTION]` Three-colour B/W/red. According to the research in
+  session 1, VUSION also exists with yellow.
+  → **Test:** two equally sized frame blocks in the capture = two planes.
+  The third colour is only shown by a displayed image. New as F-13 in
   `docs/open-questions.md`.
 
 ### FTDI
-- Maintainer: Adapter kann „nur UART, soweit ich weiß". Nicht geprüft, aber
-  für das Projekt irrelevant (J-Link vorhanden). Nicht weiter verfolgt.
+- Maintainer: the adapter can do "only UART, as far as I know". Not
+  verified, but irrelevant for the project (J-Link available). Not pursued
+  further.
+
+---
+
+## 2026-09-23 — Session 2: Repo switched to English, new working rules
+
+### Maintainer decisions
+- **Chat in German, everything in the repo in English** (docs, history,
+  code, commit messages).
+- The whole existing repo is translated now, including the evidence
+  markers (`[MESSUNG]` → `[MEASUREMENT]` etc., mapping in the note at the
+  top of this file).
+- `HISTORY.md` is translated as a one-time, explicitly approved exception
+  to the append-only rule. The unaltered German original is archived in
+  `docs/archive/HISTORY.de.md`.
+- **Push directly to `main`**, no pull requests. Ask only before large
+  changes.
+
+### What was changed
+- All Markdown files and `.gitignore` comments translated to English.
+- `CLAUDE.md` §3: maintainer statements documented as "maintainer
+  statement" without a marker (already practised since the marker
+  correction above, now written down).
+- `CLAUDE.md` §4: note on the translation exception and the archive.
+- `CLAUDE.md` §6: language and git workflow rules.
+- `CLAUDE.md` §7: `docs/archive/` and `analysis/requirements.txt` added.
+
+### Small content additions made during the translation
+- `docs/measurement-requests.md`: tool named as OWON HDS242 for M-001 and
+  M-002; M-003 notes that no magnifier/microscope is available and that a
+  phone camera macro shot may be enough.
+- `docs/references.md`: OWON HDS242 retailer sources added (they were
+  previously only in `TOOLS.md`).
+- `docs/open-questions.md`: note that the IDs `F-01` … are kept from the
+  German original ("Frage") so references stay valid.
+- `README.md`: install command and Windows `py` hint in the analysis
+  section; "next step" now names M-001 first.
+
+Otherwise no technical content was added or removed. Where the translation
+had to interpret, the German archive is authoritative.
 
 ---
 
 <!--
-VORLAGE FÜR NEUE EINTRÄGE — kopieren und ausfüllen:
+TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
-## JJJJ-MM-TT — Session N: <Titel>
+## YYYY-MM-DD — Session N: <title>
 
-### Was versucht wurde
-<Aufbau, Werkzeug, Einstellungen>
+### What was tried
+<setup, tool, settings>
 
-### Ergebnis
-- `[MARKER]` <Beobachtung>
+### Result
+- `[MARKER]` <observation>
 
-### Was daraus folgt
-<Schlussfolgerung — und was sie NICHT beweist>
+### What follows
+<conclusion — and what it does NOT prove>
 
-### Nächster Schritt
-<konkret>
+### Next step
+<concrete>
 -->
