@@ -46,6 +46,35 @@ destroys it.
 
 ---
 
+## Measurement status (2026-09-23, M-001 rounds 1–4)
+
+Raw values: `../hardware/measurements.md`. FPC unplugged, board side only.
+
+| Pin | Standard | Measured | Status |
+|---:|---|---|---|
+| 2 | GDR | continuity to leg 1 of the `KM` SOT-23 | `[MEASUREMENT]` connection; "gate" is `[ASSUMPTION]` (usual SOT-23 pinout) |
+| 3 | RESE | continuity to GND | `[MEASUREMENT]` GND-connected; RESE vs. plain GND open (round 5d/5e) |
+| 8 | BS | continuity to GND | `[MEASUREMENT]` GND-connected. `[ASSUMPTION]` BS = low selects 4-wire SPI (with D/C line) |
+| 9–14 | BUSY, RST, D/C, CS, SCK, SDI | diode 0.56 V one way, OL the other | `[MEASUREMENT]` signature; `[ASSUMPTION]` these are the 6 MCU signal lines |
+| 15, 16 | VDDIO, VCI | same signature as 9–14, **no** continuity to battery plus | open (round 5a–5c) |
+| 17 | VSS | continuity to GND | `[MEASUREMENT]` |
+| 21 | PREVGH | diode 0.70 V (red on GND) | `[MEASUREMENT]` signature; see below |
+| 23 | PREVGL | diode 0.43 V (red on pin) | `[MEASUREMENT]` signature; see below |
+| 1, 4–7, 18–20, 22, 24 | NC/HLT, VGL, VGH, TSCL, TSDA, VDD, VPP, VSH, VSL, VCOM | OL both ways | `[MEASUREMENT]` no DC path — consistent with pins that only carry capacitors or are unconnected |
+
+`[ASSUMPTION]` The signatures on 21 and 23 match the boost topology of the
+Waveshare driver HAT: pin 21 (PREVGH) reaches GND through the MOSFET body
+diode plus one Schottky diode (≈ 0.5 + 0.2 V), pin 23 (PREVGL) through two
+Schottky diodes in series (≈ 2 × 0.2 V), in the opposite direction.
+→ **Test:** only an actual power-up measurement of the rails, which is not
+planned; the capture is what matters.
+
+**Summary:** everything measured so far is **consistent with the standard
+pinout above**; nothing contradicts it. It is not yet confirmed, because
+9–14 vs. 15/16 cannot be told apart by the diode test alone.
+
+---
+
 ## What is already settled
 
 `[PHOTO]` The **FPC itself is labelled**: at the contact end there is `24`

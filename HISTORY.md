@@ -429,6 +429,57 @@ drop), tested by the round itself.
 
 ---
 
+## 2026-09-23 — Session 2: M-001 rounds 1–4 — FPC pin signatures
+
+### What was measured
+Maintainer, 2026-09-23, FPC **unplugged**, battery out, board side of the
+ZIF connector. Instrument presumably OWON HDS242 (not stated), tag number
+not stated. Full table in `hardware/measurements.md`.
+
+- `[MEASUREMENT]` Round 1, continuity to battery minus: **pins 3, 8, 17**
+  beep. All others do not.
+- `[MEASUREMENT]` Round 2, continuity to battery plus: **no pin** beeps.
+- `[MEASUREMENT]` Round 3, diode mode:
+  - pins 3, 8, 17: ≈ 0.001 V both ways (short to GND)
+  - **pins 9–16**: 0.56 V with red on GND, OL reversed
+  - pin 21: 0.7 V with red on GND, OL reversed
+  - pin 23: OL with red on GND, 0.4343 V reversed
+  - pins 1, 2, 4–7, 18–20, 22, 24: OL both ways
+- `[MEASUREMENT]` Round 4: leg 1 of the `KM` SOT-23 has continuity to
+  **FPC pin 2**. (That leg 1 is the gate is `[ASSUMPTION]`, usual SOT-23
+  MOSFET pinout.)
+
+### Interpretation
+- Everything is **consistent with the standard pinout** in
+  `docs/pinout.md`; nothing contradicts it:
+  - 17 = GND, 2 = GDR as expected.
+  - 3 on GND fits RESE (shunt of well under 1 Ω looks like a short to the
+    meter). Not yet distinguished from plain GND.
+  - 8 on GND fits BS tied low. `[ASSUMPTION]` BS low = 4-wire SPI, i.e. a
+    separate D/C line — which matches pin 11 having a signal signature.
+  - `[ASSUMPTION]` 21/23 match the Waveshare HAT boost topology
+    (PREVGH: FET body diode + Schottky ≈ 0.7 V; PREVGL: two Schottky in
+    series ≈ 0.43 V, opposite direction).
+- **Deviation from the decision rule:** 8 pins with a signal-like diode
+  signature (9–16), not 6. 15/16 are VDDIO/VCI in the standard. The diode
+  test cannot tell a supply net fed by the MCU from a GPIO line.
+- **No pin connects to battery plus.** `[ASSUMPTION]` The panel supply is
+  switched by the MCU (load switch or GPIO). New question F-14 — relevant
+  for path A, because with the EFR32 in reset the panel would stay
+  unpowered.
+
+### What it does not prove
+That 9–14 are exactly BUSY/RST/D/C/CS/SCK/SDI in that order. The diode test
+shows "connected to a semiconductor pin", not which signal. The order is
+only settled by the capture (SCK toggles, D/C pattern, BUSY is driven by
+the panel).
+
+### Next step
+M-001 round 5 (separate 9–14 from 15/16, find the supply switch, confirm
+RESE), added to `docs/measurement-requests.md`.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

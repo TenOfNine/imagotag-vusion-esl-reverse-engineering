@@ -10,10 +10,10 @@ may be treated as fact from then on.
 
 ## M-001 — FPC pinout
 
-**Date:** 2026-09-23 (started)
+**Date:** 2026-09-23 (rounds 1–4 done)
 **Tool:** ⬜ (presumably OWON HDS242 — not yet stated)
 **Tag no.:** ⬜ — must **not** be tag 01 (reference unit)
-**State:** unpowered, battery removed. From round 1 on: FPC **unplugged** (board-side nets only). Pin 17 result: FPC state not stated.
+**State:** unpowered, battery removed, FPC **unplugged** (board-side nets only).
 
 ### Counting direction
 
@@ -37,39 +37,41 @@ Procedure: see `../docs/measurement-requests.md`, M-001, rounds 1–4.
 
 | Pin | GND beep | R to GND | VDD beep | Diode A (V) | Diode B (V) | Target | Standard would be |
 |---:|---|---|---|---|---|---|---|
-|  1 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | HLT_CTL |
-|  2 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | GDR |
-|  3 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | RESE |
-|  4 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VGL ⚡ |
-|  5 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VGH ⚡ |
-|  6 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | TSCL |
-|  7 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | TSDA |
-|  8 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | BS |
-|  9 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | BUSY 🟢 |
-| 10 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | RST 🟢 |
-| 11 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | D/C 🟢 |
-| 12 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | CS 🟢 |
-| 13 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | SCK 🟢 |
-| 14 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | SDI 🟢 |
-| 15 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VDDIO |
-| 16 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VCI |
-| 17 | ✅ GND (method not stated, 2026-09-23) | ⬜ | ⬜ | ⬜ | ⬜ | GND | VSS (GND) |
-| 18 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VDD |
-| 19 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VPP |
-| 20 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VSH ⚡ |
-| 21 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | PREVGH ⚡ |
-| 22 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VSL ⚡ |
-| 23 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | PREVGL ⚡ |
-| 24 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | VCOM ⚡ |
+|  1 | no | ⬜ | no | OL | OL | ⬜ | HLT_CTL |
+|  2 | no | ⬜ | no | OL | OL | KM SOT-23 leg 1 (presumed gate) | GDR |
+|  3 | ✅ beep | ⬜ | no | 0.0012 | 0.0013 | GND net | RESE |
+|  4 | no | ⬜ | no | OL | OL | ⬜ | VGL ⚡ |
+|  5 | no | ⬜ | no | OL | OL | ⬜ | VGH ⚡ |
+|  6 | no | ⬜ | no | OL | OL | ⬜ | TSCL |
+|  7 | no | ⬜ | no | OL | OL | ⬜ | TSDA |
+|  8 | ✅ beep | ⬜ | no | 0.0012 | 0.0013 | GND net | BS |
+|  9 | no | ⬜ | no | 0.56 | OL | ⬜ | BUSY 🟢 |
+| 10 | no | ⬜ | no | 0.56 | OL | ⬜ | RST 🟢 |
+| 11 | no | ⬜ | no | 0.56 | OL | ⬜ | D/C 🟢 |
+| 12 | no | ⬜ | no | 0.56 | OL | ⬜ | CS 🟢 |
+| 13 | no | ⬜ | no | 0.56 | OL | ⬜ | SCK 🟢 |
+| 14 | no | ⬜ | no | 0.56 | OL | ⬜ | SDI 🟢 |
+| 15 | no | ⬜ | no | 0.56 | OL | ⬜ | VDDIO |
+| 16 | no | ⬜ | no | 0.56 | OL | ⬜ | VCI |
+| 17 | ✅ beep | ⬜ | no | 0.0012 | 0.0013 | GND net | VSS (GND) |
+| 18 | no | ⬜ | no | OL | OL | ⬜ | VDD |
+| 19 | no | ⬜ | no | OL | OL | ⬜ | VPP |
+| 20 | no | ⬜ | no | OL | OL | ⬜ | VSH ⚡ |
+| 21 | no | ⬜ | no | 0.7 | OL | ⬜ | PREVGH ⚡ |
+| 22 | no | ⬜ | no | OL | OL | ⬜ | VSL ⚡ |
+| 23 | no | ⬜ | no | OL | 0.4343 | ⬜ | PREVGL ⚡ |
+| 24 | no | ⬜ | no | OL | OL | ⬜ | VCOM ⚡ |
+
+Rounds 1–4 measured 2026-09-23, FPC unplugged. "R to GND" (resistance values) not yet measured.
 
 ### Evaluation
 
 | Question | Answer |
 |---|---|
-| Number of pins with a GPIO-like diode signature | ⬜ (expected: 6) |
-| Are they contiguous? | ⬜ yes / ⬜ no |
-| On which pins? | ⬜ |
-| **Standard confirmed?** | ⬜ yes / ⬜ no |
+| Number of pins with a GPIO-like diode signature | **8** (expected: 6) |
+| Are they contiguous? | ✅ yes |
+| On which pins? | **9–16** (0.56 V / OL) |
+| **Standard confirmed?** | ⬜ partly — 9–14 vs. 15/16 still to be separated (round 5) |
 
 ---
 

@@ -13,7 +13,9 @@ existing references stay valid.
 
 ### 🔴 F-01 What is the actual FPC pinout?
 
-Everything else depends on it. The table in `pinout.md` is pure hypothesis.
+Everything else depends on it. Status 2026-09-23: rounds 1–4 of M-001 are
+consistent with the standard; 9–14 vs. 15/16 still open. See `pinout.md`,
+"Measurement status".
 
 → Measurement request **M-001**
 
@@ -117,6 +119,18 @@ observation of the device. VUSION also exists with yellow.
 → Capture: two equally sized frame blocks = two planes = three-colour.
 → The third colour is only shown by a displayed image (original tag or our
 own driver).
+
+### 🟡 F-14 Is the panel supply (VDDIO/VCI) switched by the MCU?
+
+`[MEASUREMENT]` 2026-09-23: none of the 24 FPC pins has continuity to
+battery plus, although pins 15/16 are VDDIO/VCI in the standard.
+`[ASSUMPTION]` The panel supply is switched (load switch or GPIO-powered).
+
+Relevant for path A: with the EFR32 held in reset, a switched supply would
+stay **off** — the ESP32 would then have to switch it on or feed pins 15/16
+itself.
+
+→ Measurement request M-001, round 5a–5c.
 
 ---
 

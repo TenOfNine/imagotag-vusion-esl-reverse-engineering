@@ -17,7 +17,7 @@ set the request here to `✅ done`.
 
 | ID | Topic | Status | Blocks |
 |---|---|---|---|
-| M-001 | Continuity-check the FPC pinout | 🟠 in progress (direction + GND done) | **everything** |
+| M-001 | Continuity-check the FPC pinout | 🟠 rounds 1–4 done, round 5 open | **everything** |
 | M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 
@@ -36,7 +36,8 @@ For each of the 24 FPC pins, determine where it leads. Fill in the table in
 `../hardware/measurements.md`.
 
 **Status 2026-09-23:** counting direction settled (pin 1 towards the board
-centre, pin 24 at the board edge), pin 17 = GND. Rounds below still open.
+centre, pin 24 at the board edge). Rounds 1–4 done, results in
+`../hardware/measurements.md`. **Round 5 is open.**
 
 #### Preparation
 
@@ -93,6 +94,25 @@ value, the assumption is supported.
 - **Optional — FG22 pin numbers:** for the pins with a GPIO signature,
   which QFN pad they connect to. Only needed later for path B; skip it if
   the pads are too small to probe reliably.
+
+#### Round 5 — separate signal lines from supply lines (added 2026-09-23)
+
+Rounds 1–4 found **8** pins with the same diode signature (9–16), not 6.
+Pins 15/16 are VDDIO/VCI in the standard, i.e. supply pins — but none of
+them has continuity to battery plus. This round separates them. Still
+unpowered, battery out, FPC unplugged.
+
+| # | Test | Mode | Expected if standard | Why |
+|---|---|---|---|---|
+| 5a | pin 15 ↔ pin 16 | continuity | **beep** (same supply net) | signal lines are never shorted together |
+| 5b | pins 9–16 each against battery minus | resistance, read after ~3 s | 15/16: value **keeps rising** (decoupling capacitor); 9–14: no rising | supply nets carry capacitors, signal lines do not |
+| 5c | pin 15 (or 16) ↔ every leg of the SOT-23s marked `S21`, `XDt`, `T0.`, `1R.` | continuity | one leg beeps | finds the component that switches the panel supply |
+| 5d | pin 3 ↔ each leg of the `KM` SOT-23 | continuity | one leg beeps (the source) | RESE senses the current at the MOSFET source; pin 3 alone beeping to GND does not distinguish RESE from plain GND |
+| 5e | pin 3 and pin 8 against battery minus | resistance | pin 3: a few tenths of an ohm more than pin 8 (shunt) | may be below the meter's resolution — then just write "same" |
+
+`[ASSUMPTION]` The panel supply (pins 15/16) is switched by the MCU (load
+switch or GPIO-powered), which is common in battery ESLs.
+→ **Test:** 5a–5c.
 
 ### Decision rule
 
