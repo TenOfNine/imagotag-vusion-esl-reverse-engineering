@@ -944,6 +944,31 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: NFC read of the tag (M-010, phone side)
+
+- Maintainer sent a screenshot of an NFC read with "NFC Tools PRO":
+  `hardware/photos/nfc-read-tag02-nfctools.png` (23:54). Capture of the
+  same attempt announced, not yet received. Which tag was read is not
+  stated (presumably tag 02).
+- `[PHOTO]` App output: ISO 14443-3A, "NXP – Mifare Ultralight
+  (Ultralight C) – NTAG226", technologies NfcA / MifareUltralight / Ndef,
+  UID `04:54:7D:6A:F7:1C:90`, ATQA `0x0044`, SAK `0x00`, NFC Forum Type 2,
+  size 47 / 47 bytes, **writable: no**, one NDEF record:
+  `https://decathlon.de/qr/8966414/2056?_lld=99012AF4`.
+- Interpretation:
+  - `[ASSUMPTION]` The NFC part is a **passive, write-locked NXP NTAG-type
+    memory** holding a retailer product link (Decathlon). UID prefix `04`
+    is NXP's manufacturer code. It is probably the SO-8 `8K417` seen in
+    session 1 → **Test:** continuity from the SO-8 to the coil and to the
+    EFR32 (does it have an I²C / field-detect line to the MCU?).
+  - Reading it did nothing visible on the display (to be confirmed with
+    the capture). A plain read of a static NDEF record is unlikely to
+    trigger a refresh unless the IC signals the field to the MCU.
+  - Write-locked → the NFC path cannot be used to send commands to the
+    tag. Do **not** try to unlock or overwrite it.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
