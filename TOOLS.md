@@ -37,6 +37,15 @@ With an SPI clock of up to 4 MHz that is 5 samples per clock — right at the
 limit. If the clock is higher, reduce to 4 channels (SCK, MOSI, CS, D/C)
 or consider Linux (e.g. a live USB stick).
 
+**Status 2026-09-23:** `[CAPTURE]` in two 20 MSa/s captures on Windows
+D4–D7 read constantly 0 while D0–D3 worked; at 2 MSa/s D4 carried data.
+`[RESEARCH]` Search results for the Sipeed documentation give the Windows
+bandwidth as 160 Mb/s with "typical 40M@4CH", i.e. 20 MSa/s × 8 channels
+is exactly at the limit (https://github.com/sipeed/sipeed_wiki, Sipeed
+wiki "Using as a Logic Analyzer" — the wiki itself was not reachable from
+the Claude Code environment). `[ASSUMPTION]` Above a certain rate only
+D0–D3 are sampled → put the lines that matter on D0–D3. Test: M-008.
+
 ### Consequences for use
 
 - **Streaming** means: everything goes live over USB into RAM. Long

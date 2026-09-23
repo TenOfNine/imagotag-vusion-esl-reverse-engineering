@@ -799,6 +799,40 @@ Session paused by the maintainer. This entry is the resume point.
 
 ---
 
+## 2026-09-23 — Session 3: Second 20 MSa/s capture — D4/D5 still flat, analyser suspected
+
+### What was tried
+- Maintainer re-checked all wires (no shorts, mapping correct; details
+  not given) and re-soldered pin 14. Tag 02, panel plugged in,
+  **20 MSa/s**, 50.0 s.
+- Raw file: `captures/2026-09-23_tag02_boot-init-rewired_20MHz.sr`
+  (sha256 `521ea680…9316`, archive timestamp 2026-09-23 23:30:02).
+  Overview: `analysis/out/2026-09-23_tag02_boot-init-rewired_20MHz_overview.txt`.
+
+### Result
+- `[CAPTURE]` **D4 (pin 13) and D5 (pin 14) again have no edge at all.**
+- `[CAPTURE]` D0–D3 show the identical boot sequence as in the previous
+  captures (reset 10 ms, BUSY high ~49.6 ms later, 82 CS frames in three
+  transactions, power-down), shifted in time only.
+
+### Interpretation
+- Pattern over all four captures: D4 carried a clock at **2 MSa/s**;
+  D4 **and** D5 (and D6/D7) are flat in **both 20 MSa/s** captures,
+  independent of re-soldering. D0–D3 always work.
+- `[ASSUMPTION]` Not a wiring problem but the analyser: at 20 MSa/s with
+  8 channels on Windows (at the USB bandwidth limit, see `TOOLS.md`) only
+  D0–D3 are sampled. This would also explain the flat D5 in
+  `…_boot-init_20MHz.sr`; the earlier D5 behaviour at 2 MSa/s (following
+  the battery) was a separate, real wiring fault.
+  → **Test:** M-008 (2 MSa/s check with current wiring; then SCK/data/CS/DC
+  moved to D0–D3 and recorded at 20 MSa/s with 4 channels).
+
+### What it does not prove
+That the current pin 14 wiring is correct — that is only shown by data
+edges in the M-008 captures.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

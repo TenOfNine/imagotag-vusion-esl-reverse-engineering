@@ -23,7 +23,8 @@ set the request here to `✅ done`.
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
-| M-007 | D5 wire (pin 14) shows no data — check solder point | 🔴 open — after re-soldering D4 (SCK) **and** D5 are flat; check all six wires | **pass B** |
+| M-007 | D5 wire (pin 14) shows no data — check solder point | 🟠 wiring re-checked by maintainer (OK); D4/D5 still flat at 20 MSa/s → suspect the analyser, see M-008 | **pass B** |
+| M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | 🔴 open | **pass B** |
 
 ---
 
@@ -350,6 +351,56 @@ wire and the via in one go.
 |---|---|
 | 1 fails and/or 2 beeps | wire was on the wrong point → fix, then pass B |
 | 1 beeps, 2 silent | wiring is right; pin 14 is not MOSI → report back, rethink the pin roles |
+
+---
+
+## M-008 — Are D4–D7 dropped by the analyser at 20 MSa/s?
+
+**Priority: high** — cheapest possible test, no soldering.
+**Tool:** SLogic Combo 8, PulseView (Windows)
+**State:** tag 02 in operation, panel plugged in
+
+### Background
+
+`[CAPTURE]` D4 (pin 13) showed a clean clock at **2 MSa/s**
+(`…_boot-overview-panel_2MHz.sr`), but D4 **and** D5 are completely flat in
+both **20 MSa/s** captures (`…_boot-init_20MHz.sr`,
+`…_boot-init-rewired_20MHz.sr`) — even after the maintainer re-checked
+all wires (no shorts, mapping correct). D0–D3 work in every capture.
+`[RESEARCH]` The SLogic Combo 8 is bandwidth-limited on Windows (sources in
+`TOOLS.md`); 20 MSa/s × 8 channels sits right at that limit.
+`[ASSUMPTION]` At 20 MSa/s the driver/device runs in a reduced channel
+mode and only D0–D3 carry data; D4–D7 read 0.
+
+### Task
+
+1. **Wiring check at 2 MSa/s, current wiring**, ~15 s, battery inserted
+   during the recording. Expect edges on D4 (SCK) **and D5 (data)** during
+   the transfer at ~6 s.
+2. **Move the leads at the SLogic header** (no soldering) so that the four
+   lines needed for decoding sit on D0–D3:
+
+   | Channel | FPC pin | Signal (`[ASSUMPTION]` standard order) |
+   |---|---|---|
+   | D0 | 13 | SCK |
+   | D1 | 14 | data (SDI/SDA) |
+   | D2 | 12 | CS |
+   | D3 | 11 | D/C |
+   | D4–D7 | — | **disable** in PulseView (D7 lead on GND if connected) |
+
+   Name the channels in PulseView accordingly (`Pin13`, `Pin14`, …).
+   BUSY and RST are already known from earlier captures and are not needed
+   for decoding.
+3. Record **20 MSa/s, 4 channels, ~15 s**, battery inserted during the
+   recording.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Step 1 shows D4/D5 edges, step 3 shows SCK + data | analyser channel mode was the cause → decode the init sequence; note the limit in `TOOLS.md` |
+| Step 1 already flat on D4/D5 | wiring after all → back to M-007 |
+| Step 1 fine, step 3 flat on D0/D1 | problem moves with the wire → wiring/lead, not the analyser |
 
 ---
 
