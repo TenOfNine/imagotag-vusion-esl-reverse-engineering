@@ -23,7 +23,7 @@ set the request here to `✅ done`.
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
-| M-007 | D5 wire (pin 14) shows no data — check solder point | 🔴 open | **pass B** |
+| M-007 | D5 wire (pin 14) shows no data — check solder point | 🔴 open — after re-soldering D4 (SCK) **and** D5 are flat; check all six wires | **pass B** |
 
 ---
 
@@ -322,6 +322,27 @@ and low at 27.65 s (presumably battery out), in both captures.
 2. Continuity from the D5 solder point to **battery plus**.
 3. If 1 fails or 2 beeps: find the correct via for pin 14 (M-004) and
    re-solder.
+
+### Update 2026-09-23 — after re-soldering pin 14
+
+`[CAPTURE]` `2026-09-23_tag02_boot-init_20MHz.sr`: D5 no longer follows
+the battery (good), but now **both D4 (pin 13, SCK) and D5 (pin 14) are
+flat low** for the whole capture, while D0–D3 behave exactly as before.
+SCK was clearly visible in the previous capture, so the D4 connection was
+most likely disturbed while re-soldering pin 14 (neighbouring via), or a
+wire/clip came loose.
+
+Extended task — unpowered, battery out, FPC plugged in or out:
+
+| # | Check | Expected |
+|---|---|---|
+| 4 | For **each** of D0–D5: continuity from the **end of the wire at the SLogic** (not the solder point) to its FPC pin 9–14 at the connector | beep for each, 6 × |
+| 5 | Neighbour shorts: 12↔13, 13↔14, 14↔15 at the solder points | no beep |
+| 6 | D4 and D5 solder points to battery minus and battery plus | no beep |
+| 7 | SLogic side: D4/D5 leads firmly on the right header pins | — |
+
+Checking from the SLogic end of the wire covers the solder joint, the
+wire and the via in one go.
 
 ### Decision rule
 

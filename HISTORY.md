@@ -679,6 +679,53 @@ repeat pass A. Pass B only once BUSY shows activity.
 
 ---
 
+## 2026-09-23 — Session 2: First 20 MSa/s capture — SCK and data lost after re-soldering
+
+### What was tried
+- Tag 02, panel plugged in, **20 MSa/s**, 22.4 s, battery inserted during
+  the recording. Pin 14 wire re-soldered to a different point beforehand
+  (M-007); the maintainer suspects it is still wrong.
+- Raw file: `captures/2026-09-23_tag02_boot-init_20MHz.sr` (446 KB,
+  sha256 `e7e151cb…5b65`, archive timestamp 2026-09-23 19:00:12).
+  Overview: `analysis/out/2026-09-23_tag02_boot-init_20MHz_overview.txt`.
+
+### Result
+- `[CAPTURE]` **D4 (pin 13) and D5 (pin 14): no edge at all**, low for the
+  whole capture. D5 no longer follows the battery.
+- `[CAPTURE]` D0–D3 show the same sequence as in the 2 MSa/s capture with
+  panel (reset 10 ms, BUSY high ~49.6 ms after reset, then the transfer,
+  then power-down) — now with 50 ns resolution.
+- `[CAPTURE]` The transfer consists of **82 CS frames in three
+  transactions** (CS-low width per frame, D/C level):
+  1. 6.5811 s: 1 frame D/C=0 (5.85 µs), then **3** frames D/C=1
+     (13.2–13.65 µs each),
+  2. 6.5813 s: 2 frames D/C=0 (5.85 / 5.10 µs), then **5** frames D/C=1
+     (3.80–3.95 µs each),
+  3. 6.5814 s: 1 frame D/C=0 (5.05 µs), then **70** frames D/C=1
+     (12.85–13.65 µs each).
+- `[CAPTURE]` D/C is constant within each CS frame.
+
+### Interpretation
+- Every byte has its own CS frame; commands are D/C=0, parameters/data
+  D/C=1. The frame widths show **at least two different byte timings**:
+  ~3.8 µs (writes, `[ASSUMPTION]` hardware SPI ≥ 2 MHz) and ~13 µs with
+  ~1 µs bit period (seen in the 2 MSa/s capture). `[ASSUMPTION]` The ~13 µs
+  frames (3 bytes after the first command, 70 bytes after the last) are
+  **reads** from the panel over a bidirectional data line, clocked slowly
+  (bit-banged). Only the byte values will settle this.
+- `[ASSUMPTION]` Losing D4 is a wiring problem caused by the re-soldering
+  (pin 13 and 14 are neighbours), not a change in the tag's behaviour —
+  the timing of D0–D3 is unchanged. → **Test:** M-007 extended checks.
+
+### What it does not prove
+The byte values — still no data line and now no clock.
+
+### Next step
+M-007 extended: check all six wires end-to-end from the SLogic side, fix,
+then repeat pass B.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
