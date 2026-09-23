@@ -17,7 +17,7 @@ set the request here to `✅ done`.
 
 | ID | Topic | Status | Blocks |
 |---|---|---|---|
-| M-001 | Continuity-check the FPC pinout | 🔴 open | **everything** |
+| M-001 | Continuity-check the FPC pinout | 🟠 in progress (direction + GND done) | **everything** |
 | M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 
@@ -35,16 +35,64 @@ set the request here to `✅ done`.
 For each of the 24 FPC pins, determine where it leads. Fill in the table in
 `../hardware/measurements.md`.
 
-Order of procedure:
+**Status 2026-09-23:** counting direction settled (pin 1 towards the board
+centre, pin 24 at the board edge), pin 17 = GND. Rounds below still open.
 
-1. **Settle the counting direction.** Insert the FPC, check at which end of
-   the connector the printed `1` is. Note the result.
-2. **Find GND:** continuity to the battery minus terminal.
-3. **Find RESE:** approx. 0.5 – 3 Ω to GND (the small shunt).
-4. **Find GDR:** continuity to the gate of the SOT-23 marked `KM`.
-5. **Find the digital lines:** which pins have continuity **directly to a
-   QFN pin of the FG22**? Note the QFN pin number as well.
-6. Mark the rest as "ends at MLCC" or "unclear".
+#### Preparation
+
+1. Use any tag **except tag 01** (reference unit). Note its number.
+2. Remove the battery, wait **at least 1 minute** so the HV capacitors can
+   discharge — residual charge falsifies the readings.
+3. **Unplug the FPC.** We want the board-side nets only; with the panel
+   attached, its internal circuitry adds paths and confuses the readings.
+4. Probe point per pin: the **solder tails of the ZIF connector** on the
+   board (or the fan-out vias next to it). A sharpened probe tip or a
+   sewing needle held against the probe helps at 0.5 mm pitch. Accidentally
+   bridging two neighbouring pins is harmless unpowered — just repeat that
+   pin.
+
+#### Round 1 — everything against GND (continuity + resistance)
+
+One probe fixed on **battery minus**. Go through pins 1–24:
+
+- continuity mode: beep yes/no
+- then resistance mode: value after approx. 2 s. If the value keeps
+  climbing, write "rising" — that is a capacitor charging (typical for the
+  HV pins).
+
+Expected with the standard: pin 17 beeps (done), pin 3 (RESE) shows a few
+ohms (shunt).
+
+#### Round 2 — everything against VDD (continuity)
+
+One probe fixed on **battery plus**, pins 1–24 in continuity mode.
+Expected with the standard: pins 15, 16, 18 (VDDIO, VCI, VDD) may beep.
+
+#### Round 3 — diode signature (the key round)
+
+Meter in **diode mode**. Every GPIO of the EFR32 has ESD protection diodes
+to GND and VDD. They show up from the outside, without having to reach the
+tiny QFN pads:
+
+- **Diode A:** **red** probe on battery minus, **black** probe on the pin.
+- **Diode B:** swap: **black** on battery minus, **red** on the pin.
+
+Write down the displayed voltage or `OL` for every pin.
+
+`[ASSUMPTION]` Pins wired directly to an MCU GPIO show approx.
+0.4 – 0.8 V in diode A. Open pins show `OL` both ways; pins on large
+capacitors show a slowly changing value.
+→ **Test:** this round itself — if exactly 6 pins show the same kind of
+value, the assumption is supported.
+
+#### Round 4 — targeted checks (only for the interesting pins)
+
+- **GDR:** continuity from the SOT-23 marked `KM` to the FPC pins.
+  `[ASSUMPTION]` The gate is usually pin 1 of the SOT-23 (single pin on one
+  side is the drain) — check all three legs, note which one hits.
+- **Optional — FG22 pin numbers:** for the pins with a GPIO signature,
+  which QFN pad they connect to. Only needed later for path B; skip it if
+  the pads are too small to probe reliably.
 
 ### Decision rule
 

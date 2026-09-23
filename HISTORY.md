@@ -397,6 +397,38 @@ had to interpret, the German archive is authoritative.
 
 ---
 
+## 2026-09-23 — Session 2: M-001 started — counting direction and GND
+
+### What was measured (maintainer statements, first M-001 results)
+- `[MEASUREMENT]` Counting direction on the board: **pin 1 points towards
+  the centre of the board, pin 24 is at the board edge.** Read from the `1`
+  printed on the FPC cable, 2026-09-23.
+- `[MEASUREMENT]` The FPC contacts face **down** (towards the board) and are
+  not visible once the cable is unplugged. 2026-09-23.
+- `[MEASUREMENT]` **Pin 17 = GND**, 2026-09-23. Method not stated yet
+  (presumably continuity to battery minus with the OWON HDS242). Tag number
+  not stated yet.
+
+### What follows
+- Plausibility check from `docs/pinout.md` step 3 passes: GND is the 8th
+  pin counted from the pin 24 end, as in the standard. The board is **not**
+  mirrored relative to the FPC numbering.
+- This is **one** matching pin. It does not confirm the rest of the
+  standard pinout.
+- Contacts facing down agrees with `[RESEARCH]` on ESL FPCs (contacts on
+  the bottom side, see `docs/pinout.md`). Only relevant if an FPC extension
+  is ever bought (A-B cable).
+
+### Next step
+M-001 was refined into four rounds (GND, VDD, diode signature, targeted
+checks), see `docs/measurement-requests.md`. The measurement table in
+`hardware/measurements.md` got columns for them. The diode round lets the
+MCU-connected pins be found from the connector side, without probing the
+QFN pads. Its expected values are an `[ASSUMPTION]` (ESD diode forward
+drop), tested by the round itself.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
