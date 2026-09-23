@@ -73,6 +73,22 @@ differently and the tag may abort the refresh.
 
 ---
 
+**Update 2026-09-23 — use 4 channels for decoding:** `[CAPTURE]` with
+8 channels at 20 MSa/s on Windows, D4–D7 read 0 (M-008). Proven setup:
+
+| Channel | FPC pin | Signal |
+|---|---|---|
+| D0 | 13 | SCK |
+| D1 | 14 | SDA (bidirectional) |
+| D2 | 12 | CS |
+| D3 | 11 | D/C |
+| D4–D7 | — | disabled |
+
+Decode with `python3 analysis/sr_spi_frames.py <file>.sr --sck Pin13
+--data Pin14 --cs Pin12 --dc Pin11`.
+
+---
+
 ## 2a. Level check with the oscilloscope (OWON HDS242)
 
 Before connecting the SLogic for the first time, **only on the lines

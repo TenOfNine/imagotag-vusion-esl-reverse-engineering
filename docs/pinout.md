@@ -70,6 +70,18 @@ Schottky diodes in series (≈ 2 × 0.2 V), in the opposite direction.
 → **Test:** only an actual power-up measurement of the rails, which is not
 planned; the capture is what matters.
 
+**Update 2026-09-23 (captures):** `[CAPTURE]` roles of all six signal
+pins are now established from captures on tag 02:
+
+| Pin | Signal | Evidence |
+|---:|---|---|
+| 9 | BUSY (panel output; high ≈ 50 ms after reset = ready) | toggles only with panel plugged in |
+| 10 | RST (active low, 10 ms pulse) | `…_boot-overview_2MHz.sr` |
+| 11 | D/C (low = command) | constant within each byte frame |
+| 12 | CS (active low, one frame per byte) | `…_boot-init_20MHz.sr` |
+| 13 | SCK (idle low; ~6.4 MHz writes, ~1 MHz reads) | `…_boot-init-4ch_20MHz.sr` |
+| 14 | **SDA — bidirectional data** (MCU writes and panel answers on the same line) | read bytes contain the panel serial, see `HISTORY.md` |
+
 **Summary:** M-001 decision rule row 1 applies — the six signal lines are
 contiguous on 9–14. The logic analyser may be connected to **pins 9–14 and
 GND only** (see `capture-protocol.md`). The hypothesis warning at the top

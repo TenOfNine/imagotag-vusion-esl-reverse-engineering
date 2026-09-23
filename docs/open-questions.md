@@ -13,12 +13,21 @@ existing references stay valid.
 
 ### 🔴 F-01 What is the actual FPC pinout?
 
+Update 2026-09-23 (later): **answered for the signal pins** — roles of
+9–14 established from captures (9 BUSY, 10 RST, 11 D/C, 12 CS, 13 SCK,
+14 bidirectional SDA), see `pinout.md`.
+
 Status 2026-09-23: **largely answered.** `[MEASUREMENT]` Signal lines on
 9–14, supply on 15/16, GND on 17, GDR on 2. Still open: which signal is on
 which pin within 9–14 → the capture settles it. See `pinout.md`,
 "Measurement status".
 
 ### 🔴 F-02 What resolution does the panel have?
+
+**Update 2026-09-23 (capture):** `[CAPTURE]` the 70 bytes the MCU reads
+from the panel at boot contain `01 E0 03 20` = **480, 800**.
+`[ASSUMPTION]` That is the panel's resolution stored in its OTP →
+**800 × 480** very likely. Confirmed only by a frame block of matching size.
 
 **Update 2026-09-23:** `[RESEARCH]` VUSION 7.4 BWR: 800 × 480 px, 126 dpi
 (datasheet, see `hardware.md`). For the BWRY version still to be confirmed
@@ -77,6 +86,11 @@ Decides which pinout table of the datasheet applies.
 The whole sniffing strategy relies on it. If not: plan B via NFC.
 
 → Becomes apparent at the first recording attempt.
+
+Update 2026-09-23 (later): `[CAPTURE]` `2026-09-23_tag02_boot-long_2MHz.sr`
+— **no SPI activity for 134 s after the boot sequence.** The tag does not
+refresh on battery insertion. → Measurement request **M-010** (NFC), then
+SWD read-out (F-05) or own driver.
 
 Update 2026-09-23: `[CAPTURE]` `2026-09-23_tag02_boot-overview-panel_2MHz.sr`
 — within 27 s after battery insertion **no refresh**: the tag initialises

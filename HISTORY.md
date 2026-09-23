@@ -869,6 +869,81 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: First decoded bytes — panel ID and resolution read from OTP
+
+### What was tried
+- M-008 step 1: `captures/2026-09-23_tag02_boot-long_2MHz.sr` — unchanged
+  8-channel wiring, **2 MSa/s, 134.3 s** (sha256 `cd8b77b1…3077`).
+- M-008 step 3: `captures/2026-09-23_tag02_boot-init-4ch_20MHz.sr` —
+  leads moved at the SLogic: D0 = pin 13, D1 = pin 14, D2 = pin 12,
+  D3 = pin 11, D4–D7 disabled, **20 MSa/s, 18.5 s** (sha256
+  `61fc7d8e…26bc`).
+- New tool `analysis/sr_spi_frames.py` (per-CS-frame decoder for `.sr`);
+  output: `analysis/out/2026-09-23_tag02_boot-init-4ch_20MHz_frames.txt`.
+
+### Result
+- `[CAPTURE]` 2 MSa/s, 8 channels: D4 **and D5** show edges during the
+  transfer (D5: 148 edges). 20 MSa/s, 4 channels: SCK and data clean.
+  → **M-008 hypothesis confirmed:** at 20 MSa/s with 8 channels only
+  D0–D3 are recorded. The wiring was fine (M-007 closed). **Corrects** the
+  entry "First 20 MSa/s capture — SCK and data lost after re-soldering":
+  that loss was caused by the analyser, not by the soldering.
+- `[CAPTURE]` **No SPI activity from 6.62 s to 134.3 s** — no refresh.
+- `[CAPTURE]` Decoded boot sequence (MSB first, 82 frames, rising- and
+  falling-edge sampling agree for all bytes):
+
+  | # | Command (D/C=0) | Data (D/C=1) | Data clock |
+  |---|---|---|---|
+  | 1 | `70` | `0D 04 01` | ~1 MHz |
+  | 2 | `90` | — | — |
+  | 3 | `A2` | `00 15 00 00 E0` | ~6.4 MHz |
+  | 4 | `92` | 70 bytes (below) | ~1 MHz |
+
+  70 bytes after `92`:
+  ```
+  00 A5 1D 87 04 01 53 50 51 30 4B 58 04 FF FF FF
+  FF 07 07 2B 01 E0 03 20 40 40 40 07 AB FF FF 00
+  00 00 3C 00 00 00 00 08 37 03 03 00 01 1E 06 0A
+  0F 19 0F 09 FF FF FF FF FF FF FF FF 01 04 01 01
+  3F FF FF FF FF FF
+  ```
+- `[CAPTURE]` Commands are written at SCK ≈ 6.4 MHz (0.157 µs period,
+  only ~3 samples per period at 20 MSa/s); the data after `70` and `92`
+  is clocked at ~1 MHz.
+- `[CAPTURE]` Bytes 7–12 of the 70-byte block are ASCII **`SPQ0KX`**.
+  `[PHOTO]` The panel QR code (`panel-label-el074ts1.webp`) decodes to
+  `H7FZD`**`SPQ0KX`**`YZ5V00DAUAT` — the same six characters.
+- `[CAPTURE]` Bytes 21–24 are `01 E0 03 20` = 480 and 800.
+
+### Interpretation
+- `[CAPTURE]` The 70 bytes come **from the panel**: they contain part of the
+  panel's own serial number, which the MCU cannot know otherwise. So
+  pin 14 is a **bidirectional data line (SDA)**, and `92` (after `90`/`A2`)
+  is a read command. The ~1 MHz blocks are reads, the ~6.4 MHz frames
+  are writes.
+- `[ASSUMPTION]` The 70 bytes are the panel's **OTP / ID block**
+  (serial, resolution 800 × 480, probably voltage/VCOM/temperature
+  parameters). Resolution 800 × 480 fits the BWR datasheet value.
+- `[ASSUMPTION]` `70` → `0D 04 01` is a revision / chip-ID read.
+- The pin roles 9 BUSY, 10 RST, 11 D/C, 12 CS, 13 SCK, 14 SDA are now all
+  backed by captures (F-01 answered for the signal pins).
+- The controller type is still **not identified**: the commands seen
+  (`70`, `90`, `A2`, `92`) are reads, not the init/refresh set. The
+  decoder's fingerprint table (UC8179/IL0373/SSD16xx) is not suitable —
+  a BWRY family is missing.
+
+### What it does not prove
+- Byte-exactness of the fast writes — M-009 (40 MSa/s) will confirm.
+- How the display is initialised and refreshed — no refresh happened.
+
+### Next step
+- **M-010:** try to trigger a refresh via NFC while capturing.
+- M-009: 40 MSa/s re-capture (cheap check).
+- If no refresh can be triggered: F-05 (SWD lock status, needs M-002 /
+  M-003) — reading the firmware would contain the whole init sequence.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

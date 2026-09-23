@@ -23,8 +23,10 @@ set the request here to `✅ done`.
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
-| M-007 | D5 wire (pin 14) shows no data — check solder point | 🟠 wiring re-checked by maintainer (OK); D4/D5 still flat at 20 MSa/s → suspect the analyser, see M-008 | **pass B** |
-| M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | 🔴 open | **pass B** |
+| M-007 | D5 wire (pin 14) shows no data — check solder point | ✅ done — wiring OK (confirmed by M-008 captures) | — |
+| M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
+| M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | 🟡 open | confidence in write bytes |
+| M-010 | Trigger a refresh (NFC) while capturing | 🔴 open | **the image data / init sequence** |
 
 ---
 
@@ -401,6 +403,70 @@ mode and only D0–D3 carry data; D4–D7 read 0.
 | Step 1 shows D4/D5 edges, step 3 shows SCK + data | analyser channel mode was the cause → decode the init sequence; note the limit in `TOOLS.md` |
 | Step 1 already flat on D4/D5 | wiring after all → back to M-007 |
 | Step 1 fine, step 3 flat on D0/D1 | problem moves with the wire → wiring/lead, not the analyser |
+
+---
+
+## M-009 — Re-capture the boot at 40 MSa/s, 4 channels
+
+**Priority: medium** — verifies the write bytes; no rewiring.
+**Tool:** SLogic, PulseView (Windows)
+
+### Background
+
+`[CAPTURE]` `2026-09-23_tag02_boot-init-4ch_20MHz.sr`: the MCU writes with
+an SCK period of ~0.157 µs (≈ 6.4 MHz) — only ~3 samples per clock period
+at 20 MSa/s. Reads run at ~1 MHz and are safe. Rising- and falling-edge
+sampling agreed for all 82 bytes, but the margin is thin.
+`[RESEARCH]` 4 channels × 40 MSa/s = 160 Mb/s, the Windows limit given for
+the SLogic (see `TOOLS.md`).
+
+### Task
+
+Same wiring as the last capture (D0 = pin 13, D1 = pin 14, D2 = pin 12,
+D3 = pin 11, D4–D7 disabled). **40 MSa/s**, ~15 s, battery inserted during
+the recording.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Same 82 bytes | 20 MSa/s result confirmed |
+| Different write bytes | 20 MSa/s was too slow for writes → use 40 MSa/s from now on |
+| D0–D3 flat / capture aborts | 40 MSa/s too much for this PC → stay at 20 MSa/s |
+
+---
+
+## M-010 — Trigger a refresh while capturing
+
+**Priority: high** — `[CAPTURE]` the tag does **not** refresh within 134 s
+after battery insertion (`2026-09-23_tag02_boot-long_2MHz.sr`). Without a
+refresh there is no image data and no display init sequence to sniff.
+**Tool:** SLogic, an NFC-capable phone
+**State:** tag 02 in operation, panel plugged in, 4-channel wiring
+
+### Task
+
+1. Start a **2 MSa/s, 4-channel** recording (same wiring), insert the
+   battery, wait ~15 s until the boot sequence is over.
+2. Hold the phone's NFC area against the tag's NFC coil (back side, upper
+   area). Try a generic NFC reader app (e.g. "NFC Tools" — reading only,
+   **no writing**). Keep it there for ~10 s, then remove, repeat 2–3 times.
+3. Note the timestamps of each attempt and whether the display changed.
+   Keep recording for ~60 s after the last attempt.
+4. Send the `.sr` file and whatever the phone app shows (screenshot).
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Long SPI activity (≥ ~96 kB) after an NFC tap | refresh captured → decode init + frame (pass at 20–40 MSa/s next) |
+| Short SPI activity only | NFC wakes the tag but no refresh → analyse the bytes |
+| Nothing | NFC is not a trigger → next options: SWD lock check (F-05, needs M-002/M-003) or driving the panel ourselves |
+
+### ⚠ Safety
+
+Reading with the phone is harmless. **Do not write** to the tag via NFC —
+unknown effect on the original firmware.
 
 ---
 

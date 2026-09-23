@@ -45,6 +45,9 @@ is exactly at the limit (https://github.com/sipeed/sipeed_wiki, Sipeed
 wiki "Using as a Logic Analyzer" — the wiki itself was not reachable from
 the Claude Code environment). `[ASSUMPTION]` Above a certain rate only
 D0–D3 are sampled → put the lines that matter on D0–D3. Test: M-008.
+**Result 2026-09-23:** `[CAPTURE]` with the four decode lines moved to
+D0–D3 and D4–D7 disabled, 20 MSa/s works; the same wiring on D4/D5 works at
+2 MSa/s. Rule for this project: **for ≥ 20 MSa/s use only D0–D3.**
 
 ### Consequences for use
 

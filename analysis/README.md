@@ -104,6 +104,24 @@ only trustworthy well above the SPI clock.
 
 ---
 
+## sr_spi_frames.py
+
+Decodes SPI **per CS frame** directly from a `.sr` file. Built for this
+tag: every byte has its own CS pulse, writes and reads use different clock
+speeds on the same (bidirectional) data line.
+
+```bash
+python3 analysis/sr_spi_frames.py captures/<file>.sr \
+    --sck Pin13 --data Pin14 --cs Pin12 --dc Pin11 --start 6.70 --end 6.71
+```
+
+Channel names as stored in the `.sr` file (or `D0`..`D7`). A `!` marks
+bytes where rising- and falling-edge sampling disagree — a sign that the
+sample rate is too low. Run from the `analysis/` directory or with it on
+`PYTHONPATH` (it imports `sr_overview`).
+
+---
+
 ## make_testcapture.py
 
 Generates a **synthetic** capture to test the decoder without hardware:
