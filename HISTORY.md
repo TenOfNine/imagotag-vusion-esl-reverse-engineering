@@ -1011,6 +1011,26 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: Current capture wiring documented (M-004 closed)
+
+- Photo: `hardware/photos/pcb-bottom-capture-wiring-v2.webp` (tag 02, back
+  side, wiring used for `…_boot-long_2MHz.sr`, `…_boot-init-4ch_20MHz.sr`
+  and `…_nfc-read_2MHz.sr`).
+- Maintainer statement — wire colours: **black = GND, white = pin 9,
+  grey = pin 10, purple = pin 11, blue = pin 12, green = pin 13,
+  yellow = pin 14.** The captures with this wiring show the expected
+  behaviour on every line, so the mapping is also backed by `[CAPTURE]`.
+- `[PHOTO]` Compared with the first wiring photo, the pin 9, 11, 13, 14
+  wires now sit on a cluster of vias on the left, pins 10/12 on two vias
+  next to the parallel trace bundle (upper right), GND next to the `G`
+  silkscreen near the LEDs.
+- `[PHOTO]` Right of centre, left of the `2 BOT` label: open vias in the
+  arrangement described in session 1 (one left, one right, two close
+  together, larger hole above) are visible in this photo — the M-002
+  candidates. Their function is **not** derived from the photo.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

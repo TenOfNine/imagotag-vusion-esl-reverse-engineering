@@ -20,7 +20,7 @@ set the request here to `✅ done`.
 | M-001 | Continuity-check the FPC pinout | ✅ done 2026-09-23 | — |
 | M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
-| M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
+| M-004 | Solder points for FPC pins 9–14 + GND | ✅ done — see `pcb-bottom-capture-wiring-v2.webp`; mapping verified by captures | — |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
 | M-007 | D5 wire (pin 14) shows no data — check solder point | ✅ done — wiring OK (confirmed by M-008 captures) | — |
