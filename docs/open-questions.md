@@ -89,6 +89,9 @@ Hypothese: RESETn dauerhaft auf GND → GPIOs gehen in Hi-Z, SPI-Bus wird frei.
 
 → An **einem** Tag ausprobieren, bevor irgendwo Heißluft zum Einsatz kommt.
 
+Stand 2026-09-23: **Keine Heißluftstation vorhanden.** Solange das so
+bleibt, ist RESETn auf GND die einzige durchführbare Variante.
+
 ### ⚪ F-11 Was machen die Testpunkte TP1/TP2/TP3 auf dem FPC?
 
 Unklar. Möglicherweise Produktionstest des Panels. Niedrige Priorität.

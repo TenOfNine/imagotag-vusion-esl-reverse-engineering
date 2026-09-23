@@ -1,5 +1,15 @@
 # analysis — Auswertung der Mitschnitte
 
+## Installation
+
+```bash
+python3 -m pip install -r analysis/requirements.txt
+```
+
+Unter Windows: `py -m pip install -r analysis/requirements.txt`
+
+---
+
 ## decode_spi.py
 
 Zerlegt einen PulseView-CSV-Export in Kommandos und Datenblöcke.
@@ -33,7 +43,10 @@ python3 analysis/decode_spi.py captures/<datei>.csv \
 3. **Kommandolog** — jede Transaktion mit Opcode, Klartextbedeutung und Payload.
 4. **Frame-Blöcke** — alle Datenblöcke ≥ 1024 Byte, plus **Auflösungs-
    kandidaten** durch Faktorisierung von `Blocklänge × 8`.
-5. **LUT-Kandidaten** — Blöcke zwischen 20 und 512 Byte. Wenn hier die
+5. **TRES-Abgleich** — falls ein `0x61`-Kommando vorkommt: die dort
+   angekündigte Auflösung wird gegen die Blocklängen geprüft
+   (`MATCH` / `MISMATCH`). Ein `MISMATCH` ist ein Befund, kein Fehler.
+6. **LUT-Kandidaten** — Blöcke zwischen 20 und 512 Byte. Wenn hier die
    Waveform drinsteckt, muss sie nicht aus dem OTP rekonstruiert werden.
 
 **Als Dateien** (mit `--out-prefix`):
@@ -59,6 +72,17 @@ Belastbar wird das erst, wenn:
 
 - die Auflösung aus den Blocklängen zu den physischen Panelmaßen passt, und
 - ein Replay der Sequenz auf der Hardware tatsächlich ein Bild zeichnet.
+
+---
+
+## Speicherbedarf
+
+Der Decoder lädt nur die benötigten Kanäle, jeweils 1 Byte pro Sample.
+Richtwert: **Samples × Kanalzahl** Byte, plus Arbeitsspeicher für die
+Auswertung. Ein Durchgang B mit 20 MSa/s × 60 s × 6 Kanälen braucht damit
+rund **7 GB** allein für die Rohdaten. Wenn der Rechner das nicht hat:
+Aufnahme kürzer schneiden (in PulseView nur den Bereich um den Refresh
+exportieren).
 
 ---
 

@@ -180,6 +180,124 @@ Nächster Schritt: Messauftrag **M-001** in `docs/measurement-requests.md`
 (Durchklingeln des FPC-Steckers), danach der erste Mitschnitt nach
 `docs/capture-protocol.md`.
 
+## 2026-09-23 — Session 2: Übernahme in Claude Code
+
+### Was versucht wurde
+Projekt aus dem Claude-Chat nach Claude Code (Cloud-Session) übernommen.
+Alle Dateien des Repos gelesen. Decoder mit dem synthetischen Mitschnitt
+geprüft:
+
+```bash
+python3 analysis/make_testcapture.py <scratch>/fake.csv
+python3 analysis/decode_spi.py <scratch>/fake.csv --busy D4 --rst D5 --out-prefix <scratch>/fake
+```
+
+Umgebung: Python 3.11, `numpy` und `pandas` mussten erst nachinstalliert
+werden (im Repo nirgends als Abhängigkeit vermerkt).
+
+### Ergebnis
+- Decoder läuft fehlerfrei durch: 10 Transaktionen, Reset, BUSY-Phase 0,50 s,
+  Fingerprint UC8179 66,7 %, zwei gleich große Blöcke à 2.400 Byte erkannt.
+  Laufzeit ca. 12 s für 10,4 Mio. Samples.
+  → Beweist nur, dass der Decoder seine eigene Testvorrichtung versteht.
+  Über das echte Panel sagt das **nichts** aus.
+- Auffällig am Testmitschnitt: `TRES` meldet `03 20 01 E0` (= 800 × 480),
+  die Blöcke haben aber nur 2.400 Byte (= 19.200 Pixel). Der Decoder
+  gleicht TRES und Blocklänge **nicht** gegeneinander ab. Beim echten
+  Mitschnitt wäre genau dieser Abgleich ein starker Plausibilitätstest.
+- Opcodes `0x15` und `0x60` werden im UC8179-Log ohne Klartext angezeigt.
+- Offene Skalierungsfrage: Ein Durchgang B (40 MSa/s × 30–60 s) ergibt
+  1,2–2,4 Mrd. Samples. Der Decoder lädt die CSV komplett über pandas —
+  ob das im RAM des Maintainer-Rechners durchläuft, ist ungeprüft.
+
+### Was daraus folgt
+Keine neue Hardware-Erkenntnis. Stand unverändert: **nichts gemessen**,
+M-001 bis M-003 offen.
+
+### Nächster Schritt
+Rückfragen an den Maintainer (Multimeter vorhanden? Betriebssystem für
+PulseView? FPC-Verlängerung vorhanden?), danach M-001.
+
+## 2026-09-23 — Session 2: Messtechnik geklärt
+
+### Angaben des Maintainers
+- Multimeter: **OWON HDS242** — Hand-Oszilloskop (2 Kanäle, 40 MHz) mit
+  eingebautem Multimeter inkl. Durchgangsprüfer. Eckdaten `[RECHERCHE]`,
+  Quellen in `TOOLS.md`.
+- FTDI-Adapter: Angabe „FTDI1232". `[ANNAHME]` FT232R(L), also nur UART.
+  → **Prüfung:** Chipaufdruck ablesen. Für das Projekt nicht kritisch.
+- **Keine FPC-Verlängerung**, **keine Heißluftstation**, nur eine normale
+  Lötstation.
+- PulseView läuft unter **Windows**.
+
+### Was daraus folgt
+- M-001 bis M-003 sind mit dem HDS242 durchführbar.
+- Mitschnitt nur über **Löten an die Vias** (Capture-Weg B).
+- Samplerate-Obergrenze **20 MSa/s bei 8 Kanälen**. Bei SPI > 4 MHz auf
+  4 Kanäle reduzieren.
+- Mit dem Oszilloskop lassen sich **vor** dem Anklemmen des SLogic
+  Logikpegel und SPI-Takt prüfen → neuer Abschnitt 2a in
+  `docs/capture-protocol.md`. Das schützt den SLogic vor Pegeln > 3,6 V und
+  deckt 1,8-V-Logik auf, die er nicht sehen würde.
+- Auslöten des EFR32 (Weg A, Variante 2) ist ohne Heißluft **derzeit nicht
+  durchführbar**. Bleibt nur RESETn auf GND (F-10).
+
+---
+
+## 2026-09-23 — Session 2: Korrektur von Evidenz-Markern aus Session 1
+
+Korrigiert Einträge aus „Session 1: Identifikation der Hardware" und
+„Session 1: Randbedingungen des Maintainers". Die alten Einträge bleiben
+unverändert stehen.
+
+- „Maintainer besitzt mehr als 5 Tags" und „Messtechnik vorhanden" waren
+  als `[MESSUNG]` markiert. Das sind **Angaben des Maintainers**, keine
+  Messungen. `CLAUDE.md` §3 hat dafür keinen eigenen Marker; sie werden ab
+  hier als „Angabe des Maintainers" ohne Evidenz-Marker geführt.
+- QR-Codes von Platine und Panel: als `[MESSUNG]` markiert. Wie sie
+  dekodiert wurden (Scanner des Maintainers oder aus dem Foto), ist aus dem
+  Repo nicht nachvollziehbar. Aus dem Foto wäre es `[FOTO]`.
+  → **Offene Rückfrage an den Maintainer.**
+- Außenmaße „ca. 170 × 112 mm" und „dreifarbig": als `[MESSUNG]` markiert,
+  aber ohne Datum und Methode, die `CLAUDE.md` §3 verlangt.
+  → **Offene Rückfrage:** Womit gemessen (Lineal, Messschieber)? Dreifarbig
+  gesehen an einem angezeigten Bild?
+
+---
+
+## 2026-09-23 — Session 2: Decoder erweitert
+
+### Was geändert wurde
+- `analysis/requirements.txt` angelegt (`numpy`, `pandas`).
+- `decode_spi.py` gleicht ein `0x61`-Kommando (TRES) jetzt gegen die
+  Blocklängen ab. Zwei Payload-Layouts: 4 Byte (UC8179) und 3 Byte (IL0373).
+  `[RECHERCHE]` Layouts aus dem Gedächtnis der Controller-Familien, nicht
+  gegen ein Datenblatt im Repo geprüft.
+- `decode_spi.py` lädt nur noch die benötigten Kanäle als `uint8`, statt
+  alle Spalten als `int64`. Senkt den RAM-Bedarf grob um Faktor 10.
+
+### Ergebnis
+- Testmitschnitt: Transaktionslog, `_blocks.csv` und `_init_sequence.py`
+  **bytegleich** zur Ausgabe vor der Änderung.
+- Der TRES-Abgleich meldet beim Testmitschnitt korrekt `MISMATCH`
+  (800 × 480 angekündigt = 48.000 Byte, Blöcke haben 2.400 Byte).
+  Der Widerspruch steckt in `make_testcapture.py`, nicht im Decoder.
+
+### Was es nicht beweist
+Dass der Decoder einen echten PulseView-Export verarbeitet. Das zeigt erst
+der erste echte Mitschnitt. Ein Durchgang B mit 20 MSa/s × 60 s braucht
+auch nach der Änderung rund 7 GB RAM allein für die Rohdaten.
+
+---
+
+## 2026-09-23 — Session 2: Korrektur zu „Decoder erweitert"
+
+Die TRES-Payload-Layouts (UC8179: 4 Byte, IL0373: 3 Byte) waren dort als
+`[RECHERCHE]` markiert, ohne Quellenlink. Richtig ist `[ANNAHME]`.
+→ **Prüfung:** Gegen die Datenblätter von UC8179 und IL0373 abgleichen,
+oder beim echten Mitschnitt: Ergibt der Abgleich `MATCH`, stützt das das
+verwendete Layout.
+
 ---
 
 <!--

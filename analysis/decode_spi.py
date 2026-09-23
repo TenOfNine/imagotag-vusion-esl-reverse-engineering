@@ -198,8 +198,23 @@ def _parse_rate(line: str) -> float | None:
     return None
 
 
-def load(path: str, wanted: list[str]) -> tuple[pd.DataFrame, float | None]:
+def load(
+    path: str, wanted: list[str], optional: list[str] = ()
+) -> tuple[pd.DataFrame, float | None]:
     skip, names, rate = sniff_header(path)
+
+    missing = [c for c in wanted if c not in names]
+    if missing:
+        raise SystemExit(
+            f"channel(s) {missing} not in CSV.\n"
+            f"available columns: {names}\n"
+            f"pass the right names via --sck/--mosi/--cs/--dc"
+        )
+
+    # Only load the channels we decode, as uint8. A 60 s capture at
+    # 20 MSa/s has 1.2e9 rows - loading every column as int64 would need
+    # tens of GB of RAM.
+    keep = set(wanted) | {c for c in optional if c in names}
 
     header_arg = 0 if skip > 0 else None
     df = pd.read_csv(
@@ -208,17 +223,10 @@ def load(path: str, wanted: list[str]) -> tuple[pd.DataFrame, float | None]:
         header=header_arg,
         comment=";",
         engine="c",
-        low_memory=False,
+        usecols=lambda c: str(c).strip() in keep,
+        dtype=np.uint8,
     )
     df.columns = [str(c).strip() for c in df.columns]
-
-    missing = [c for c in wanted if c not in df.columns]
-    if missing:
-        raise SystemExit(
-            f"channel(s) {missing} not in CSV.\n"
-            f"available columns: {list(df.columns)}\n"
-            f"pass the right names via --sck/--mosi/--cs/--dc"
-        )
 
     for c in wanted:
         df[c] = (pd.to_numeric(df[c], errors="coerce").fillna(0) > 0).astype(np.uint8)
@@ -383,6 +391,28 @@ def big_blocks(cap: Capture, min_bytes: int = 1024) -> list[Transaction]:
     return [t for t in cap.transactions if t.n_data >= min_bytes]
 
 
+def declared_resolutions(cap: Capture) -> list[tuple[int, int, int, str]]:
+    """Resolutions announced via a 0x61 (TRES) command.
+
+    Returns (transaction index, width, height, layout) tuples. Two payload
+    layouts are known:
+      4 bytes  UC8179:  HRES[9:8] HRES[7:0] VRES[9:8] VRES[7:0]
+      3 bytes  IL0373:  HRES[7:3]           VRES[8]   VRES[7:0]
+    0x61 means something else in the SSD16xx family, so a hit here is only
+    meaningful if the controller really is UC8179/IL0373-like.
+    """
+    out = []
+    for t in cap.transactions:
+        if t.cmd != 0x61:
+            continue
+        d = t.data
+        if len(d) == 4:
+            out.append((t.index, (d[0] << 8) | d[1], (d[2] << 8) | d[3], "UC8179"))
+        elif len(d) == 3:
+            out.append((t.index, d[0], (d[1] << 8) | d[2], "IL0373"))
+    return out
+
+
 # --------------------------------------------------------------------------
 # Reporting
 # --------------------------------------------------------------------------
@@ -469,6 +499,28 @@ def report(cap: Capture, clock: float | None, prefix: str | None) -> None:
         if len(blocks) >= 2 and len({t.n_data for t in blocks}) == 1:
             p(f"  -> {len(blocks)} equally sized blocks: consistent with a")
             p("     multi-plane (e.g. B/W + RED) three-colour panel.")
+
+    # ---- TRES vs. block length ------------------------------------------
+    declared = declared_resolutions(cap)
+    if declared:
+        p("")
+        p("=" * 72)
+        p("DECLARED RESOLUTION (0x61) vs. FRAME BLOCKS")
+        p("=" * 72)
+        sizes = sorted({t.n_data for t in blocks})
+        for idx, w, h, layout in declared:
+            expect = (w * h + 7) // 8
+            p(f"  [{idx:5d}] 0x61 as {layout} layout: {w} x {h}"
+              f"  -> {expect:,} bytes per 1bpp plane")
+            if not sizes:
+                p("      no frame blocks to compare against")
+            elif expect in sizes:
+                p("      MATCH: a frame block has exactly this length")
+            else:
+                p(f"      MISMATCH: frame blocks are {', '.join(f'{s:,}' for s in sizes)}"
+                  " bytes")
+                p("      -> partial update, other bit depth, wrong layout guess,")
+                p("         or 0x61 is not TRES on this controller. Investigate.")
 
     # ---- LUT candidates -------------------------------------------------
     luts = [t for t in cap.transactions if 20 <= t.n_data <= 512]
@@ -567,7 +619,7 @@ def main(argv: list[str] | None = None) -> int:
     wanted = [a.sck, a.mosi, a.cs, a.dc]
     optional = [c for c in (a.busy, a.rst) if c]
 
-    df, rate = load(a.capture, wanted)
+    df, rate = load(a.capture, wanted, optional)
     rate = a.rate or rate
     for c in optional:
         if c not in df.columns:

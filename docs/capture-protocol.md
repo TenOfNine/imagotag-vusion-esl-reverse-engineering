@@ -21,6 +21,10 @@ Controller-Typ, Auflösung, Init-Sequenz und ggf. die Waveform-LUT auf einmal ab
 
 Zwei Wege, in dieser Reihenfolge:
 
+> **Stand 2026-09-23:** Keine FPC-Verlängerung vorhanden → **Weg B
+> (Löten) ist der aktuelle Weg.** Weg A bleibt als Option, falls ein Set
+> beschafft wird.
+
 ### A — FPC-Verlängerung einschleifen (bevorzugt, lötfrei)
 
 24-poliges FPC-Verlängerungsset (Adapter + Kabel, 0,5 mm) zwischen Panel und
@@ -62,6 +66,26 @@ und das Tag bricht den Refresh womöglich ab.
 
 ---
 
+## 2a. Pegelkontrolle mit dem Oszilloskop (OWON HDS242)
+
+Vor dem ersten Anklemmen des SLogic, **nur an den in M-001 als
+MCU-verbunden verifizierten Leitungen**:
+
+1. Tag in Betrieb nehmen, Refresh auslösen.
+2. Mit dem Oszilloskop an **SCK** den High-Pegel ablesen.
+3. Wenn möglich gleich die **SCK-Frequenz** während eines Datenblocks.
+
+| Ergebnis | Folge |
+|---|---|
+| High-Pegel 2,5 – 3,6 V | SLogic kann direkt angeschlossen werden |
+| High-Pegel < 2 V (z. B. 1,8-V-Logik) | SLogic erkennt kein High (VIH > 2 V) → **nicht** aufnehmen, Rückmeldung an Claude Code |
+| High-Pegel > 3,6 V | **SLogic nicht anschließen** — Rückmeldung an Claude Code |
+| SCK > 4 MHz | Durchgang B mit 4 statt 8 Kanälen fahren (siehe `TOOLS.md`) |
+
+⚠ Tastkopf-Masse an GND, **nie** in die Nähe der HV-Pins (±20 V).
+
+---
+
 ## 3. Aufnahme
 
 ### Durchgang A — Übersicht
@@ -84,7 +108,7 @@ Ziel ist **nicht** das Dekodieren, sondern die Orientierung:
 | Einstellung | Wert |
 |---|---|
 | Kanäle | 8 |
-| Samplerate | **20 MSa/s** (Windows) bzw. **40 MSa/s** (Linux) |
+| Samplerate | **20 MSa/s** (Windows — Setup des Maintainers) bzw. 40 MSa/s (Linux) |
 | Dauer | 30–60 s |
 | Datenmenge | ca. 600 MB bzw. 1,2 GB |
 
@@ -153,6 +177,8 @@ verlustfrei und deutlich kompakter.
 python3 analysis/decode_spi.py captures/<datei>.csv \
     --sck D0 --mosi D1 --cs D2 --dc D3 --busy D4 --rst D5
 ```
+
+Unter Windows statt `python3` den Launcher `py` verwenden.
 
 Siehe `analysis/README.md`.
 
