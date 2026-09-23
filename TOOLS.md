@@ -31,6 +31,12 @@ Das zentrale Werkzeug dieses Projekts.
 
 → **Linux bevorzugen**, wenn verfügbar.
 
+**Stand 2026-09-23:** Maintainer nutzt PulseView unter **Windows**.
+→ Praktische Grenze für dieses Projekt: **20 MSa/s bei 8 Kanälen.**
+Bei einem SPI-Takt bis 4 MHz sind das 5 Samples pro Takt — gerade an der
+Grenze. Liegt der Takt höher, auf 4 Kanäle reduzieren (SCK, MOSI, CS, D/C)
+oder Linux (z. B. Live-USB) in Betracht ziehen.
+
 ### Konsequenzen für die Nutzung
 
 - **Streaming** heißt: alles geht live über USB ins RAM. Lange Aufnahmen
@@ -82,7 +88,10 @@ Für Zugriff auf den EFR32FG22.
 
 ## ❓ FTDI USB-Seriell-Adapter
 
-Chiptyp noch **nicht bestimmt**.
+Angabe des Maintainers (2026-09-23): **„FTDI1232"**. Einen FTDI-Chip mit
+genau dieser Bezeichnung kenne ich nicht. `[ANNAHME]` Gemeint ist ein
+**FT232R(L)**-Modul — das wäre reines UART.
+→ **Prüfung:** Aufdruck auf dem größten IC des Adapters ablesen.
 
 - **FT232R / FT231X / FT230X** → nur UART. Für SWD unbrauchbar.
 - **FT2232H / FT232H / FT4232H** → haben MPSSE, können SWD via OpenOCD
@@ -93,11 +102,39 @@ Nur relevant, falls parallel eine UART-Debugausgabe mitgelesen werden soll.
 
 ---
 
-## ❓ Multimeter mit Durchgangsprüfer
+## ✅ OWON HDS242 — Hand-Oszilloskop mit Multimeter
 
-Von Claude Code in allen Messaufträgen **vorausgesetzt**. Falls nicht
-vorhanden, ist Messauftrag M-001 nicht durchführbar und das gesamte Projekt
-blockiert — bitte dann melden.
+Angabe des Maintainers (2026-09-23). Deckt **Multimeter und Oszilloskop** ab.
+
+`[RECHERCHE]` Eckdaten laut Händlerangaben
+(https://vishaworld.com/products/owon-hds242-handheld-digital-oscilloscope-bandwidth-40-mhz-2-channel-sample-rate-250-msa-s-single-channel-125-msa-s-dual-channel,
+https://toolboom.com/en/handheld-digital-oscilloscope-owon-hds242/):
+
+| Eigenschaft | Wert |
+|---|---|
+| Kanäle | 2 |
+| Bandbreite | 40 MHz |
+| Samplerate | 250 MSa/s (1 Kanal), 125 MSa/s (2 Kanäle) |
+| Speichertiefe | 8 k Punkte |
+| Multimeter | 20.000 Counts, Spannung, Strom, Widerstand, Kapazität, Diode, **Durchgang** |
+| Versorgung | 18650-Akku, USB-C |
+
+### Konsequenzen für die Nutzung
+
+- **Durchgangsprüfer vorhanden** → M-001 bis M-003 sind durchführbar.
+- **Oszilloskop vorhanden** → damit lassen sich vor dem Anklemmen des
+  SLogic die **Logikpegel** und der **SPI-Takt** kontrollieren, und
+  diagnostisch die Boost-Spannungen (VGH/VGL).
+- **8 k Punkte Speicher** → zum Mitschneiden eines ganzen Refresh
+  **ungeeignet**. Das bleibt Aufgabe des SLogic.
+- Maximale Eingangsspannung der Oszilloskop-Eingänge bei 1×/10×-Tastkopf
+  **nicht recherchiert** → vor Messungen an den HV-Rails im Handbuch
+  nachsehen und 10× verwenden.
+
+## ✅ Lötstation
+
+Angabe des Maintainers (2026-09-23): normale Lötstation, **keine
+Heißluft**. Reicht für Kupferlackdraht an Vias (Capture-Weg B).
 
 ---
 
@@ -117,9 +154,8 @@ vereinfacht — aber keinen Arbeitsplan darauf aufbauen.
 
 | Gerät | Wofür | Grobpreis |
 |---|---|---|
-| 24-pol. FPC-Verlängerungsset (0,5 mm, Adapter + Kabel) | Abgriff am FPC **ohne Löten**. Achtung: A-A vs. A-B je nach Kontaktseite. | 10–20 € |
-| Oszilloskop | Kontrolle der Boost-Spannungen (VGH/VGL) — nur diagnostisch | — |
-| Heißluftstation | Auslöten des EFR32 (Weg A, Variante 2) | — |
+| 24-pol. FPC-Verlängerungsset (0,5 mm, Adapter + Kabel) | Abgriff am FPC **ohne Löten**. Achtung: A-A vs. A-B je nach Kontaktseite. **Bestätigt nicht vorhanden** (2026-09-23). | 10–20 € |
+| Heißluftstation | Auslöten des EFR32 (Weg A, Variante 2). **Bestätigt nicht vorhanden** (2026-09-23) → Variante 2 derzeit nicht durchführbar. | — |
 | Mikroskop / Lupe mit Beleuchtung | Pads am QFN zählen, Markings lesen | — |
 
 ---
