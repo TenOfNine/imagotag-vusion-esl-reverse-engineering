@@ -969,6 +969,48 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: NFC read does not trigger a refresh (M-010 negative)
+
+### What was tried
+- Tag 02, 4-channel wiring (D0 = pin 13, D1 = pin 14, D2 = pin 12,
+  D3 = pin 11), **2 MSa/s, 35.5 s**. Battery inserted during the
+  recording, then the tag's NFC was read with a phone (NFC Tools PRO,
+  screenshot `hardware/photos/nfc-read-tag02-nfctools.png`, 23:54).
+- Raw file: `captures/2026-09-23_tag02_nfc-read_2MHz.sr` (sha256
+  `1b891d33…1c68`, archive timestamp 2026-09-23 23:54:54). Overview in
+  `analysis/out/`.
+- Exact time(s) of the NFC read within the recording not noted.
+
+### Result
+- `[CAPTURE]` Only the known boot sequence at 7.19 s (same frame
+  structure as before). **No SPI activity afterwards** until the end
+  (35.5 s).
+- Maintainer statement: tag 02 was read; **nothing happened on the
+  display.**
+
+### What follows
+- NFC (at least a plain read) is **not** a refresh trigger. Together with
+  the 134 s capture: the tag only refreshes when commanded over its radio
+  link, which we cannot provide.
+- Caveat: the recording covered ~28 s after boot; the NFC read time is not
+  logged. If the read happened after the recording stopped, the test is
+  not conclusive. Given the write-locked static NDEF content, a trigger is
+  unlikely anyway.
+
+### Next step (decision for the maintainer)
+- **Route 1 — firmware via SWD (F-05):** query the lock state with
+  `commander device info` / `security status` (non-destructive). If the
+  chip is **not** locked, read the flash → the complete init sequence and
+  LUT handling are in the binary. Needs the SWD pins: M-002 (open vias),
+  M-003 (QFN32/40). **No unlock** (CLAUDE.md §5.2 — the init sequence has
+  not been sniffed).
+- **Route 2 — drive the panel ourselves:** identify the controller
+  (research on the read commands `70`, `90`/`A2`/`92`), then try a careful
+  init with an ESP32. Riskier and more guesswork.
+- M-009 (40 MSa/s check) still open, low priority.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

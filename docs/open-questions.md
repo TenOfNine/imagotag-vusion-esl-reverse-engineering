@@ -87,6 +87,12 @@ The whole sniffing strategy relies on it. If not: plan B via NFC.
 
 → Becomes apparent at the first recording attempt.
 
+Update 2026-09-23 (NFC): `[CAPTURE]` `2026-09-23_tag02_nfc-read_2MHz.sr`
+— reading the tag's NFC with a phone causes **no SPI activity** and no
+visible change. Plan B (NFC) does not trigger a refresh. Remaining routes:
+firmware read-out via SWD (F-05, needs M-002/M-003) or driving the panel
+ourselves.
+
 Update 2026-09-23 (later): `[CAPTURE]` `2026-09-23_tag02_boot-long_2MHz.sr`
 — **no SPI activity for 134 s after the boot sequence.** The tag does not
 refresh on battery insertion. → Measurement request **M-010** (NFC), then

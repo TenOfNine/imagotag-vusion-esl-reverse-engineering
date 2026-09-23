@@ -1,0 +1,22 @@
+samples      70,963,200
+sample rate  2,000,000 Hz
+duration     35.482 s
+
+CHANNELS
+  D0 (Pin13)     start=0 end=0 high=  0.00 %  edges=1172
+  D1 (Pin14)     start=0 end=0 high=  0.00 %  edges=148
+  D2 (Pin12)     start=0 end=0 high=  0.31 %  edges=166
+  D3 (Pin11)     start=0 end=0 high=  0.00 %  edges=6
+  D4             start=0 end=0 high=  0.00 %  edges=0
+  D5             start=0 end=0 high=  0.00 %  edges=0
+  D6             start=0 end=0 high=  0.00 %  edges=0
+  D7             start=0 end=0 high=  0.00 %  edges=0
+
+TIMELINE   (bursts: edges less than 20 us apart are collapsed)
+      7.078898 s  D2 (Pin12) -> 1
+      7.189525 s  burst      6.0 us, 6 edges  [D0 (Pin13): 1 rising, D1 (Pin14): 1 rising, D2 (Pin12): 1 rising]
+      7.189592 s  burst     47.5 us, 61 edges  [D0 (Pin13): 23 rising, D1 (Pin14): 4 rising, D2 (Pin12): 3 rising, D3 (Pin11): 1 rising]
+      7.189704 s  burst     56.5 us, 45 edges  [D0 (Pin13): 7 rising, D1 (Pin14): 6 rising, D2 (Pin12): 8 rising, D3 (Pin11): 1 rising]
+      7.189820 s  burst    993.5 us, 1374 edges  [D0 (Pin13): 555 rising, D1 (Pin14): 62 rising, D2 (Pin12): 70 rising, D3 (Pin11): 1 rising]
+      7.190848 s  D1 (Pin14) -> 0
+      7.190889 s  burst     26.5 us, 4 edges  [D1 (Pin14): 1 rising]

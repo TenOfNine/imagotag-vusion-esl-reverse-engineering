@@ -26,7 +26,7 @@ set the request here to `✅ done`.
 | M-007 | D5 wire (pin 14) shows no data — check solder point | ✅ done — wiring OK (confirmed by M-008 captures) | — |
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | 🟡 open | confidence in write bytes |
-| M-010 | Trigger a refresh (NFC) while capturing | 🔴 open | **the image data / init sequence** |
+| M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
 
 ---
 
