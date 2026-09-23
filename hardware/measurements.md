@@ -12,7 +12,7 @@ may be treated as fact from then on.
 
 **Date:** 2026-09-23 (rounds 1–5 done)
 **Tool:** OWON HDS242
-**Tag no.:** the tag shown in `hardware/photos/` (no number assigned yet) — not the reference unit
+**Tag no.:** **tag 02** (the tag shown in `hardware/photos/`)
 **State:** unpowered, battery removed, FPC **unplugged** (board-side nets only).
 
 ### Counting direction

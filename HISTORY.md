@@ -525,6 +525,17 @@ FPC state).
 
 ---
 
+## 2026-09-23 — Session 2: Tag numbering, M-004 reported found
+
+- Maintainer statement: tags get physical labels. **Tag 01** = reference
+  unit (untouched). **Tag 02** = the tag shown in `hardware/photos/`, used
+  for M-001. All M-001 results from today refer to tag 02.
+- Maintainer statement: solder points for pins 9–14 "probably all found"
+  (M-004). Locations not yet documented.
+- Next: oscilloscope check (`capture-protocol.md` §2a), then pass A.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

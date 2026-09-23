@@ -147,7 +147,11 @@ air**. Sufficient for enamelled copper wire on vias (capture path B).
 | Item | Quantity | Status |
 |---|---|---|
 | ESL tags `RFRTx026D` | > 5 | available |
-| of which **reference unit** | 1 | **untouched**, see `CLAUDE.md` §5.1 |
+| of which **reference unit** | 1 | **tag 01**, **untouched**, see `CLAUDE.md` §5.1 |
+| tag 02 | 1 | the tag in `hardware/photos/`; used for M-001 and the first capture |
+
+Numbering agreed 2026-09-23: tags are labelled physically, tag 01 is the
+reference unit.
 
 ---
 

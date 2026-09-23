@@ -20,7 +20,7 @@ set the request here to `✅ done`.
 | M-001 | Continuity-check the FPC pinout | ✅ done 2026-09-23 | — |
 | M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
-| M-004 | Solder points for FPC pins 9–14 + GND | 🔴 open | **the capture** |
+| M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
 
 ---
