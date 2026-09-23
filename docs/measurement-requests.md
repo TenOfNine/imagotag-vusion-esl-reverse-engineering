@@ -22,6 +22,7 @@ set the request here to `✅ done`.
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
+| M-006 | Why BUSY (pin 9) never changed in pass A | 🔴 open | **pass B** |
 
 ---
 
@@ -254,6 +255,47 @@ driven by an EFR32 GPIO.
 |---|---|
 | Source on battery plus, gate pulled up | path A: the ESP32 pulls the gate low (or feeds pin 15/16 directly) to power the panel |
 | Different picture | report back, reconsider the supply path |
+
+---
+
+## M-006 — Why BUSY (pin 9) never changed in pass A
+
+**Priority: high** — pass B makes no sense until the panel answers.
+**Tool:** eyes, OWON HDS242, SLogic
+**State:** as stated per step
+
+### Background
+
+`[CAPTURE]` `2026-09-23_tag02_boot-overview_2MHz.sr`: the tag resets the
+panel three times, waits ~10.08 s each time with **pin 9 constantly low**,
+sends one short transaction, drops all lines and retries. No image data.
+`[ASSUMPTION]` The tag waits for BUSY to go high and times out — the panel
+never signals "ready". Details in `HISTORY.md`.
+
+### Task
+
+1. **Was the panel plugged in during the capture?** After M-001 the FPC
+   was unplugged. Check that it is fully inserted and the ZIF latch is
+   closed.
+2. **Did the display change** during the capture (flicker, new image)?
+3. **Solder point of pin 9** — unpowered, battery out: continuity from the
+   D0 wire's solder point to FPC pin 9 at the connector. Also check it has
+   **no** continuity to pin 8 (GND) or pin 10.
+4. **D7 on GND?** (SLogic bug, see `TOOLS.md`.)
+5. Repeat **pass A** (2 MHz, 60 s) with the panel verified as plugged in.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Panel was unplugged | plug in, repeat pass A — expect BUSY activity and a much longer transaction |
+| Panel was plugged in, pin 9 solder point OK, BUSY still flat | report back; next suspects: panel supply (pin 15 level during the reset window, scope) or a damaged panel |
+| Pin 9 solder point wrong/open | fix, repeat pass A |
+
+### ⚠ Safety
+
+Unpowered for step 3. The scope check of pin 15 happens only with the
+probe ground on GND, never near pins 4, 5, 20–24 (±20 V).
 
 ---
 

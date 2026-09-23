@@ -536,6 +536,68 @@ FPC state).
 
 ---
 
+## 2026-09-23 — Session 2: First capture (pass A) — panel never signals ready
+
+### What was tried
+- Tag 02, SLogic Combo 8, PulseView on Windows, **2 MSa/s**, 71.7 s.
+- Channels (named in the session file): D0 = pin 9, D1 = pin 10,
+  D2 = pin 11, D3 = pin 12, D4 = pin 13, D5 = pin 14. D6/D7 unnamed.
+- Refresh trigger: presumably battery insertion (not stated).
+- Raw file: `captures/2026-09-23_tag02_boot-overview_2MHz.sr` (143 KB,
+  sha256 `6158904d…6de3a8`, archive timestamp 2026-09-23 18:33:56).
+- Evaluated with the new `analysis/sr_overview.py`; output in
+  `analysis/out/2026-09-23_tag02_boot-overview_2MHz_overview.txt`.
+- Not stated by the maintainer: whether the scope check (§2a) was done,
+  whether the panel was plugged in, whether the display changed.
+
+### Result
+- `[CAPTURE]` Pin 14 goes high at 1.62 s (presumably power-up) and stays
+  high for the whole capture. It never toggles.
+- `[CAPTURE]` **Pin 9 is low for the entire capture. No edge at all.**
+- `[CAPTURE]` A cycle repeats **three times**, period ≈ 10.59 s:
+  1. pin 12 rises (6.667 s),
+  2. pin 10: high → low for **10.05 ms** → high (20.1 ms after pin 12),
+  3. **≈ 10.08 s of silence**,
+  4. a short transaction (~200 µs): pin 12 low; one short burst; pin 11
+     rises; three bursts of 8 pulses on pin 13, each framed by pin 12;
+     pin 11 falls,
+  5. pin 12 and pin 10 go low (≈ 0.46 s), then the next cycle.
+  After the third cycle (38.22 s) nothing happens until the end (71.7 s).
+- `[CAPTURE]` Pin 13 shows the bursts of pulses at 0.5 µs spacing —
+  exactly the sample resolution. The SPI clock is therefore **≥ ~1 MHz**;
+  its exact value cannot be determined at 2 MSa/s (aliasing).
+- `[CAPTURE]` No long data blocks. **No image data was transferred.**
+- `[CAPTURE]` Lines reached valid high levels on the SLogic (VIH > 2 V),
+  so the logic level is at least ~2 V. This does not replace the scope
+  check for the upper limit.
+
+### Interpretation
+- `[ASSUMPTION]` The roles match the standard order: pin 10 = RST (clean
+  10 ms reset pulse), pin 11 = D/C (low for the first byte, high for the
+  following ones), pin 12 = CS (idle high, framing each byte), pin 13 = SCK
+  (8 pulses per byte), pin 9 = BUSY. → **Test:** pass B at 20 MSa/s.
+- `[ASSUMPTION]` The ≈ 10.08 s gap is a **BUSY timeout**: after the reset
+  the firmware waits for the panel to signal "ready", gives up, sends a
+  short command (probably power-off/deep-sleep), powers down and retries —
+  three times. That BUSY stays low is consistent with a UC81xx-type
+  controller (BUSY low = busy) that never becomes ready.
+  → **Test:** M-006.
+- Pin 14 (SDI in the standard) constantly high is unexplained. If it is
+  MOSI, all transmitted bits were 1 — or the first byte was clocked faster
+  than the sample rate can show. Pass B settles it.
+
+### What it does not prove
+- That the panel is broken. The most likely simple cause is that the panel
+  was not plugged in (it was unplugged for M-001) or the pin 9 wire is not
+  connected. Both are checked in M-006.
+- The exact SPI clock.
+
+### Next step
+M-006 (panel plugged in? pin 9 solder point? display reaction?), then
+repeat pass A. Pass B only once BUSY shows activity.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

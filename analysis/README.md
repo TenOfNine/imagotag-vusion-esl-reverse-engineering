@@ -88,6 +88,21 @@ refresh).
 
 ---
 
+## sr_overview.py
+
+Timeline overview of a PulseView `.sr` session, read directly (no CSV
+export needed). Meant for the low-rate overview pass A: per-channel
+activity plus a chronological edge list with fast bursts collapsed.
+
+```bash
+python3 analysis/sr_overview.py captures/<file>.sr
+```
+
+At a low sample rate fast clocks alias — pulse counts inside a burst are
+only trustworthy well above the SPI clock.
+
+---
+
 ## make_testcapture.py
 
 Generates a **synthetic** capture to test the decoder without hardware:
