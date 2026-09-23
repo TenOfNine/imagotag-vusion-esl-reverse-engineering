@@ -81,9 +81,10 @@ pinout above**; nothing contradicts it. It is not yet confirmed, because
 on one side and `1` on the other. The counting direction of the cable is
 thereby unambiguous.
 
-`[ASSUMPTION]` **Still open:** at which end of the connector on the board
-pin 1 is. Front and back are mirror images.
-→ Insert the FPC and look at which end the `1` is.
+`[MEASUREMENT]` 2026-09-23: on the board, **pin 1 points towards the
+centre of the board, pin 24 is at the board edge** (read from the `1`
+printed on the inserted FPC). The FPC contacts face down, towards the
+board. GND on pin 17 confirms the numbering is not mirrored.
 
 ---
 
