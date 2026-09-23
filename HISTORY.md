@@ -598,6 +598,21 @@ repeat pass A. Pass B only once BUSY shows activity.
 
 ---
 
+## 2026-09-23 — Session 2: Pass A explained — panel was not plugged in
+
+- Maintainer statement: during the first pass A the **panel was not
+  plugged in** (it had been unplugged for M-001).
+- This explains the flat BUSY line and the three timeout cycles in
+  `captures/2026-09-23_tag02_boot-overview_2MHz.sr`. The capture is kept:
+  it documents how the original firmware behaves **without a panel**
+  (reset, ≈ 10.08 s wait, short command, power-down, three retries, then
+  give up) — useful later as a reference for timeouts.
+- `[ASSUMPTION]` "BUSY low = busy / not ready" (UC81xx-style) remains an
+  assumption until a capture with the panel shows BUSY toggling.
+- Next: pass A repeated with the panel plugged in.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

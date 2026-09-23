@@ -22,7 +22,7 @@ set the request here to `✅ done`.
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 | M-004 | Solder points for FPC pins 9–14 + GND | 🟠 maintainer reports points found, details pending | **the capture** |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
-| M-006 | Why BUSY (pin 9) never changed in pass A | 🔴 open | **pass B** |
+| M-006 | Why BUSY (pin 9) never changed in pass A | 🟠 cause found (panel unplugged), pass A being repeated | **pass B** |
 
 ---
 
