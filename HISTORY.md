@@ -1031,6 +1031,20 @@ Captures from M-008 (SCK + data on D0–D3 at 20 MSa/s).
 
 ---
 
+## 2026-09-23 — Session 3: Open vias next to "2 BOT" are battery through-holes
+
+- Maintainer statement: the open vias next to the `2 BOT` label are
+  **through-holes belonging to the battery contact pads**, not a debug
+  header. The maintainer does not expect SWD there.
+- This contradicts the `[ASSUMPTION]` from session 1 ("four open vias =
+  SWD port"). Not marked `[REFUTED]` yet, because it is a visual judgement,
+  not a measurement — but M-002 is deprioritised. A quick continuity check
+  against battery plus/minus would settle it.
+- Next: macro photo of the EFR32 (M-003) → package → SWDIO/SWCLK pin
+  numbers from the datasheet → locate where those pins can be reached.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

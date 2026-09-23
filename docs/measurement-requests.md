@@ -18,7 +18,7 @@ set the request here to `✅ done`.
 | ID | Topic | Status | Blocks |
 |---|---|---|---|
 | M-001 | Continuity-check the FPC pinout | ✅ done 2026-09-23 | — |
-| M-002 | Four open vias = SWD? | 🔴 open | J-Link access |
+| M-002 | Four open vias = SWD? | 🟡 unlikely — maintainer: they are through-holes of the battery contact pads; SWD must be found elsewhere (after M-003) | J-Link access |
 | M-003 | QFN package: 32 or 40 pins? | 🔴 open | SWD pin numbers |
 | M-004 | Solder points for FPC pins 9–14 + GND | ✅ done — see `pcb-bottom-capture-wiring-v2.webp`; mapping verified by captures | — |
 | M-005 | Panel supply switch `XDt` | 🟡 open, low priority | path A only |
