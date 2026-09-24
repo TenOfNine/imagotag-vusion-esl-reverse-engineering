@@ -20,6 +20,13 @@ targeted.
    (colour mapping known) were transformed into the same frame → known
    start points for FPC pins 9–14.
 4. Traces were then followed by eye on side-by-side crops.
+5. **Set 2 (2026-09-24, ruler photos, full-resolution originals from a
+   ZIP):** `pcb-top-ruler.jpg` (3202 × 2402) and `pcb-bottom-ruler.jpg`
+   (3112 × 2334), ≈ 32.5 px/mm. Same three-hole affine fit, residual
+   3.9 px ≈ 0.12 mm. Outputs: `derived/pcb-bottom-ruler-registered.jpg`,
+   `derived/pcb-ruler-top-bottom-blend.jpg`,
+   `derived/pcb-ruler-netlist-annotated.jpg`. **From here on set 2 is the
+   reference frame**; set 1 is kept for traceability.
 
 **Accuracy:** board outline, holes, NFC coil and LEDs overlay well; local
 error roughly 0.5–1.5 mm (worst near the connector). Enough to follow a
@@ -42,12 +49,26 @@ or 0.5 mm connector pads apart.
   **bottom** along the left edge of the connector block, down under the QR
   label (where the exposed vias of FPC 10 and FPC 12 sit on the bundle),
   then turns right and ends in a **row of vias directly below the EFR32**.
-- `[PHOTO]` On the top, short traces run from the EFR32's **bottom row of
-  pads** down to vias in that area.
-- `[ASSUMPTION]` The six display lines go to QFN pads on the **bottom side of
-  the chip** — pins **11–20** with the usual counter-clockwise numbering. The
-  bundle has more than six traces, so it carries other signals too.
-  → **Test:** M-012 items 1–6, starting with the bottom-row pads.
+- ~~`[PHOTO]` On the top, short traces run from the EFR32's bottom row of
+  pads down to vias in that area.~~
+- ~~`[ASSUMPTION]` The six display lines go to QFN pads on the bottom side
+  of the chip — pins 11–20.~~
+  **Superseded 2026-09-24 by the set-2 photos (photo re-evaluation, not a
+  measurement).** Cause: the set-1 top overview is rotated by 90° relative
+  to the macro, so its "bottom row" is the chip's **left** pad column.
+- `[PHOTO]` (set 2) The bundle ends in **eight vias V1–V8** left of the
+  EFR32 (coordinates in the `pcb-top-ruler.jpg` frame, px): V1 (1222,1513),
+  V2 (1250,1545), V3 (1277,1573), V4 (1287,1465), V5 (1301,1497),
+  V6 (1328,1531), V7 (1356,1475), V8 (1366,1516). On the top, short
+  parallel traces run from these vias into the EFR32's **left pad column**
+  (pin-1 dot top left, the same orientation as
+  `pcb-top-mcu-macro.webp`).
+- `[ASSUMPTION]` The six display lines end on QFN pins **1–10** (left
+  column, counted top→bottom). Which via reaches which pad cannot be
+  resolved reliably from the photos (0.4 mm pitch, traces cross between
+  via row and pads). The bundle has more traces than six, so other signals
+  share it.
+  → **Test:** M-012 items 1–6, starting with pins 1–10.
 
 ### NFC
 - `[PHOTO]` The NFC coil sits on the bottom under the empty left "wing".

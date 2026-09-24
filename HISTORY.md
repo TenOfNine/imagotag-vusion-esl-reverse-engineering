@@ -1174,6 +1174,42 @@ of both sides or continuity measurements.
 
 ---
 
+## 2026-09-24 — Session 3: Correction — display bundle ends at the EFR32 left pad column
+
+Refers to "Session 3: Partial netlist from the PCB photos" (same day).
+
+### What was tried
+Maintainer sent the ruler photos as full-resolution originals in a ZIP
+(DSC07560 top, 3202 × 2402; DSC07561 bottom, 3112 × 2334; ≈ 32.5 px/mm).
+Stored as `hardware/photos/pcb-top-ruler.jpg` / `pcb-bottom-ruler.jpg`;
+the downscaled 2000 px WebP versions were removed. Registered as set 2 in
+`analysis/register_photos.py` (same three holes, affine fit).
+
+### Result
+- `[PHOTO]` Set-2 registration residual 3.9 px ≈ 0.12 mm (set 1:
+  ~0.5–1.5 mm).
+- `[PHOTO]` The FPC 9–14 bottom bundle ends in eight vias V1–V8 left of
+  the EFR32; on the top, short parallel traces run from them into the
+  chip's **left pad column** (pin-1 dot top left). Coordinates in
+  `docs/netlist-from-photos.md`, marked in
+  `hardware/photos/derived/pcb-ruler-netlist-annotated.jpg`.
+- `[PHOTO]` `8K417` is an 8-pin package (4 + 4 pins visible).
+
+### Correction
+The earlier entry's "bottom pad row" and `[ASSUMPTION]` "display lines on
+QFN pins 11–20" are **wrong**. Cause: the set-1 top overview is rotated by
+90° relative to the macro photo, so I read the left column as the bottom
+row. Superseded (photo re-evaluation, not a measurement). New
+`[ASSUMPTION]`: the six display lines end on QFN pins **1–10**.
+M-012 shortcut and `docs/netlist-from-photos.md` updated accordingly.
+
+### What it does not prove
+Which via reaches which pad — not resolvable at 0.4 mm pitch. Still no
+single pad-to-FPC-pin connection is established.
+→ **Test:** M-012 items 1–6, continuity FPC 9–14 against pins 1–10.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

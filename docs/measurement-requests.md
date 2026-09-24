@@ -553,8 +553,11 @@ Tip: the capture wires are already on the vias of FPC 9–14 — probe from
 the wire end to the QFN pad toes.
 
 **Shortcut from the photos (2026-09-24, `docs/netlist-from-photos.md`):**
-`[ASSUMPTION]` the display lines end at the **bottom row of QFN pads
-(pins 11–20)** — start there. The SO-8 is probably not the NFC chip (a
+~~the display lines end at the bottom row of QFN pads (pins 11–20)~~ —
+superseded 2026-09-24 by the higher-resolution ruler photos (see
+`HISTORY.md`). `[ASSUMPTION]` the display lines end at the **left column of
+QFN pads (pins 1–10, pin-1 dot top left)** — start there; a checklist is in
+`docs/netlist-from-photos.md`. The SO-8 is probably not the NFC chip (a
 small 6-pin IC near the left wing is connected to the coil) → check the
 SO-8 for SPI-flash wiring first.
 

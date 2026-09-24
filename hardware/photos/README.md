@@ -15,7 +15,11 @@
 | `derived/pcb-bottom-registered.jpg` | bottom photo warped into the frame of `pcb-top-overview.webp` (made by `analysis/register_photos.py`) |
 | `derived/pcb-top-bottom-blend.jpg` | 50/50 blend of top and registered bottom — both layers at the same coordinates |
 | `derived/pcb-netlist-annotated.jpg` | blend with the photo-derived findings of `docs/netlist-from-photos.md` marked (**unverified**) |
-| `pcb-top-ruler-2000px.webp` / `pcb-bottom-ruler-2000px.webp` | top and bottom with ruler, even light, better camera (2026-09-24). **Arrived downscaled to 2000 × 1500** (originals ~3000 × 2300); ≈ 20 px/mm |
+| `pcb-top-ruler.jpg` | top side with ruler, even light, better camera (DSC07560, original from ZIP, 3202 × 2402, ≈ 32.5 px/mm), 2026-09-24 |
+| `pcb-bottom-ruler.jpg` | bottom side with ruler, same session (DSC07561, 3112 × 2334), 2026-09-24. Replaces the downscaled `*-ruler-2000px.webp` versions |
+| `derived/pcb-bottom-ruler-registered.jpg` | `pcb-bottom-ruler.jpg` warped into the frame of `pcb-top-ruler.jpg` (set 2, residual ≈ 0.12 mm) |
+| `derived/pcb-ruler-top-bottom-blend.jpg` | 50/50 blend of set 2 |
+| `derived/pcb-ruler-netlist-annotated.jpg` | set-2 findings marked: FPC wire points, bundle end vias V1–V8, EFR32 left pads 1–10, `8K417` (**unverified**) |
 | `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---

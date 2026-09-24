@@ -126,7 +126,9 @@ sample rate is too low. Run from the `analysis/` directory or with it on
 
 Brings the bottom-side PCB photos into the frame of the top overview
 (affine fit on the three holes visible on both sides) and writes the
-registered image and a blend to `hardware/photos/derived/`. Needs
+registered image and a blend to `hardware/photos/derived/`. Two photo
+sets: set 1 (`pcb-top-overview.webp` frame) and set 2 (ruler photos,
+`pcb-top-ruler.jpg` frame, the current reference). Needs
 `opencv-python-headless`. See `docs/netlist-from-photos.md`.
 
 ---
