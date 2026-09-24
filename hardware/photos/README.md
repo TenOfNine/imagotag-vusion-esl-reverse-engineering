@@ -12,6 +12,9 @@
 | `nfc-read-tag02-nfctools.png` | phone screenshot (NFC Tools PRO), NFC read of the tag, 2026-09-23 23:54 (M-010) |
 | `pcb-bottom-capture-wiring-v2.webp` | tag 02 back side, current capture wiring (2026-09-23 night): black GND, white pin 9, grey 10, purple 11, blue 12, green 13, yellow 14 (maintainer statement) |
 | `pcb-top-mcu-macro.webp` | EFR32FG22 macro (QFN40, 10 pads per side), crystals, `8K417` SO-8, boost diodes (2026-09-23) |
+| `derived/pcb-bottom-registered.jpg` | bottom photo warped into the frame of `pcb-top-overview.webp` (made by `analysis/register_photos.py`) |
+| `derived/pcb-top-bottom-blend.jpg` | 50/50 blend of top and registered bottom — both layers at the same coordinates |
+| `derived/pcb-netlist-annotated.jpg` | blend with the photo-derived findings of `docs/netlist-from-photos.md` marked (**unverified**) |
 | `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---

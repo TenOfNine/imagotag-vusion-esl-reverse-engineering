@@ -122,6 +122,15 @@ sample rate is too low. Run from the `analysis/` directory or with it on
 
 ---
 
+## register_photos.py
+
+Brings the bottom-side PCB photos into the frame of the top overview
+(affine fit on the three holes visible on both sides) and writes the
+registered image and a blend to `hardware/photos/derived/`. Needs
+`opencv-python-headless`. See `docs/netlist-from-photos.md`.
+
+---
+
 ## make_testcapture.py
 
 Generates a **synthetic** capture to test the decoder without hardware:

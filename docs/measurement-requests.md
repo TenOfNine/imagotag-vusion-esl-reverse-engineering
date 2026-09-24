@@ -552,6 +552,12 @@ a resistor — note resistors):
 Tip: the capture wires are already on the vias of FPC 9–14 — probe from
 the wire end to the QFN pad toes.
 
+**Shortcut from the photos (2026-09-24, `docs/netlist-from-photos.md`):**
+`[ASSUMPTION]` the display lines end at the **bottom row of QFN pads
+(pins 11–20)** — start there. The SO-8 is probably not the NFC chip (a
+small 6-pin IC near the left wing is connected to the coil) → check the
+SO-8 for SPI-flash wiring first.
+
 For item 9: if **two** SO-8 pins go to the NFC coil, it is the NFC chip.
 If four pins go to the EFR32 and one each to GND/VDD, it is probably an
 **SPI flash** — important, because OEPL keeps images in external flash.

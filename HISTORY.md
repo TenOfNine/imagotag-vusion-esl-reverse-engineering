@@ -1141,6 +1141,39 @@ Resume point. Supersedes "Open thread at the end of session 2".
 
 ---
 
+## 2026-09-24 — Session 3: Partial netlist from the PCB photos
+
+### What was tried
+Maintainer asked for a schematic reconstruction from the photos (two-layer
+board assumed). Bottom photos registered onto the top overview via the
+three holes visible on both sides (`analysis/register_photos.py`); wire
+solder points of `pcb-bottom-capture-wiring-v2.webp` transformed into the
+same frame; traces followed on side-by-side crops. Results in
+`docs/netlist-from-photos.md` and `hardware/photos/derived/`.
+
+### Result
+- `[PHOTO]` Registration good (outline, holes, NFC coil, LEDs overlay);
+  local error ~0.5–1.5 mm.
+- `[PHOTO]` Silkscreen names only `1 TOP` / `2 BOT` → supports two layers.
+- `[PHOTO]` FPC 9–14: exposed test vias near the connector → bottom bundle
+  of ~10 traces (FPC 10/12 test vias on it) → row of vias below the EFR32
+  → short top traces to the chip's **bottom pad row**.
+- `[PHOTO]` NFC coil (bottom, left wing) is wired to a **small 6-pin IC**
+  on the top, not to the SO-8.
+- `[PHOTO]` Upper LED: three traces to vias, continuing on the top towards
+  the EFR32 / SO-8.
+
+### Interpretation
+- `[ASSUMPTION]` Display lines on QFN pins 11–20; SO-8 `8K417` likely an
+  SPI flash (F-16). Both → M-012 (shortcut added).
+
+### What it does not prove
+No single pad-to-pin connection is established — the photos cannot
+resolve 0.4 mm QFN pads. A full schematic needs flatbed scans (600–1200 dpi)
+of both sides or continuity measurements.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
