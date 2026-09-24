@@ -78,6 +78,11 @@ or 0.5 mm connector pads apart.
 Maintainer: a flatbed scan does not work — the components hold the board
 too far from the glass. Better camera photos instead.
 
+- **Transfer caveat (2026-09-24):** images pasted into the chat can arrive
+  **downscaled** — the ruler photos came in at 2000 × 1500 WebP instead of
+  ~3000 × 2300. Earlier photos (e.g. the EFR32 macro) arrived at full
+  resolution. Check the size reported back; if in doubt, attach the file
+  itself or pack the originals into a ZIP.
 - **Resolution is not the limit on my side:** images are processed at full
   resolution with code (cropping, registration); only the preview I look at
   is downscaled. Send **original files, not resized** (JPEG at highest

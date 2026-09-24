@@ -15,6 +15,7 @@
 | `derived/pcb-bottom-registered.jpg` | bottom photo warped into the frame of `pcb-top-overview.webp` (made by `analysis/register_photos.py`) |
 | `derived/pcb-top-bottom-blend.jpg` | 50/50 blend of top and registered bottom — both layers at the same coordinates |
 | `derived/pcb-netlist-annotated.jpg` | blend with the photo-derived findings of `docs/netlist-from-photos.md` marked (**unverified**) |
+| `pcb-top-ruler-2000px.webp` / `pcb-bottom-ruler-2000px.webp` | top and bottom with ruler, even light, better camera (2026-09-24). **Arrived downscaled to 2000 × 1500** (originals ~3000 × 2300); ≈ 20 px/mm |
 | `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---
