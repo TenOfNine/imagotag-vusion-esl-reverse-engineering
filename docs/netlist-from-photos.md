@@ -73,6 +73,28 @@ or 0.5 mm connector pads apart.
 
 ---
 
+## Photo guidelines for the next round (2026-09-24)
+
+Maintainer: a flatbed scan does not work — the components hold the board
+too far from the glass. Better camera photos instead.
+
+- **Resolution is not the limit on my side:** images are processed at full
+  resolution with code (cropping, registration); only the preview I look at
+  is downscaled. Send **original files, not resized** (JPEG at highest
+  quality or PNG/TIFF). A 5953 × 5004 px / 3.5 MB JPEG worked; the upload
+  limit of the chat is not known.
+- **Target: ≥ 50 px per mm** on the board (a 0.1 mm trace ≈ 5 px). For the
+  ~110 × 75 mm board that means **tiles**: 2 × 2 per side, **~30 % overlap**,
+  each tile containing at least one hole or large via as a reference.
+- Extra macro of the EFR32 area on **both sides** at ≥ 100 px/mm.
+- **Camera perpendicular** to the board (tripod or fixed stand), same
+  distance for all tiles; no zoom change between tiles.
+- **Diffuse light** from two sides; avoid glare on the solder mask. One
+  extra set with **low-angle light** makes traces under the mask stand out.
+- A **ruler** in one tile per side gives the scale.
+- Remove the capture wires if possible, or photograph once with and once
+  without.
+
 ## What would make a real schematic possible
 
 Phone photos (perspective, glare, shadows) limit this. A **flatbed scan of
