@@ -561,6 +561,16 @@ QFN pads (pins 1–10, pin-1 dot top left)** — start there; a checklist is in
 small 6-pin IC near the left wing is connected to the coil) → check the
 SO-8 for SPI-flash wiring first.
 
+**Pads 1–8 first (2026-09-25, `docs/oepl-pin-comparison.md`):**
+`[PHOTO]` only pads 1–8 of the left column have their own traces to the
+via field; pads 9–10 lead to the 38.4 MHz crystal. Probe FPC 9–14 against
+pads 1–8, and `XDt` leg 1 against the pads that are left over.
+
+**Document check (no instrument):** please compare the table "GPIO →
+QFN40 package pin" in `docs/oepl-pin-comparison.md` with the "QFN40
+Device Pinout" table of the EFR32FG22 datasheet. silabs.com is blocked
+for Claude Code; the table there comes from search snippets only.
+
 For item 9: if **two** SO-8 pins go to the NFC coil, it is the NFC chip.
 If four pins go to the EFR32 and one each to GND/VDD, it is probably an
 **SPI flash** — important, because OEPL keeps images in external flash.

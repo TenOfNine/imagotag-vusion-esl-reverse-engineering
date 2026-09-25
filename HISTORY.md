@@ -1210,6 +1210,44 @@ single pad-to-FPC-pin connection is established.
 
 ---
 
+## 2026-09-25 — Session 4: OEPL pin maps compared with our board
+
+### What was tried
+Maintainer asked whether the OpenEPaperLink EFR32 pin map might match
+our board. Read the board table `firmware/oepl_efr32_hwtypes.c` of
+`Tag_FW_EFR32xG22` (commit `ecd2915`). Tried to get the EFR32xG22 QFN40
+pinout: silabs.com, manuals.plus, alldatasheet, digikey and docplayer are
+all blocked from this environment (egress policy) → only web-search
+snippets were available. Zoomed into the left pad column of
+`pcb-top-ruler.jpg`.
+
+### Result
+- `[RESEARCH]` OEPL display pins: Solum M3 PA03/PA04/PB00/PA06/PA07/PA08
+  (+ enable PA00), modchip HD150 and BRD4402B on other pins as well; all
+  use USART1 and write-only SPI. Solum puts the SPI flash on PC00–PC03
+  (USART0) and the LEDs on PC05–PC07. The OEPL comment says ports C/D
+  cannot raise IRQs in regular sleep.
+- `[RESEARCH]` (search snippets only, PDF not opened) QFN40: pins 1–8 =
+  PC00–PC07, 9/10 = HFXTAL_I/O, 11 = RESETn, 16–20 = PB04…PB00,
+  21–29 = PA00…PA08, 37–40 = PD03…PD00.
+- `[PHOTO]` Left pad column: pads 1–8 each have their own trace to the
+  via field V1–V8; pads 9–10 lead to the 38.4 MHz crystal below the chip
+  corner. This fits pins 9/10 = HFXTAL.
+
+### What follows
+- `[ASSUMPTION]` The display lines are on PC00–PC07. **No OEPL pin map
+  matches**, and on Solum these pads carry flash and LEDs → our own board
+  entry is needed. Details and firmware consequences (USART0 routing,
+  BUSY polling, 3-wire reads) in `docs/oepl-pin-comparison.md`.
+- It does not prove anything about individual pins: the package table is
+  unverified, and no continuity has been measured.
+
+### Next step
+Maintainer: datasheet check of the table + M-012 continuity FPC 9–14 →
+pads 1–8 (both added to M-012).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

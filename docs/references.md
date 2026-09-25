@@ -34,6 +34,16 @@ documents refer to here.
   and Pricer HD150 (via modchip). **No Vusion port.**
   Contains the note that unlocking factory-locked devices requires a
   J-Link-based debugger and that the unlock erases the original firmware.
+  → 2026-09-25: board pin maps (Solum M3, modchip HD150, BRD4402B)
+  compared with our board in `docs/oepl-pin-comparison.md`; no match.
+- **EFR32xG22 QFN40 package pinout** — datasheet not reachable from the
+  Claude Code environment (silabs.com and mirrors blocked). Mapping taken
+  from web-search result snippets (2026-09-25) that name
+  https://www.silabs.com/documents/public/data-sheets/efr32bg22-datasheet.pdf
+  and the radio-board schematics
+  https://www.silabs.com/documents/public/schematic-files/BRD4182A-B06-schematic.pdf
+  and https://www.silabs.com/documents/public/schematic-files/BRD4184B-A04-schematic.pdf.
+  **Needs verification against the PDF.**
 - **Wiki: Flashing SiLabs-based M3/Newton Displays**
   https://github.com/OpenEPaperLink/OpenEPaperLink/wiki/Flashing-SiLabs-based-M3-Newton-Displays
 - **Issue #358** — custom ESL with ESP32 and 7.5" display
