@@ -1248,6 +1248,17 @@ pads 1–8 (both added to M-012).
 
 ---
 
+## 2026-09-25 — Session 4: progress.md created
+
+Maintainer asked for a `progress.md` that lists everything done and still
+open, so that nothing is forgotten. Created in the repo root as a
+**living checklist** (updated in place, unlike this file), with owners
+(maintainer / Claude Code), the open measurement requests, the open
+decisions and a housekeeping list of stale docs. Linked from `README.md`.
+No new technical insight.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

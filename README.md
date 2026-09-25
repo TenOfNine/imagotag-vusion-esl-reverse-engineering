@@ -39,8 +39,9 @@ therefore still open and will be made once the init sequence is available.
 
 ## Current status
 
-See `HISTORY.md` for the full history and `docs/open-questions.md` for
-what is still open.
+See `progress.md` for the checklist of what is done and what is open,
+`HISTORY.md` for the full history and `docs/open-questions.md` for the
+open questions.
 
 Short version (session 3, 2026-09-23): FPC pinout measured and all six
 signal roles confirmed by captures; the tag's boot sequence is decoded
