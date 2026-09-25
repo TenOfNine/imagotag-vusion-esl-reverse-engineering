@@ -82,7 +82,7 @@ pin 1 side's neighbour, i.e. **pins 22/23 are the 2nd and 3rd pad from the
 bottom on the right-hand side** in `pcb-top-mcu-macro.webp`.
 → **Test:** M-011 (continuity).
 
-(Older note:)
+(Older note, superseded by the update above:)
 `[ASSUMPTION]` **QFN40** is fitted, estimated from approx. 10 visible pads
 per side in the photo.
 → **Test:** count pads per side under a magnifier. 10 = QFN40, 8 = QFN32.
@@ -103,6 +103,8 @@ strong confirmation of the MCU identification.
 `[RESEARCH]` EFR32 Series 2 supports **SWD only**, no JTAG.
 The SWD pins are on **port A**. The concrete pin numbers depend on the
 package → take them from the datasheet only after QFN32/QFN40 is settled.
+**Update 2026-09-23:** settled (QFN40) — pin 22 SWCLK, pin 23 SWDIO, see
+above and M-011. Full package table (unverified): `oepl-pin-comparison.md`.
 
 `[RESEARCH]` Factory-locked xG22 can be unlocked as long as
 "unauthenticated debug unlock" has not been disabled. **The unlock erases
@@ -121,8 +123,9 @@ the original firmware.** Tool: Simplicity Commander + J-Link.
 | Colours | **four-colour B/W/R/Y** (from "BWRY" in the product name) — display not yet seen | `[ASSUMPTION]` |
 | Serial number (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[PHOTO]` `panel-label-el074ts1.webp` |
 | Resolution | 800 × 480 at 126 dpi for the VUSION 7.4 **BWR**; for BWRY not confirmed | `[RESEARCH]` / `[ASSUMPTION]` |
-| COG controller | **unknown** | — |
-| Waveform / LUT | **unknown** | — |
+| COG controller | UltraChip UC81xx family (BWRY variant) — boot opcodes `70`/`90`/`92`/`A2` match | `[ASSUMPTION]` from `[CAPTURE]`, see F-03 |
+| Resolution from OTP | `01 E0 03 20` = 480, 800 in the panel's OTP block | `[CAPTURE]` bytes; meaning `[ASSUMPTION]` |
+| Waveform / LUT | **unknown** — cannot be captured (no refresh) | — |
 
 **Update 2026-09-23:** maintainer statement — the tag is a **VUSION 7.4
 BWRY GU140, model EDG3-0740A**. `[ASSUMPTION]` BWRY = black/white/red/
@@ -149,6 +152,7 @@ shown by a displayed image.
 the type designation as well as via E Ink and distributor catalogues.
 ESL panels are supplied to OEMs under NDA.
 
+(Older note, superseded by the OTP bytes above:)
 `[ASSUMPTION]` Resolution 800 × 480 — purely a size plausibility for 7.x",
 **not a reliable value**.
 → **Test:** calculate back from the payload block lengths in the capture.
@@ -201,12 +205,16 @@ function unclear, probably LDO, load switch and/or level shifter.
 | Antenna | large coil on the back side | `[PHOTO]` |
 | Label inside the coil | handwritten `0181` | `[PHOTO]` |
 
-`[ASSUMPTION]` The SO-8 is the NFC front end.
-→ **Test:** measure continuity IC ↔ antenna coil.
+~~`[ASSUMPTION]` The SO-8 is the NFC front end.~~
+**Update 2026-09-24:** `[PHOTO]` the coil is wired to a small 6-pin IC at
+the left edge of the populated area, not to the SO-8
+(`netlist-from-photos.md`). `[ASSUMPTION]` The SO-8 `8K417` is an external
+SPI flash (F-16).
+→ **Test:** M-012 item 9.
 
-**Relevance:** plan B. If the tag does not draw a refresh when the battery
-is inserted, the refresh might be triggered via NFC — and the capture
-obtained after all.
+**Relevance:** ~~plan B: trigger the refresh via NFC~~ — tried
+2026-09-23, negative (M-010): the NFC read causes no SPI activity. The NFC
+tag is a write-locked NXP NTAG-type tag with a Decathlon URL.
 
 ---
 
@@ -220,7 +228,9 @@ obtained after all.
 | Four soldered vias bottom left = battery contact solder joints | `[PHOTO]` |
 | **Four open vias** on the right, left of `2 BOT` | `[PHOTO]` |
 
-`[ASSUMPTION]` The four open vias are the **SWD port**
+~~`[ASSUMPTION]` The four open vias are the **SWD port**
 (SWDIO, SWCLK, GND, VDD, possibly RESET). Arrangement: one on the left, one
-on the right, two close together below, larger hole above.
+on the right, two close together below, larger hole above.~~
 → **Test:** measurement request M-002.
+**Update 2026-09-23:** maintainer statement — these are through-holes of
+the battery contact pads, not SWD. SWD is taken from QFN pins 22/23 → M-011.

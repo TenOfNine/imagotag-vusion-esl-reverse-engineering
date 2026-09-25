@@ -1259,6 +1259,30 @@ No new technical insight.
 
 ---
 
+## 2026-09-25 — Session 4: progress.md anchored in CLAUDE.md, stale docs corrected
+
+### What was done
+- Maintainer decision: `progress.md` stays **separate** from `HISTORY.md`,
+  but `CLAUDE.md` must make sure it is always read and maintained.
+  → `CLAUDE.md` §4 got a "progress.md" subsection (read at session start,
+  update in the same commit, move finished items to "Done", check against
+  `HISTORY.md` before a session ends); §7 lists `progress.md` and the new
+  docs (`firmware-plan.md`, `netlist-from-photos.md`,
+  `oepl-pin-comparison.md`).
+- Maintainer asked to correct all stale statements. Corrected by adding
+  update notes and marking superseded text (nothing deleted):
+  `README.md` (four-colour, path B decided, current status, reading
+  order), `docs/open-questions.md` (F-01/F-07/F-08/F-09 ✅; updates to
+  F-02, F-03, F-04, F-05, F-06, F-10, F-14, F-16; "Answered" index),
+  `docs/hardware.md` (COG/OTP rows, SWD pins settled, SO-8 not NFC, NFC
+  trigger negative, open vias = battery through-holes), `docs/pinout.md`
+  (header warning narrowed to the unmeasured pins), `firmware/README.md`,
+  M-010 decision row.
+
+No new technical insight.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

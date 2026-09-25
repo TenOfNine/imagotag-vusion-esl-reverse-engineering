@@ -1,10 +1,14 @@
 # Pinout — 24-pin FPC
 
-> **⚠ Nothing in this document has been measured.**
-> The table below is the Waveshare / Good Display standard as a working
-> hypothesis. ESL panels regularly deviate from it.
-> As long as the "measured" column is empty, **no** driver and **no**
-> wiring may be built on it.
+> **Status 2026-09-25:** the signal pins **9–14** (roles), GND (3, 8, 17)
+> and the supply net 15/16 are established by `[MEASUREMENT]` and
+> `[CAPTURE]` — see "Measurement status" below. The **function names of
+> all other pins** are still the Waveshare / Good Display standard as a
+> working hypothesis; only their DC signature is measured. No driver may
+> rely on those names.
+>
+> (Original warning, superseded: "Nothing in this document has been
+> measured.")
 
 ---
 
@@ -139,6 +143,8 @@ counting direction on the board is mirrored relative to the assumption.
 Is entered in `../hardware/measurements.md`. As soon as the digital lines
 are confirmed there, **this file** is updated with `[MEASUREMENT]` markers
 and the hypothesis warning above is removed.
+**Done 2026-09-23/25:** see "Measurement status"; the warning at the top
+was narrowed to the pins that are still hypothesis.
 
 ---
 

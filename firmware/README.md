@@ -1,5 +1,13 @@
 # firmware — still empty
 
+> **Update 2026-09-25:** the capture route is exhausted (the tag never
+> refreshes, `HISTORY.md`). The order at the bottom is superseded: path B
+> is decided, the next steps are M-011 (SWD lock state) and M-012 (EFR32
+> pin map), then the board definition and bring-up steps 1–3 of
+> `../docs/firmware-plan.md`. No OEPL pin map matches our board
+> (`../docs/oepl-pin-comparison.md`). The GPIO mapping comes from **M-012**,
+> not from M-001/M-002.
+
 > **Update 2026-09-23:** the maintainer chose **path B** — a custom
 > firmware on the original EFR32, no ESP32. Current plan, open decisions
 > and bring-up steps: `../docs/firmware-plan.md`. The path A section below

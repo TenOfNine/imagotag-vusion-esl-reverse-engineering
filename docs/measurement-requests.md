@@ -463,7 +463,7 @@ refresh there is no image data and no display init sequence to sniff.
 |---|---|
 | Long SPI activity (≥ ~96 kB) after an NFC tap | refresh captured → decode init + frame (pass at 20–40 MSa/s next) |
 | Short SPI activity only | NFC wakes the tag but no refresh → analyse the bytes |
-| Nothing | NFC is not a trigger → next options: SWD lock check (F-05, needs M-002/M-003) or driving the panel ourselves |
+| Nothing | NFC is not a trigger → next options: SWD lock check (F-05, needs M-002/M-003 — **update:** M-003 done, M-002 negative, now M-011) or driving the panel ourselves |
 
 ### ⚠ Safety
 

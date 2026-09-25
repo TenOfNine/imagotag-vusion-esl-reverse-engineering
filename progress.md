@@ -12,7 +12,7 @@ at the maintainer's request.
 - Owner: **M** = maintainer (hardware, measurements), **C** = Claude Code
   (analysis, docs, code).
 
-Last updated: 2026-09-25 (session 4).
+Last updated: 2026-09-25 (session 4, housekeeping done).
 
 ---
 
@@ -127,13 +127,12 @@ Order = suggested priority.
 
 ## Open — housekeeping (C, small doc fixes)
 
-- [ ] `docs/open-questions.md`: F-03 (UC81xx `[ASSUMPTION]`), F-05/F-06/F-07
-      (M-003 done, M-002 negative, M-011 pending) not yet updated; the
-      "Answered" section is still empty
-- [ ] `README.md`: header still says "probably three-colour" → BWRY
-- [ ] `CLAUDE.md` §7 repo structure does not list `progress.md`,
-      `docs/firmware-plan.md`, `docs/netlist-from-photos.md`,
-      `docs/oepl-pin-comparison.md` (rule file → ask the maintainer first)
+- [x] Stale statements corrected (C, 2026-09-25): `open-questions.md`
+      (F-01/F-07/F-08/F-09 ✅, updates to F-02/03/04/05/06/10/14/16,
+      "Answered" index), `README.md`, `docs/hardware.md`, `docs/pinout.md`
+      header, `firmware/README.md`, M-010 decision row
+- [x] `CLAUDE.md`: rules for `progress.md` (§4) and new files in §7
+      (maintainer approved, 2026-09-25)
 
 ---
 
@@ -142,7 +141,6 @@ Order = suggested priority.
 | # | Decision | Blocks |
 |---|---|---|
 | F-15 | Erase the original firmware on tag 02 if the chip is locked? | flashing |
-| — | Whether `progress.md` is read at every session start (`CLAUDE.md` §4) | — |
 
 ## Safety reminders (from `CLAUDE.md` §5)
 

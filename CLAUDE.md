@@ -79,6 +79,30 @@ One-time exception: on 2026-09-23 the maintainer approved translating the
 whole repo into English, including existing `HISTORY.md` entries. The
 unaltered German original is kept in `docs/archive/HISTORY.de.md`.
 
+### progress.md — the living checklist
+
+`progress.md` (repo root) lists what has been done and what is still open,
+with an owner per item (maintainer / Claude Code). It is **separate** from
+`HISTORY.md` and does not replace it (maintainer decision, 2026-09-25):
+`HISTORY.md` is the append-only chronology with evidence, `progress.md` is
+the current checklist and is **edited in place**.
+
+**Rules:**
+
+- At **session start**: read `progress.md` together with `HISTORY.md` and
+  `docs/open-questions.md`, and take its open items into account when
+  planning the session.
+- **Keep it current in the same commit** as the change that alters the
+  state: tick finished items, add new open items (new measurement request,
+  new decision, new to-do), remove nothing silently — finished items move
+  to "Done".
+- Update the "Last updated" line and the one-paragraph summary when the
+  overall state changes.
+- A ticked item means "done", not "confirmed" — evidence markers stay in
+  `HISTORY.md` and the docs.
+- Before ending a session: check that `progress.md` matches the
+  last `HISTORY.md` entries.
+
 ---
 
 ## 5. Safety rules (not negotiable)
@@ -132,6 +156,7 @@ These rules protect hardware that cannot be re-ordered.
 CLAUDE.md                  this file
 README.md                  project overview
 HISTORY.md                 long-term memory, chronological
+progress.md                living checklist: done / open, per owner
 TOOLS.md                   available instruments
 docs/
   hardware.md              component and platform knowledge
@@ -139,6 +164,9 @@ docs/
   capture-protocol.md      instructions for the logic analyser capture
   measurement-requests.md  open measurement requests to the maintainer
   open-questions.md        what is unresolved
+  firmware-plan.md         custom firmware on the EFR32 (path B)
+  netlist-from-photos.md   traces reconstructed from PCB photos
+  oepl-pin-comparison.md   OpenEPaperLink pin maps vs. our board
   references.md            sources
   archive/                 superseded originals (e.g. German HISTORY)
 captures/                  raw captures (.sr, .csv) — not in git
