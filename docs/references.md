@@ -66,6 +66,18 @@ documents refer to here.
   coding `u8Colors_4clr_v2`, refresh/sleep code. Compared with our OTP in
   `analysis/otp_init_map.py`.
 
+- **Pervasive Displays — `Pervasive_BWRY_Medium` driver library**
+  (vendor code for "iTC BWRY film Q, 5.8\" and 7.4\"", `741-QS-0B`)
+  https://github.com/PervasiveDisplays/Pervasive_BWRY_Medium, commit
+  `d877f73` (2026-10-19), with **PDLS_Common**
+  https://github.com/PervasiveDisplays/PDLS_Common, commit `5f53ef2`
+  → OTP read, OTP offsets, init, update order, turn-off DC/DC, reset and
+  BUSY timing, 96,000-byte frame. Referenced from the app note pages
+  (overview, SPI timing format, update procedure) that the maintainer
+  found; those pages themselves are blocked for Claude Code. Licence CC
+  BY-SA 4.0 (basic edition), "for exclusive use with Pervasive Displays
+  screens" — reimplement, do not copy.
+
 ## Reports from others on this board (added 2026-10-21)
 
 - **Issue #2 of this repo** — "Findings from a second RFRTx026D (Vusion

@@ -17,10 +17,12 @@ Reference values: bitbank2/bb_epaper, pull request #44, commit 61de1cf,
 table `epd74yr_init_full` ("Register values dumped from the panel's COG OTP
 memory"), https://github.com/bitbank2/bb_epaper/pull/44
 
-NOTE: the OTP offsets below are NOT from a datasheet. They were found by
-matching the reference values against our OTP bytes (2026-10-21) and are an
-[ASSUMPTION] until checked against the Pervasive Displays application note.
-The script only shows that every value exists, in order, in our OTP.
+The OTP offsets below were first found by value matching (2026-10-21).
+Update 2026-10-21: they are identical to the offsets used by Pervasive
+Displays' own driver (PervasiveDisplays/Pervasive_BWRY_Medium, commit
+d877f73, COG_initial()), so they are [RESEARCH] now. Note that the vendor
+driver sends 0x04 (power on) after the image data, not at the end of the
+init as in the bb_epaper table.
 """
 
 from __future__ import annotations

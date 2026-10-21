@@ -36,10 +36,6 @@ COLUMNS = [
             "Compare the QFN40 pin table in "
             "docs/oepl-pin-comparison.md §2 with the EFR32FG22 datasheet",
         ], "feeds: M-012, board definition", False),
-        ("doc_pdi", "M", "Pervasive Displays app note", [
-            "Send screenshots or a PDF of the BWRY Medium tables "
-            "(OTP offsets, sequence, timing)",
-        ], "checks: OTP offsets in docs/panel-protocol.md", False),
         ("about", "M", "GitHub \"About\" text", [
             "Outdated: \"three-colour\", \"Docs in German\" "
             "(repo settings)",
@@ -99,13 +95,14 @@ COLUMNS = [
         ], "needs: M-012 + datasheet check", False),
         ("s13", "C", "Bring-up steps 1–3", [
             "LED / RTT · panel power, reset, BUSY (1 ms quirk) · "
-            "replay the boot reads incl. all 112 OTP bytes",
+            "OTP read: chip ID 0D04, bank check, all 112 bytes",
             "Maintainer flashes, sends RTT log + SLogic capture",
         ], "needs: F-15 · confirms the pin map", False),
         ("s4", "C", "Step 4 · first image", [
-            "Pervasive BWRY Medium init built from the OTP at runtime, "
-            "E6 temperature from the EFR32 sensor — not the OEPL ucbwry "
-            "init. Only after step 3",
+            "Vendor sequence (panel-protocol.md §7): init from the OTP, "
+            "10 + 96,000 bytes, 04, 12 00, turn-off DC/DC + 6 s wait. "
+            "E6 temperature from the EFR32 sensor — not ucbwry. "
+            "Only after step 3",
         ], "confirms: F-02, F-03, F-13", False),
         ("s5", "C", "Step 5 · OEPL port", [
             "Board type + Pervasive driver + 256 kB build — or reuse the "
@@ -127,7 +124,7 @@ ARROWS = [
 
 PARKED = ("Parked / low priority: M-005 XDt in detail (path A only) · "
           "F-10 disable the EFR32 (path A) · F-11 FPC test points TP1–TP3 · "
-          "F-12 refresh-rate limits (≈ 22 s per full refresh)")
+          "F-12 refresh-rate limits (≈ 22 s refresh + 6 s turn-off per update)")
 SAFETY = ("Safety (CLAUDE.md §5): tag 01 is never touched · no unlock "
           "before F-15 is decided and written into CLAUDE.md · FPC checks "
           "unpowered first (≈ ±20 V on the FPC, logic analyser max. 3.6 V)")

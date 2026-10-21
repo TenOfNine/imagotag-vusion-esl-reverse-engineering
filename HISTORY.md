@@ -1367,6 +1367,64 @@ environment → Pervasive content only via search-result snippets.
 
 ---
 
+## 2026-10-21 — Session 5: Pervasive Displays' own driver confirms the OTP offsets and corrects the update order
+
+### What was tried
+Maintainer found the Pervasive Displays app note pages for "BWRY Medium"
+(overview, SPI timing format, update procedure) and asked whether they
+add anything. The site is blocked for Claude Code (proxy 403). The pages
+reference Pervasive's `.cpp` driver; that is public on GitHub and was
+read instead: `PervasiveDisplays/Pervasive_BWRY_Medium` (commit
+`d877f73`, 2026-10-19) and `PervasiveDisplays/PDLS_Common` (commit
+`5f53ef2`).
+
+### Result
+- `[RESEARCH]` The driver supports "iTC BWRY (film Q) 5.8\" and 7.4\""
+  screens, references `581-QS-0B` / `741-QS-0B`, and implements the app
+  note step by step.
+- `[RESEARCH]` OTP read: `70` → 2-byte chip ID must be `0x0D04`; `90`;
+  `A2 00 15 00 00 E0`; `92` → dummy byte, then byte 0 must be `A5`
+  (bank 0), else skip to offset `0x70` and check again (bank 1);
+  **112 bytes** read; 3-wire bit-banged reads, ~0.5 MHz, one CS frame per
+  byte, 8 ms waits after `70` and `90`. Matches our capture (which has
+  `0D 04` + a third byte `01`, ~1 MHz, no 8 ms waits).
+- `[RESEARCH]` **The init uses exactly the 18 OTP offsets that
+  `analysis/otp_init_map.py` found by value matching** (PWR 16, PSR
+  26–27, TRES 19–22, PSR 17–18, BTST_P 23–25, PFS 30–32, `E7` 33, `65`
+  34–37, PLL 38, CDI 39, TCON 40–41, PWS 42, `EF` 43–50, `DC/DD/DE/E8/DA`
+  59–63), with `E6` temperature (default 25 °C), `E0 02`, `A5` + BUSY,
+  `FF A5`, `FF E3`, `E9 01` as fixed steps.
+- `[RESEARCH]` Update order differs from the bb_epaper-based description
+  of the previous entry: init → `10` + 96,000 bytes → **`04` + BUSY** →
+  `12 00` + BUSY → **turn-off DC/DC**: `02 00` + BUSY, `00 07 2B 01`,
+  `FF A5`, 400 ms, `EE A0 1E`, 4 ms, `EE 00 00`, 3 ms, `FF E3`, **6 s
+  wait**. No `07 A5` deep sleep.
+- `[RESEARCH]` Reset: 20 ms, RST high 10 ms, RST low 20 ms, RST high
+  10 ms, then wait for BUSY **high** (= ready, polled every 32 ms).
+  Writes up to 16 MHz with CS held low per command + data block; 1 ms
+  pause before single commands.
+- Licence of the vendor code: CC BY-SA 4.0 (basic edition), "for
+  exclusive use with Pervasive Displays screens" → we reimplement from
+  the documented procedure and do not copy the code.
+
+### What follows
+- The OTP offsets in `docs/panel-protocol.md` §2 change from
+  `[ASSUMPTION]` to `[RESEARCH]`. The maintainer no longer needs to send
+  the app note tables.
+- **Corrects** "Session 5: Project review …" (and `panel-protocol.md` §3):
+  power-on `04` comes after the image data, and the update ends with the
+  turn-off DC/DC sequence, not `07 A5`. Details in `panel-protocol.md` §7.
+- F-12: ≈ 22 s refresh + 6 s turn-off wait per update.
+- `CLAUDE.md` §4: maintainer decision — `docs/open-items.svg` is updated
+  in the same commit whenever the open items in `progress.md` change.
+
+### What it does not prove
+That our panel is one of these screens: the chip ID, the OTP procedure
+and all OTP values match, but nothing has been sent to our panel yet.
+Pixel coding is still only from bb_epaper / issue #2.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

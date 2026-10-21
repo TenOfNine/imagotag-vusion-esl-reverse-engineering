@@ -102,6 +102,11 @@ the current checklist and is **edited in place**.
   `HISTORY.md` and the docs.
 - Before ending a session: check that `progress.md` matches the
   last `HISTORY.md` entries.
+- **`docs/open-items.svg`** (shown in `README.md`) mirrors the open items
+  of `progress.md`. Whenever open items change, update the content in
+  `docs/make_open_items_svg.py` (including `SNAPSHOT`), regenerate the
+  SVG and commit it **in the same commit** as `progress.md`
+  (maintainer decision, 2026-10-21).
 
 ---
 

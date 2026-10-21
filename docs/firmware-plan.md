@@ -18,6 +18,11 @@ marked **DECISION**.
 >   (2026-10-11).
 > - Section 1 (lock state vs. §5.2) still applies; new arguments in
 >   `open-questions.md` F-15.
+> - Later 2026-10-21: the step-4 sequence comes from Pervasive Displays'
+>   own driver (`panel-protocol.md` §7): OTP read of all 112 bytes with
+>   chip-ID and bank check, init from the OTP, `10` + 96,000 bytes, `04`,
+>   `12 00`, then the turn-off DC/DC sequence with its 6 s wait before
+>   the panel supply is cut. Reimplemented, not copied (licence).
 
 Maintainer decision (2026-09-23): the goal is a firmware that runs **on the
 original EFR32FG22** of the tag. No ESP32, no hardware swap — the board stays

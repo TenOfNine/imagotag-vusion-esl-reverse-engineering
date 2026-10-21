@@ -1,6 +1,8 @@
 # Panel protocol — EL074TS1 controller, OTP and init sequence
 
-Status 2026-10-21. Written after the project review in session 5.
+Status 2026-10-21. Written after the project review in session 5;
+updated the same day with Pervasive Displays' own driver library
+(section 7). Where the two disagree, the vendor driver wins.
 Evidence markers as in `CLAUDE.md` §3. **Nothing here has been sent to a
 panel by us yet.** The first real test is bring-up step 3/4 in
 `firmware-plan.md`.
@@ -87,10 +89,12 @@ header (0–4), the serial (5–10), byte 11 and `FF` fill are left over.
 
 - The **values** are `[CAPTURE]` (our panel). The **command order and the
   fixed bytes** are `[RESEARCH]` (bb_epaper; the Pervasive app note says
-  the same according to issue #2). The **offsets** are `[ASSUMPTION]`:
-  found by value matching, not read from the app note.
-  **Test:** compare with the offset table of the Pervasive app note
-  (maintainer, the site is blocked for Claude Code).
+  the same according to issue #2). ~~The **offsets** are `[ASSUMPTION]`:
+  found by value matching, not read from the app note.~~
+  **Update 2026-10-21:** the offsets are now `[RESEARCH]`: Pervasive
+  Displays' own `COG_initial()` reads exactly these 18 offsets, in this
+  order (section 7). Command order and fixed bytes are confirmed by the
+  same code.
 - Consequence: the panel-specific part of the init sequence (the part
   `CLAUDE.md` §5.2 wants captured before an unlock) **is in our own
   capture**. What is not captured is the order and the fixed bytes;
@@ -99,6 +103,11 @@ header (0–4), the serial (5–10), byte 11 and `FF` fill are left over.
   because offset 63 is the last one it needs.
 
 ## 3. Full update sequence (as published, not tested by us)
+
+> **Superseded 2026-10-21 by section 7** (vendor driver). Two differences:
+> the vendor sends `04` (power on) **after** the image data, and it ends
+> with a dedicated "turn-off DC/DC" sequence instead of `07 A5`. The
+> bb_epaper-based list below is kept for traceability.
 
 `[RESEARCH]` bb_epaper (`bbepRefresh`, `bbepSleep` for 4-colour UC81xx
 panels) and issue #2:
@@ -132,7 +141,11 @@ OEPL `jd` driver): 2 bits per pixel, `00` black, `01` white, `10` yellow,
 
 ## 5. Open points
 
-- Offsets in section 2 → Pervasive app note (maintainer).
+- ~~Offsets in section 2 → Pervasive app note (maintainer).~~ Answered
+  by the vendor driver (section 7).
+- Pixel coding (`00` black, `01` white, `10` yellow, `11` red): not in
+  the vendor driver code read so far — still from bb_epaper / issue #2.
+  **Test:** bring-up step 4 with a four-colour test pattern.
 - Whether the image appears in the right orientation / mirrored →
   bring-up step 4.
 - What the header bytes `1D 87 04 01` and byte 11 (`04`) mean — not needed
@@ -146,3 +159,111 @@ OEPL `jd` driver): 2 bits per pixel, `00` black, `01` white, `10` yellow,
 | Pervasive Displays BWRY Medium app note | procedure, banks, read clock | `[RESEARCH]`, snippets only |
 | bitbank2/bb_epaper PR #44 | complete init table, refresh, sleep | `[RESEARCH]`, code |
 | Issue #2 of this repo (third party, AI-assisted, unit not ours) | chip ID, pin map, flash, unlock, working refresh | `[RESEARCH]`, unverified on our unit |
+| Pervasive Displays `Pervasive_BWRY_Medium` + `PDLS_Common` (vendor code) | OTP read, OTP offsets, init, update, turn-off DC/DC, reset/BUSY/SPI timing, frame size | `[RESEARCH]`, primary source (section 7) |
+
+## 7. Vendor driver: Pervasive Displays `Pervasive_BWRY_Medium`
+
+Added 2026-10-21. The maintainer found the Pervasive Displays app note
+pages (overview, SPI timing format, update procedure). The site is blocked
+for Claude Code, but the `.cpp` references point to Pervasive Displays'
+public driver on GitHub, which implements the app note step by step
+(comments "Application note § 2 … § 5"):
+
+- `Pervasive_BWRY_Medium` (PervasiveDisplays/Pervasive_BWRY_Medium, commit `d877f73`, 2026-10-19),
+  supports "iTC colour black-white-red-yellow screens (film `Q`) with sizes
+  of 5.8 and 7.4\"" — references `581-QS-0B` and `741-QS-0B`.
+- `PDLS_Common` (PervasiveDisplays/PDLS_Common, commit `5f53ef2`,
+  2026-10-19) for reset, BUSY and SPI helpers.
+- Licence: basic edition CC BY-SA 4.0, "For exclusive use with Pervasive
+  Displays screens". → We **reimplement from the documented procedure**
+  and do not copy the source into this repo or into an OEPL
+  (CC BY-NC-SA) port. `[ASSUMPTION]` this keeps the licences apart — not
+  legal advice.
+
+Everything below is `[RESEARCH]` from that code unless marked otherwise.
+
+### 7.1 OTP read (`COG_getDataOTP`)
+
+1. Chip-ID check: `70` (command), wait 8 ms, read **2 bytes** → must be
+   `0x0D04`. `[CAPTURE]` ours: `0D 04` (+ a third byte `01` that the
+   original firmware also reads).
+2. `90` (command, no data), wait 8 ms.
+3. `A2` + `00 15 00 00 E0` (OTP start address).
+4. `92`, then read: 1 dummy byte, then byte 0. If byte 0 = `A5` → bank 0.
+   Otherwise skip to offset `0x70` and read again; if that is `A5` →
+   bank 1, else abort.
+5. Read **112 bytes** in total (`COG_data[0…111]`).
+
+All reads use 3-wire SPI on the bidirectional data line, bit-banged with
+1 µs half periods (≈ 0.5 MHz), one CS frame per byte.
+`[CAPTURE]` The original Vusion firmware does the same with ~1 MHz reads
+and without the 8 ms waits.
+
+### 7.2 Initialisation (`COG_initial`)
+
+| Step | Command + data | Source of the data |
+|---|---|---|
+| 1 | `E6` + temperature | host value, signed °C, default 25 (`0x19`) |
+| 2 | `E0 02` | fixed |
+| 3 | `A5`, then wait for BUSY high | fixed |
+| 4 | `01` PWR | OTP[16] |
+| 5 | `00` PSR | OTP[26–27] |
+| 6 | `61` TRES | OTP[19–22] |
+| 7 | `00` PSR | OTP[17–18] |
+| 8 | `06` BTST_P | OTP[23–25] |
+| 9 | `03` PFS | OTP[30–32] |
+| 10 | `E7` | OTP[33] |
+| 11 | `65` | OTP[34–37] |
+| 12 | `30` PLL | OTP[38] |
+| 13 | `50` CDI | OTP[39] |
+| 14 | `60` TCON | OTP[40–41] |
+| 15 | `E3` PWS | OTP[42] |
+| 16 | `FF A5` | fixed |
+| 17 | `EF` | OTP[43–50] |
+| 18 | `DC`, `DD`, `DE`, `E8`, `DA` | OTP[59], [60], [61], [62], [63] |
+| 19 | `FF E3` | fixed |
+| 20 | `E9 01` | fixed |
+
+Identical to the table in section 2 (`analysis/otp_init_map.py`), except
+that `04` is **not** part of the init.
+
+### 7.3 Full update (`updateNormal`)
+
+1. Panel power/GPIO on, reset: wait 20 ms, RST high 10 ms, **RST low
+   20 ms**, RST high 10 ms, CS high, wait 10 ms, wait for BUSY **high**.
+   `[CAPTURE]` the original firmware holds RST low for 10.05 ms.
+2. If the OTP has not been read yet: OTP read (7.1), then reset again.
+3. Init (7.2).
+4. `10` + frame: **96,000 bytes** for 7.41" (demo `frameSize`; 46,080 for
+   5.81").
+5. `04` (power on), wait for BUSY high.
+6. `12 00` (display refresh), wait for BUSY high (≈ 22 s, see F-12).
+7. Turn-off DC/DC (`COG_stopDCDC`):
+   `02 00`, wait for BUSY high → `00 07 2B 01` → `FF A5` → wait 400 ms →
+   `EE A0 1E` → wait 4 ms → `EE 00 00` → wait 3 ms → `FF E3` →
+   **wait 6000 ms**. No `07 A5` deep sleep.
+
+`[ASSUMPTION]` The panel supply (`XDt`, PC06) may only be switched off
+after step 7 including the 6 s wait. **Test:** none without a scope on the
+HV rails; follow the vendor order.
+
+### 7.4 Bus details
+
+- BUSY: the driver waits for **high** = ready, polling every 32 ms, no
+  timeout. (Firmware of ours needs a timeout.)
+- Writes: hardware SPI up to **16 MHz**; CS stays low for a whole
+  command + data block (D/C low for the command byte, high for the data).
+  `[CAPTURE]` The original firmware uses ~6.4 MHz and one CS frame per
+  byte — `[ASSUMPTION]` the COG accepts both.
+- Reads: see 7.1.
+- Single commands (`b_sendCommand8`, `b_sendCommandData8`) are preceded
+  by a 1 ms pause ("extra delay required for some MCUs").
+
+### 7.5 What this changes
+
+- Section 2 offsets: confirmed (`[RESEARCH]`).
+- Section 3: superseded (`04` after the data; turn-off DC/DC sequence).
+- Bring-up step 3 should read all **112** bytes and check chip ID `0D04`
+  and the bank marker, as the vendor does.
+- Our firmware has to send the turn-off sequence and respect the 6 s wait
+  before cutting the panel supply.

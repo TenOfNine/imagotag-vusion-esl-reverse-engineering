@@ -62,6 +62,12 @@ our OTP (`analysis/otp_init_map.py`, 0 mismatches). `[ASSUMPTION]` same
 COG as E2741QS0B3 — **test:** bring-up step 3/4. Details:
 `docs/panel-protocol.md`.
 
+**Update 2026-10-21 (later):** `[RESEARCH]` Pervasive Displays' own driver
+(`Pervasive_BWRY_Medium`) checks chip ID `0x0D04`, reads the OTP exactly as
+our capture shows and uses exactly our OTP offsets for the init
+(`panel-protocol.md` §7). Remaining `[ASSUMPTION]`: our panel is one of
+its `741-QS-0B` screens — test: bring-up step 3/4.
+
 **Update 2026-09-25:** `[CAPTURE]` the boot opcodes `0x70`, `0x90`, `0x92`,
 `0xA2` match the UltraChip UC81xx command set (defines in the OEPL source,
 see `references.md`) → `[ASSUMPTION]` UC81xx family, BWRY variant. Not
@@ -203,6 +209,9 @@ Unclear. Possibly production test of the panel. Low priority.
 **Update 2026-10-21:** `[RESEARCH]` a full refresh takes ≈ 22 s
 (bb_epaper comment for E2741QS0B3; issue #2: 21.9 s). No fast/partial
 mode is published for this panel.
+`[RESEARCH]` The vendor driver adds a turn-off DC/DC sequence ending with
+a 6 s wait after every update (`panel-protocol.md` §7.3) → ≈ 28–30 s per
+update cycle.
 
 `[RESEARCH]` For three-colour panels E Ink recommends minimum intervals of
 several minutes between updates; a full frame takes 15–30 s.
