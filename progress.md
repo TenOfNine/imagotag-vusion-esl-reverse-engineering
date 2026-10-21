@@ -154,9 +154,11 @@ Order = suggested priority.
       with expected pins in `measurement-requests.md`)
   - [ ] FPC 9–14 → QFN pins (expected 28, 5, 4, 3, 2, 1)
   - [ ] `XDt` leg 1 (gate) → QFN pin (expected 7)
-  - [ ] SO-8 pins → QFN pins 26/25/20/21, GND, VCC
+  - [ ] `8K417` chip pins → QFN pins 26/25/20/21, GND, VCC (it is a
+        leadless ~2 × 3 mm package right of the EFR32, not an SO-8 —
+        `hardware/photos/derived/pcb-top-8k417-location.jpg`)
   - [ ] both LEDs → QFN pin / supply
-  - [ ] macro photo of the SO-8 marking
+  - [ ] macro photo of the `8K417` chip (marking + package edges)
 - [ ] **M-013 — run bring-up step 1** after M-011 (+ backup if not
       locked, or F-15 + unlock if locked); tag 02, FPC unplugged; send
       the RTT report (`firmware/bringup/README.md`)

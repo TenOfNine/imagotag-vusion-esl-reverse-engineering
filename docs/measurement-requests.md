@@ -634,6 +634,17 @@ If four pins go to the EFR32 and one each to GND/VDD, it is probably an
 
 ### Update 2026-10-21 — verify a concrete hypothesis
 
+> **Correction 2026-10-21 (later):** the chip called "SO-8" below is
+> **not** an SO-8. `[PHOTO]` `pcb-top-ruler.jpg`: a leadless package
+> (USON/DFN type, ≈ 2 × 3 mm) with 4 pads on each short side and the
+> marking `8K417 / 0E47AH`, directly right of the EFR32 — see
+> `hardware/photos/derived/pcb-top-8k417-location.jpg`. Probe its pads at
+> the package edge (the small solder fillets) with a needle. Pin 1 is
+> `[ASSUMPTION]` next to the small dot/logo of the marking; the
+> "usual 25-series" pin roles also hold for USON-8 flash packages only
+> as an `[ASSUMPTION]`. If a row does not beep, probe the line against
+> all eight pads.
+
 A third party reports a full GPIO map for another RFRTx026D (issue #2 of
 this repo, found by GPIO scans over SWD on an unlocked chip). It fits our
 photo evidence (display lines on the left pad column, pads 1–8). It is

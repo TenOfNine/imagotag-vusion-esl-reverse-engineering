@@ -1548,6 +1548,33 @@ Nothing on our unit: lock state, pins, flash and flash size remain open.
 
 ---
 
+## 2026-10-21 — Session 5: Correction — the `8K417` chip is not an SO-8
+
+Corrects "Session 1: Identifying the hardware" and every later mention of
+"SO-8 `8K417`".
+
+### What was done
+Maintainer asked where the SO-8 is, for the requested macro photo.
+Zoomed into `hardware/photos/pcb-top-ruler.jpg` (≈ 32.5 px/mm).
+
+### Result
+- `[PHOTO]` The chip marked `8K417 / 0E47AH` sits directly right of the
+  EFR32 on the top side. It has **no gull-wing leads**: it is a leadless
+  package (USON/DFN type), ≈ 2 × 3 mm, with 4 pads visible on each short
+  side, and a small dot/logo next to the marking.
+- Marked in `hardware/photos/derived/pcb-top-8k417-location.jpg`.
+
+### What follows
+- "SO-8" in the docs means this chip. `hardware.md` and the M-012 update
+  carry the correction; older text is left as it was.
+- M-012: probe its pads at the package edge with a needle. Pin 1 next to
+  the dot is `[ASSUMPTION]`.
+- A leadless 2 × 3 mm 8-pad package is common for small SPI NOR flash
+  (`[ASSUMPTION]`, fits the third-party W25Q80 report; **test:** JEDEC
+  ID, optional step 1b).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

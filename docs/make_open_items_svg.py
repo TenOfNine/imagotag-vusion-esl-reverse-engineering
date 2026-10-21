@@ -69,9 +69,10 @@ COLUMNS = [
             "Unpowered, battery out, FPC unplugged",
             "• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1",
             "• XDt gate → QFN 7",
-            "• SO-8 → QFN 26/25/20/21, GND, VCC",
+            "• 8K417 chip (leadless, right of the EFR32) → QFN "
+            "26/25/20/21, GND, VCC",
             "• LEDs → QFN / supply",
-            "• Macro photo of the SO-8 marking",
+            "• Macro photo of the 8K417 chip",
         ], "answers: F-14, F-16", False),
     ]),
     ("3 · Decisions", [

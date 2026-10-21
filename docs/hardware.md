@@ -202,7 +202,7 @@ function unclear, probably LDO, load switch and/or level shifter.
 
 | Feature | Value | Evidence |
 |---|---|---|
-| IC | SO-8, marking `8K417 / 0E47AH` | `[PHOTO]` |
+| IC | ~~SO-8~~ → **leadless 8-pad package (USON/DFN type), ≈ 2 × 3 mm, 4 pads on each short side** (corrected 2026-10-21); marking `8K417 / 0E47AH`; right of the EFR32 (`derived/pcb-top-8k417-location.jpg`) | `[PHOTO]` `pcb-top-ruler.jpg` |
 | Antenna | large coil on the back side | `[PHOTO]` |
 | Label inside the coil | handwritten `0181` | `[PHOTO]` |
 

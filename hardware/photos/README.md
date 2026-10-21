@@ -20,6 +20,7 @@
 | `derived/pcb-bottom-ruler-registered.jpg` | `pcb-bottom-ruler.jpg` warped into the frame of `pcb-top-ruler.jpg` (set 2, residual ≈ 0.12 mm) |
 | `derived/pcb-ruler-top-bottom-blend.jpg` | 50/50 blend of set 2 |
 | `derived/pcb-ruler-netlist-annotated.jpg` | set-2 findings marked: FPC wire points, bundle end vias V1–V8, EFR32 left pads 1–10, `8K417` (**unverified**) |
+| `derived/pcb-top-8k417-location.jpg` | where the `8K417` chip sits (red box, right of the EFR32), with a zoomed inset; from `pcb-top-ruler.jpg` (2026-10-21) |
 | `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---
