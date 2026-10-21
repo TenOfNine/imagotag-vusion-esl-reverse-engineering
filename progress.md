@@ -12,7 +12,7 @@ at the maintainer's request.
 - Owner: **M** = maintainer (hardware, measurements), **C** = Claude Code
   (analysis, docs, code).
 
-Last updated: 2026-10-21 (session 5, project review).
+Last updated: 2026-10-21 (session 5, project review; issues #2/#3 answered).
 
 ---
 
@@ -104,6 +104,11 @@ the **verification of the pin map** (M-012) and the **F-15 decision**
 - [x] M-009 closed as not needed (fast write bytes confirmed by the
       Pervasive app note) (C)
 - [x] New question F-17 (256 or 512 kB flash) (C)
+- [x] Issue #3 answered by the maintainer (2026-10-21, own comment) (M)
+- [x] Issue #2 answered with questions 1–7 (OTP offset table, full 112-byte
+      OTP, flash marking, DEVINFO timing, SWD settings, `E6` value and
+      orientation, OEPL branch) — posted by Claude Code with the
+      maintainer's approval, 2026-10-21 (C)
 
 ---
 
@@ -135,8 +140,6 @@ Order = suggested priority.
       unlocked (original firmware erased)? New basis in
       `open-questions.md` F-15. Must be written into `CLAUDE.md` before
       any unlock
-- [ ] Decide whether and how to answer GitHub issues #2 and #3 (Claude
-      Code can draft replies)
 - [ ] GitHub repo "About" text is outdated ("three-colour", "Docs in
       German") — repo settings, maintainer only
 - [ ] ~~M-009 — re-capture at 40 MSa/s~~ — not needed (2026-10-21)
@@ -157,6 +160,8 @@ Order = suggested priority.
       EFR32 sensor — **not** the OEPL `ucbwry` init
 - [ ] Watch for the third-party OEPL port (issue #2) — reuse instead of
       duplicating, if it appears
+- [ ] Evaluate the answers to our questions in issue #2 when they arrive
+      (record as `[RESEARCH]`, check against our data)
 - [ ] Toolchain: set up GSDK 4.4.1 / `slc` (silabs.com is blocked from the
       container → maintainer download or an alternative); a bare-metal
       project with `gcc-arm-none-eabi` for steps 1–3 is possible
@@ -180,7 +185,6 @@ Order = suggested priority.
 | # | Decision | Blocks |
 |---|---|---|
 | F-15 | Erase the original firmware on tag 02 if the chip is locked? New basis since 2026-10-21 (`open-questions.md`) | flashing |
-| — | Answer issues #2/#3 on GitHub? | — |
 | — | Own bring-up firmware first, or wait for the third-party OEPL port? | step 5 |
 
 ## Safety reminders (from `CLAUDE.md` §5)
