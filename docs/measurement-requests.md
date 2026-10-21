@@ -555,6 +555,20 @@ state and then only resets the target. **Never** add `-u`, `-e` or `-f`
 
 **Send back:** the complete text output of all commands (copy & paste),
 plus: which tag, battery voltage if known, how many attempts.
+
+**Update 2026-10-21 (later)** `[RESEARCH]`, third-party comment in issue #2
+(https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6320136057):
+- While locked, only the Secure Engine status was readable (DCI,
+  `reflash.py -s`); the AHB-AP was closed, so **DEVINFO and the flash size
+  are only readable after an unlock.** Do not expect F-17 from this step
+  if the chip is locked.
+- Their locked chip answered only the **first** session after power-up;
+  later sessions got `No ACK` until the tag was power-cycled. → Power-cycle
+  (battery out/in) before **every** attempt.
+- Their setup: Pico debugprobe + pyOCD, 1 MHz, connect mode halt (not
+  under reset), tag powered from the probe's 3.3 V with the battery out,
+  nRESET wired. Our setup (battery in, VTref only senses) is fine as well;
+  nRESET is not needed for a status read.
 The output answers F-05 (locked?), whether an unlock is allowed (F-15),
 and — if `device info` shows it — the flash size (F-17: 256 or 512 kB).
 

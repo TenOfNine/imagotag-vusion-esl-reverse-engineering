@@ -40,10 +40,11 @@ COLUMNS = [
             "Outdated: \"three-colour\", \"Docs in German\" "
             "(repo settings)",
         ], None, False),
-        ("i2", "T", "Issue #2 — answers", [
-            "Our questions 2–7 (1 answered ourselves): full 112-byte OTP, "
-            "flash marking, DEVINFO, SWD settings, E6 value, OEPL branch",
-        ], "then Claude Code evaluates them", False),
+        ("i2", "T", "Issue #2 — still open there", [
+            "Answers 2, 4–6 received and evaluated (panel-protocol.md §8). "
+            "Open: flash marking (3), public OEPL branch (7, offered early "
+            "on request)",
+        ], None, False),
         ("oepl3", "T", "Third-party OEPL port", [
             "Announced in issue #2, not in OEPL v43. Claude Code watches "
             "and reuses it instead of duplicating",
@@ -52,11 +53,12 @@ COLUMNS = [
     ("2 · Tag 02 — non-destructive", [
         ("m011", "M", "M-011 · SWD lock status", [
             "• Confirm vias for QFN pins 22/23 (unpowered)",
+            "• Power-cycle before every attempt",
             "• J-Link: commander device info + commander security status "
             "— nothing else",
             "• Send the full text output",
             "• If not locked: back up the flash (outside the repo)",
-        ], "answers: F-05, F-17 · basis for F-15", False),
+        ], "answers: F-05 · basis for F-15 (F-17 only if unlocked)", False),
         ("eval", "C", "Evaluate lock state + flash size", [
             "After M-011: update docs/firmware-plan.md",
         ], "answers: F-17 (256 or 512 kB)", False),
@@ -81,7 +83,7 @@ COLUMNS = [
         ], "blocks: flashing (steps 1–5)", False),
         ("path", "D", "Bring-up path", [
             "Own bring-up firmware first, or wait for the third-party "
-            "OEPL port?",
+            "OEPL port? Ask its author for the early branch?",
         ], "blocks: step 5", False),
     ]),
     ("4 · Firmware on tag 02", [

@@ -86,6 +86,10 @@ documents refer to here.
   → pin map, chip ID, W25Q80 flash, lock state, 256 kB part, working
   refresh, OEPL port in progress. Another unit — everything unverified on
   ours.
+  Follow-up answers 2026-10-21 (full 112-byte OTP bank 0, DEVINFO only
+  after unlock, SWD "first session" details, orientation, OEPL board type
+  `IMAGOTAG_RFRTX026D` = 0x08, AP hwid `0x4C`):
+  https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6320136057
 - **Issue #3 of this repo** — question about a 2.2" VUSION GU140 with
   panel SE2213JS0E1 (different tag), user `nfr1974`, 2026-10-17
   https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/3

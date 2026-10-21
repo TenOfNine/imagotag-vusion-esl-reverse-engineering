@@ -186,6 +186,14 @@ each image only contains what its step needs:
 | 3 | OTP read exactly as the vendor driver: chip ID must be `0x0D04`, bank marker `A5`, all 112 bytes; prints them | send anything other than `70`, `90`, `A2 00 15 00 00 E0`, `92` | bytes 0–68 equal our capture |
 | 4 | init from the OTP, `10` + test frame, `04`, `12 00`, turn-off DC/DC + 6 s, supply off | run without step 3 having passed | photo of the panel |
 
+**Optional step 1b (added 2026-10-21):** SPI-flash JEDEC ID read
+(`0x9F`, and `0xAB` release-power-down ID) — read-only, after M-012 has
+verified the flash pins. Answers F-16 without relying on the marking.
+
+**Step 3 note:** read all 112 OTP bytes. A part-number string at bytes
+96–109 (third party: `S12741QS0B31CY`) would give our own evidence for
+the panel type (`panel-protocol.md` §8).
+
 Design points:
 
 - **SPI by bit-banging first** (PC00 SDA, PC01 SCK, PC02 CS, PC03 D/C).

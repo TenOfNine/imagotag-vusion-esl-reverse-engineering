@@ -267,3 +267,53 @@ HV rails; follow the vendor order.
   and the bank marker, as the vendor does.
 - Our firmware has to send the turn-off sequence and respect the 6 s wait
   before cutting the panel supply.
+
+## 8. A second panel's full OTP, and the panel orientation
+
+Added 2026-10-21. `[RESEARCH]` Third-party comment in issue #2
+(https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6320136057), another RFRTx026D, panel label `SE2741QS0B3`. Not our unit.
+
+### 8.1 Full bank 0 (112 bytes, dummy byte dropped)
+
+```
+  0: a5 1d 87 07 01 53 50 51 31 43 59 04 ff ff ff ff
+ 16: 07 07 2b 01 e0 03 20 40 40 40 07 ab ff ff 00 00
+ 32: 00 3c 00 00 00 00 08 37 03 03 00 01 1e 06 0a 0f
+ 48: 19 0f 09 01 3f 05 0b 0f 19 1a 0f 01 04 01 01 3f
+ 64: ff × 32
+ 96: 53 31 32 37 34 31 51 53 30 42 33 31 43 59 ff ff   "S12741QS0B31CY"
+```
+
+Bank 1 there: all `FF` except bytes 96–109, ASCII `SPQB00F4D028HE`.
+
+### 8.2 Comparison with our 69 bytes (`[CAPTURE]` vs `[RESEARCH]`)
+
+| Offset | Ours | Theirs | Used by the vendor init? |
+|---|---|---|---|
+| 3 | `04` | `07` | no |
+| 8–10 | `0KX` | `1CY` | no (serial) |
+| 51–58 | `FF` × 8 | `01 3F 05 0B 0F 19 1A 0F` | no |
+| all 33 init bytes (16–50, 59–63) | identical | identical | yes |
+
+- The two panels differ in a header byte (offset 3) and in an 8-byte block
+  (51–58) that the vendor driver does not read. `[ASSUMPTION]` byte 3 is
+  an OTP/layout revision and 51–58 an extra parameter set of newer
+  panels. **Test:** none needed for driving the panel.
+- Consequence: OTP contents vary between panels → our firmware reads the
+  OTP at runtime (as the vendor does) and never hard-codes the values.
+- Our bytes 69–111 were never captured. Bring-up step 3 reads them; if
+  bytes 96–109 hold an `S12741QS0B3…`-type part number, that is our own
+  `[CAPTURE]` evidence for the panel type (currently `[ASSUMPTION]`).
+
+### 8.3 Orientation and colours (third party, their unit)
+
+- Raw panel, flat cable on the left: line 0 = top edge, pixel 0 = left
+  edge → native 480 wide × 800 tall in that view.
+- Colours `00` black, `01` white, `10` yellow, `11` red, first pixel in the
+  top bits (same as bb_epaper / earlier report).
+- Their OEPL port (800 × 480 landscape, cable at the bottom): `swapXY`
+  and `mirrorX = true`; cable at the top would be `mirrorX = false,
+  mirrorY = true`.
+- They send `E6 19` (fixed 25 °C).
+
+Our own check: the asymmetric test frame of bring-up step 4.

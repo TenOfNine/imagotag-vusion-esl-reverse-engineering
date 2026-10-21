@@ -282,6 +282,12 @@ any unlock.
 
 ### 🟡 F-16 Does the board have external SPI flash?
 
+**Update 2026-10-21 (later):** `[RESEARCH]` third-party comment in issue #2:
+they identified theirs only by JEDEC ID (`0x9F` → `EF 40 14`), not by the
+marking; read-only, needs GPIO control (flash supply PA06 low, CS PA05,
+CLK PA00, MOSI PB00, MISO PA04), so only after an unlock. → Planned as an
+optional read-only bring-up step (`firmware-plan.md` §7.2).
+
 **Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): Winbond W25Q80 (1 MB, JEDEC
 `EF 40 14`) on PA00 CLK, PB00 MOSI, PA04 MISO, PA05 CS, supply enable
 PA06 (low = on). `[RESEARCH]` That is exactly the pinout of OEPL's
@@ -299,6 +305,13 @@ NTAG-type tag. Could also be an SPI flash.
 → M-012 item 9.
 
 ### 🟡 F-17 Does the EFR32 have 256 kB or 512 kB flash?
+
+**Update 2026-10-21 (later):** `[RESEARCH]` third-party comment in issue #2:
+DEVINFO is not readable while the chip is locked (AHB-AP closed). Their
+values after the unlock: PART `0x00160849`, MSIZE `0x00200100` (256 kB);
+erases at `0x40000` fail. → For us F-17 is answered by M-013 (step-1
+image) or `commander device info` **after** an unlock, or directly if
+the chip is not locked.
 
 Added 2026-10-21. `docs/hardware.md` lists 512 kB from the family table
 (`[RESEARCH]`, order code `…F512GM40`); the actual part was never read.

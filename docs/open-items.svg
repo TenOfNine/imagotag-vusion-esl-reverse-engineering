@@ -33,62 +33,63 @@
 <text x="305" y="331" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
 <text x="40" y="351" class="body" xml:space="preserve">Outdated: "three-colour", "Docs in</text>
 <text x="40" y="367" class="body" xml:space="preserve">German" (repo settings)</text>
-<rect x="24" y="400" width="293" height="132" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
-<rect x="24" y="400" width="6" height="132" rx="3" fill="#5f6368"/>
-<text x="40" y="425" class="title">Issue #2 — answers</text>
+<rect x="24" y="400" width="293" height="110" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<rect x="24" y="400" width="6" height="110" rx="3" fill="#5f6368"/>
+<text x="40" y="425" class="title">Issue #2 — still open there</text>
 <text x="305" y="425" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
-<text x="40" y="445" class="body" xml:space="preserve">Our questions 2–7 (1 answered</text>
-<text x="40" y="461" class="body" xml:space="preserve">ourselves): full 112-byte OTP, flash</text>
-<text x="40" y="477" class="body" xml:space="preserve">marking, DEVINFO, SWD settings, E6</text>
-<text x="40" y="493" class="body" xml:space="preserve">value, OEPL branch</text>
-<text x="40" y="515" class="foot" fill="#5f6368">then Claude Code evaluates them</text>
-<rect x="24" y="548" width="293" height="94" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
-<rect x="24" y="548" width="6" height="94" rx="3" fill="#5f6368"/>
-<text x="40" y="573" class="title">Third-party OEPL port</text>
-<text x="305" y="573" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
-<text x="40" y="593" class="body" xml:space="preserve">Announced in issue #2, not in OEPL v43.</text>
-<text x="40" y="609" class="body" xml:space="preserve">Claude Code watches and reuses it</text>
-<text x="40" y="625" class="body" xml:space="preserve">instead of duplicating</text>
+<text x="40" y="445" class="body" xml:space="preserve">Answers 2, 4–6 received and evaluated</text>
+<text x="40" y="461" class="body" xml:space="preserve">(panel-protocol.md §8). Open: flash</text>
+<text x="40" y="477" class="body" xml:space="preserve">marking (3), public OEPL branch (7,</text>
+<text x="40" y="493" class="body" xml:space="preserve">offered early on request)</text>
+<rect x="24" y="526" width="293" height="94" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<rect x="24" y="526" width="6" height="94" rx="3" fill="#5f6368"/>
+<text x="40" y="551" class="title">Third-party OEPL port</text>
+<text x="305" y="551" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
+<text x="40" y="571" class="body" xml:space="preserve">Announced in issue #2, not in OEPL v43.</text>
+<text x="40" y="587" class="body" xml:space="preserve">Claude Code watches and reuses it</text>
+<text x="40" y="603" class="body" xml:space="preserve">instead of duplicating</text>
 <rect x="337" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="349" y="148" class="col">2 · Tag 02 — non-destructive</text>
-<rect x="337" y="174" width="293" height="196" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="337" y="174" width="6" height="196" rx="3" fill="#1a56db"/>
+<rect x="337" y="174" width="293" height="228" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="174" width="6" height="228" rx="3" fill="#1a56db"/>
 <text x="353" y="199" class="title">M-011 · SWD lock status</text>
 <text x="618" y="199" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
 <text x="353" y="219" class="body" xml:space="preserve">• Confirm vias for QFN pins 22/23</text>
 <text x="353" y="235" class="body" xml:space="preserve">  (unpowered)</text>
-<text x="353" y="251" class="body" xml:space="preserve">• J-Link: commander device info +</text>
-<text x="353" y="267" class="body" xml:space="preserve">  commander security status — nothing</text>
-<text x="353" y="283" class="body" xml:space="preserve">  else</text>
-<text x="353" y="299" class="body" xml:space="preserve">• Send the full text output</text>
-<text x="353" y="315" class="body" xml:space="preserve">• If not locked: back up the flash</text>
-<text x="353" y="331" class="body" xml:space="preserve">  (outside the repo)</text>
-<text x="353" y="353" class="foot" fill="#1a56db">answers: F-05, F-17 · basis for F-15</text>
-<rect x="337" y="386" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="337" y="386" width="6" height="100" rx="3" fill="#137333"/>
-<text x="353" y="411" class="title">Evaluate lock state + flash size</text>
-<text x="618" y="411" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="353" y="431" class="body" xml:space="preserve">After M-011: update docs/firmware-</text>
-<text x="353" y="447" class="body" xml:space="preserve">plan.md</text>
-<text x="353" y="469" class="foot" fill="#137333">answers: F-17 (256 or 512 kB)</text>
-<rect x="337" y="502" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" stroke-dasharray="6 4"/>
-<rect x="337" y="502" width="6" height="100" rx="3" fill="#137333"/>
-<text x="353" y="527" class="title">Init sequence from the binary</text>
-<text x="618" y="527" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="353" y="547" class="body" xml:space="preserve">Only if the chip is not locked and the</text>
-<text x="353" y="563" class="body" xml:space="preserve">flash was backed up</text>
-<text x="353" y="585" class="foot" fill="#137333">answers: F-04</text>
-<rect x="337" y="618" width="293" height="164" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="337" y="618" width="6" height="164" rx="3" fill="#1a56db"/>
-<text x="353" y="643" class="title">M-012 · Verify the pin map</text>
-<text x="618" y="643" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="353" y="663" class="body" xml:space="preserve">Unpowered, battery out, FPC unplugged</text>
-<text x="353" y="679" class="body" xml:space="preserve">• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1</text>
-<text x="353" y="695" class="body" xml:space="preserve">• XDt gate → QFN 7</text>
-<text x="353" y="711" class="body" xml:space="preserve">• SO-8 → QFN 26/25/20/21, GND, VCC</text>
-<text x="353" y="727" class="body" xml:space="preserve">• LEDs → QFN / supply</text>
-<text x="353" y="743" class="body" xml:space="preserve">• Macro photo of the SO-8 marking</text>
-<text x="353" y="765" class="foot" fill="#1a56db">answers: F-14, F-16</text>
+<text x="353" y="251" class="body" xml:space="preserve">• Power-cycle before every attempt</text>
+<text x="353" y="267" class="body" xml:space="preserve">• J-Link: commander device info +</text>
+<text x="353" y="283" class="body" xml:space="preserve">  commander security status — nothing</text>
+<text x="353" y="299" class="body" xml:space="preserve">  else</text>
+<text x="353" y="315" class="body" xml:space="preserve">• Send the full text output</text>
+<text x="353" y="331" class="body" xml:space="preserve">• If not locked: back up the flash</text>
+<text x="353" y="347" class="body" xml:space="preserve">  (outside the repo)</text>
+<text x="353" y="369" class="foot" fill="#1a56db">answers: F-05 · basis for F-15 (F-17 only</text>
+<text x="353" y="385" class="foot" fill="#1a56db">if unlocked)</text>
+<rect x="337" y="418" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="337" y="418" width="6" height="100" rx="3" fill="#137333"/>
+<text x="353" y="443" class="title">Evaluate lock state + flash size</text>
+<text x="618" y="443" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="353" y="463" class="body" xml:space="preserve">After M-011: update docs/firmware-</text>
+<text x="353" y="479" class="body" xml:space="preserve">plan.md</text>
+<text x="353" y="501" class="foot" fill="#137333">answers: F-17 (256 or 512 kB)</text>
+<rect x="337" y="534" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" stroke-dasharray="6 4"/>
+<rect x="337" y="534" width="6" height="100" rx="3" fill="#137333"/>
+<text x="353" y="559" class="title">Init sequence from the binary</text>
+<text x="618" y="559" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="353" y="579" class="body" xml:space="preserve">Only if the chip is not locked and the</text>
+<text x="353" y="595" class="body" xml:space="preserve">flash was backed up</text>
+<text x="353" y="617" class="foot" fill="#137333">answers: F-04</text>
+<rect x="337" y="650" width="293" height="164" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="650" width="6" height="164" rx="3" fill="#1a56db"/>
+<text x="353" y="675" class="title">M-012 · Verify the pin map</text>
+<text x="618" y="675" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="353" y="695" class="body" xml:space="preserve">Unpowered, battery out, FPC unplugged</text>
+<text x="353" y="711" class="body" xml:space="preserve">• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1</text>
+<text x="353" y="727" class="body" xml:space="preserve">• XDt gate → QFN 7</text>
+<text x="353" y="743" class="body" xml:space="preserve">• SO-8 → QFN 26/25/20/21, GND, VCC</text>
+<text x="353" y="759" class="body" xml:space="preserve">• LEDs → QFN / supply</text>
+<text x="353" y="775" class="body" xml:space="preserve">• Macro photo of the SO-8 marking</text>
+<text x="353" y="797" class="foot" fill="#1a56db">answers: F-14, F-16</text>
 <rect x="650" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="662" y="148" class="col">3 · Decisions</text>
 <rect x="650" y="174" width="293" height="164" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
@@ -102,13 +103,14 @@
 <text x="666" y="283" class="body" xml:space="preserve">any unlock</text>
 <text x="666" y="299" class="body" xml:space="preserve">New basis: docs/open-questions.md F-15</text>
 <text x="666" y="321" class="foot" fill="#b45309">blocks: flashing (steps 1–5)</text>
-<rect x="650" y="354" width="293" height="100" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="354" width="6" height="100" rx="3" fill="#b45309"/>
+<rect x="650" y="354" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="354" width="6" height="116" rx="3" fill="#b45309"/>
 <text x="666" y="379" class="title">Bring-up path</text>
 <text x="931" y="379" class="owner" fill="#b45309" text-anchor="end">Decision</text>
 <text x="666" y="399" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
-<text x="666" y="415" class="body" xml:space="preserve">the third-party OEPL port?</text>
-<text x="666" y="437" class="foot" fill="#b45309">blocks: step 5</text>
+<text x="666" y="415" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
+<text x="666" y="431" class="body" xml:space="preserve">author for the early branch?</text>
+<text x="666" y="453" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
 <rect x="963" y="174" width="293" height="132" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
@@ -162,8 +164,8 @@
 <text x="979" y="937" class="body" xml:space="preserve">(v43: 233.6 kB) — or reuse the third-</text>
 <text x="979" y="953" class="body" xml:space="preserve">party port</text>
 <text x="979" y="975" class="foot" fill="#137333">needs: bring-up path decision, F-17</text>
-<path d="M483.5,370 L483.5,383" class="arrow"/>
-<path d="M483.5,486 L483.5,499" class="arrow"/>
+<path d="M483.5,402 L483.5,415" class="arrow"/>
+<path d="M483.5,518 L483.5,531" class="arrow"/>
 <path d="M630,214 L638.5,214 L638.5,214 L647,214" class="arrow"/>
 <path d="M943,214 L951.5,214 L951.5,214 L960,214" class="arrow"/>
 <path d="M1109.5,306 L1109.5,319" class="arrow"/>

@@ -1508,6 +1508,46 @@ Anything about the real chip. The first real result comes from M-013.
 
 ---
 
+## 2026-10-21 — Session 5: Third-party answers in issue #2 evaluated
+
+### What was received
+`[RESEARCH]` Comment by `dovjonu` in issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6320136057), answering our
+questions 2–7 for their RFRTx026D (AI-assisted, their hardware work;
+not our unit):
+- full OTP bank 0 (112 bytes); bytes 64–95 `FF`, 96–109 ASCII
+  `S12741QS0B31CY`; bank 1 all `FF` except 96–109 `SPQB00F4D028HE`;
+- SPI flash identified by JEDEC ID only (`EF 40 14`); marking not read yet;
+- DEVINFO readable only **after** the unlock (AHB-AP closed while locked,
+  only the SE status via DCI); PART `0x00160849`, MSIZE `0x00200100`;
+- while locked, only the first SWD session after power-up answered
+  (Pico debugprobe, pyOCD, 1 MHz, halt mode, tag powered from the probe);
+- `E6` fixed `0x19`; native orientation 480 × 800 with the cable on the
+  left; OEPL landscape needs `swapXY` + `mirrorX`;
+- OEPL port: board type `IMAGOTAG_RFRTX026D` (0x08), BWRY Medium driver,
+  256 kB build, custom flash pinout in the bootloader, AP hwid `0x4C`;
+  PR after a test with a real AP; an earlier branch is offered on request.
+
+### Comparison with our capture
+- `[CAPTURE]` + `[RESEARCH]` All 33 bytes the vendor init reads are
+  identical on both panels. Differences only at offset 3 (ours `04`,
+  theirs `07`), the serial (8–10) and offsets 51–58 (ours `FF`, theirs
+  `01 3F 05 0B 0F 19 1A 0F`) — none of them used by the vendor init.
+  Table: `docs/panel-protocol.md` §8.
+
+### What follows
+- OTP contents differ between panels → read at runtime, never hard-code.
+- Our bytes 69–111 are unknown; step 3 reads them. A part-number string at
+  96–109 would turn the panel-type assumption into our own `[CAPTURE]`.
+- F-17 cannot come from M-011 if the chip is locked; it comes from M-013
+  (or `device info`) after the unlock. M-011 now says: power-cycle before
+  every attempt.
+- New optional read-only step 1b (SPI-flash JEDEC ID) for F-16.
+
+### What it does not prove
+Nothing on our unit: lock state, pins, flash and flash size remain open.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
