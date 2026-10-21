@@ -52,7 +52,8 @@ COLUMNS = [
     ]),
     ("2 · Tag 02 — non-destructive", [
         ("m011", "M", "M-011 · SWD lock status", [
-            "• Confirm vias for QFN pins 22/23 (unpowered)",
+            "• Pads 22/23 located (photo) — confirm by continuity, "
+            "unpowered; no beep to battery ±",
             "• Power-cycle before every attempt",
             "• J-Link: commander device info + commander security status "
             "— nothing else",

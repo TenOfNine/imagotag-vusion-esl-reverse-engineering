@@ -1575,6 +1575,34 @@ Zoomed into `hardware/photos/pcb-top-ruler.jpg` (≈ 32.5 px/mm).
 
 ---
 
+## 2026-10-21 — Session 5: SWD pads for QFN pins 22/23 located (M-011)
+
+### What was received
+Maintainer photo `hardware/photos/pcb-bottom-swd-pads-22-23.webp`: bottom
+side below the LEDs, two exposed pads marked "22" and "23" — the
+reachable points for QFN pin 22 (SWCLK, PA01) and pin 23 (SWDIO, PA02)
+asked for in M-011. Maintainer statement; the method (continuity or
+following traces) was not stated.
+
+### Analysis
+- `[PHOTO]` The two pads are found in `pcb-bottom-ruler.jpg` at
+  (1517, 696) and (1651, 700) — large exposed pads, as in the maintainer
+  photo (neighbouring exposed pads match as well).
+- `[PHOTO]` Projected onto `pcb-top-ruler.jpg` with registration set 2:
+  "22" → (1609, 1641), just right of the EFR32's bottom-right corner;
+  "23" → (1742, 1636), at the lower-right corner of the `8K417` chip.
+  `derived/pcb-swd-pads-projected-top.jpg`.
+
+### What follows
+- Plausible for "22" (pin 22 is the 2nd pad from the bottom of the right
+  column, `[ASSUMPTION]` numbering). "23" lands next to the flash chip;
+  with an unknown local registration error this is **not** a contradiction
+  and **not** a confirmation.
+- Before the J-Link is connected: continuity pad → QFN pin and no
+  continuity to battery minus/plus (M-011 tasks 2 and 3), unpowered.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

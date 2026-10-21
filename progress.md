@@ -145,7 +145,10 @@ Order = suggested priority.
         (2026-10-21)
 - [ ] **M-011 — SWD lock status** (tag 02, battery in, J-Link; commands and
       wiring in `measurement-requests.md`)
-  - [ ] confirm the vias for pin 22 (SWCLK) / pin 23 (SWDIO), unpowered continuity
+  - [x] pads for pin 22 (SWCLK) / pin 23 (SWDIO) located — maintainer photo
+        `hardware/photos/pcb-bottom-swd-pads-22-23.webp` (2026-10-21)
+  - [ ] confirm them by continuity (unpowered): pad → QFN pin 22/23, and no
+        beep to battery minus/plus (say how they were found)
   - [ ] `commander device info` + `commander security status` — **nothing
         else**; send the full text output
   - [ ] if **not** locked: read out and back up the flash (backup stays

@@ -27,7 +27,7 @@ set the request here to `✅ done`.
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | ⚪ not needed (2026-10-21) — the fast-written bytes `A2 00 15 00 00 E0` match the Pervasive Displays app note exactly | — |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
-| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🔴 open — maintainer: probably found the right vias; J-Link read-out pending. Updated 2026-10-21 (exact commands, first-connection hint) | **SWD lock check (F-05/F-15), flash size (F-17)** |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🟠 pads located (maintainer photo 2026-10-21, `pcb-bottom-swd-pads-22-23.webp`); how they were confirmed is not stated yet; J-Link read-out pending | **SWD lock check (F-05/F-15)** |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-011 + backup or F-15 | F-17, step 2 |
 
@@ -524,6 +524,26 @@ are the **2nd and 3rd pad from the bottom on the right side**.
   `commander security status`. **No** `device unlock`, **no** erase, **no**
   flash (CLAUDE.md §5.2). The tag stays powered by its battery; VTref
   only senses the voltage.
+
+### Update 2026-10-21 — pads located
+
+Maintainer statement (2026-10-21): the pads for QFN pin 22 and pin 23 are
+the two exposed pads marked in `hardware/photos/pcb-bottom-swd-pads-22-23.webp`
+(bottom side, below the LEDs). Not stated yet: whether this was checked
+by continuity to the QFN pads (task 2/3 above) or found by following
+traces.
+
+`[PHOTO]` Located in `pcb-bottom-ruler.jpg` at (1517, 696) ["22"] and
+(1651, 700) ["23"]. Projected onto the top side with registration set 2
+(`derived/pcb-swd-pads-projected-top.jpg`): "22" lands just right of the
+EFR32's bottom-right corner, next to the right pad column; "23" lands at
+the lower-right corner of the `8K417` chip. Local registration error here
+is not known (≈ 0.12 mm only at the three holes), so this neither confirms
+nor refutes the assignment.
+
+Still needed before the J-Link connects (unpowered): continuity from each
+pad to its QFN pin (right column, 2nd and 3rd pad from the bottom), and
+**no** continuity to battery minus / plus.
 
 ### Update 2026-10-21 — exact commands and what to send back
 
