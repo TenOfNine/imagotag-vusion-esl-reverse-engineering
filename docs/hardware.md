@@ -53,7 +53,7 @@ Family Data Sheet:
 |---|---|
 | Core | ARM Cortex-M33 |
 | Max. clock | 38.4 MHz |
-| Flash | 512 kB |
+| Flash | 512 kB (**update 2026-10-21:** possibly 256 kB — F-17) |
 | RAM | 32 kB |
 | Max. TX power | 6 dBm |
 | Protocol | proprietary |
@@ -122,8 +122,9 @@ the original firmware.** Tool: Simplicity Commander + J-Link.
 | Product | **VUSION 7.4 BWRY GU140**, model **EDG3-0740A** | maintainer statement (2026-09-23); FCC ID `2ACQM-EDG3-0740-A` `[RESEARCH]` |
 | Colours | **four-colour B/W/R/Y** (from "BWRY" in the product name) — display not yet seen | `[ASSUMPTION]` |
 | Serial number (QR) | `H7FZDSPQ0KXYZ5V00DAUAT` | `[PHOTO]` `panel-label-el074ts1.webp` |
+| Further label lines | `C5-ZD`, `EB2000-GDA (SPQ0KX)LF` (read 2026-10-21) | `[PHOTO]` `panel-label-el074ts1.webp` |
 | Resolution | 800 × 480 at 126 dpi for the VUSION 7.4 **BWR**; for BWRY not confirmed | `[RESEARCH]` / `[ASSUMPTION]` |
-| COG controller | UltraChip UC81xx family (BWRY variant) — boot opcodes `70`/`90`/`92`/`A2` match | `[ASSUMPTION]` from `[CAPTURE]`, see F-03 |
+| COG controller | ~~UltraChip UC81xx family (BWRY variant)~~ → **Pervasive Displays "BWRY Medium" COG** (as in E2741QS0B3), chip ID `0D 04`; see `panel-protocol.md` (2026-10-21) | `[ASSUMPTION]` from `[CAPTURE]` + `[RESEARCH]`, see F-03 |
 | Resolution from OTP | `01 E0 03 20` = 480, 800 in the panel's OTP block | `[CAPTURE]` bytes; meaning `[ASSUMPTION]` |
 | Waveform / LUT | **unknown** — cannot be captured (no refresh) | — |
 

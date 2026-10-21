@@ -1283,6 +1283,90 @@ No new technical insight.
 
 ---
 
+## 2026-10-21 — Session 5: Project review — panel COG identified, init values found in our own capture
+
+### What was tried
+Maintainer asked for a review of the whole project. Read all docs, the
+captures' frame decode, the OEPL source (fresh shallow clone, release v43,
+commit `8a8d7a9`), and searched the web again. Found two issues opened by
+third parties in this repo (#2, #3, not answered yet) and a public driver
+for a Pervasive Displays 7.4" BWRY panel (bitbank2/bb_epaper PR #44,
+commit `61de1cf`). Wrote `analysis/otp_init_map.py`.
+`docs.pervasivedisplays.com` and silabs.com are blocked from this
+environment → Pervasive content only via search-result snippets.
+
+### Result
+- `[RESEARCH]` Our boot sequence `70`, `90`, `A2 00 15 00 00 E0`, `92` is
+  the OTP read procedure of the Pervasive Displays "BWRY Medium" COG
+  (5.8"/7.4"): `A2` sets the OTP start address, `92` reads with one dummy
+  byte first, `A5` at address 0 marks bank 0, read clock ≤ 2.5 MHz.
+  `[CAPTURE]` ours: dummy `00`, then `A5` → bank 0 active.
+- `[CAPTURE]` + `[RESEARCH]` **Every OTP-derived parameter of the
+  published E2741QS0B3 init table (bb_epaper `epd74yr_init_full`) is in
+  our 69 OTP bytes** — PWR, PSR ×2, TRES, BTST_P, PFS, `E7`, `65`, PLL,
+  CDI, TCON, PWS, `EF` (8 bytes), `DC/DD/DE/E8/DA`; 0 mismatches, and
+  together they use every non-`FF` byte from offset 16 to 63
+  (`analysis/otp_init_map.py`). Table in `docs/panel-protocol.md`.
+- `[PHOTO]` Panel label, not recorded before: `EL074TS1 / C5-ZD /
+  EB2000-GDA (SPQ0KX)LF / H7FZDSPQ0KXYZ5V00DAUAT`.
+- `[RESEARCH]` Issue #2 (user `dovjonu`, 2026-10-16, AI-assisted, another
+  RFRTx026D, MCU date code 2507, panel label `SE2741QS0B3 / SPQ1CY1`):
+  chip ID `0D 04`; GPIO map SDA PC00, SCK PC01, CS PC02, D/C PC03,
+  RST PC04, BUSY PA07, panel supply enable PC06 (low = on); SPI flash
+  W25Q80 on PA00/PB00/PA04/PA05, flash enable PA06; lock "debug unlock
+  allowed", unlocked with OEPL `reflash.py -u` + Pico debugprobe, UserData
+  kept; only the first SWD connection after power-up answered while
+  locked; **256 kB** flash (DEVINFO MSIZE); working four-colour refresh
+  (`0x10` 96,000 bytes 2 bpp, `04`, `12 00`, 21.9 s); OEPL port running,
+  radio untested, not yet published.
+- Cross-checks of issue #2 against our own data — all consistent:
+  - `[CAPTURE]` our `70` read gives `0D 04 01`;
+  - `[CAPTURE]` our BUSY shows the same ~0.78 ms pulse after reset and the
+    real "ready" at ~49.6 ms (`…_boot-overview-panel_2MHz.sr`);
+  - `[CAPTURE]` their OTP offsets (serial at 5–10, TRES at 19–22) match
+    ours once the dummy byte is dropped;
+  - `[PHOTO]` their display pins PC00–PC06 fit our left-pad-column
+    finding (pads 1–8, `netlist-from-photos.md`), assuming the
+    unverified QFN table;
+  - `[RESEARCH]` their flash pins are exactly OEPL's `BTL_TYPE_CUSTOM`
+    bootloader pinout (`bootloader/bootloader_pinout.h`);
+  - `[PHOTO]` their MCU marking has the same `C121GG` line as ours.
+- `[RESEARCH]` OEPL `reflash.py -s` (pyOCD, J-Link or CMSIS-DAP) prints
+  the lock state without erasing; `-u`/`-e`/`-f` unlock/erase/flash.
+- `[RESEARCH]` Pixel coding 2 bpp: `00` black, `01` white, `10` yellow,
+  `11` red (bb_epaper `u8Colors_4clr_v2`, issue #2, OEPL `jd` driver).
+  Refresh ≈ 22 s. `E6` carries the temperature, supplied by the host.
+- Issue #3 (user `nfr1974`): a 2.2" GU140 with panel `SE2213JS0E1`, asks
+  about its pinout — different tag, nothing for our board.
+
+### What follows
+- F-03 practically answered: `[ASSUMPTION]` Pervasive Displays BWRY
+  Medium COG, as in E2741QS0B3. The earlier "UC81xx / `ucbwry`"
+  assumption (session 3) is superseded — the `ucbwry` init must not be
+  sent to this panel.
+- F-04: no LUT needed; the panel-specific init values are in **our own**
+  capture. Only the command order and fixed bytes come from public
+  sources. This removes most of the reason behind `CLAUDE.md` §5.2 for
+  tag 02 — the F-15 decision now has a new basis (still the maintainer's).
+- M-009 is not needed any more: the fast-written `A2` payload matches the
+  published value exactly.
+- M-012 becomes a verification of a concrete pin hypothesis (checklist
+  in `measurement-requests.md`). Note: BUSY is expected on **PA07
+  (pin 28, right side)**, not on the left pad column.
+- New F-17: flash 256 or 512 kB → M-011 `commander device info`.
+- Corrects session 3 "Path B chosen" (`ucbwry` as the starting point for
+  step 4) and `docs/hardware.md` (COG row, flash size).
+
+### What it does not prove
+- That our panel accepts this init and refreshes — nothing was sent to
+  it. Test: bring-up steps 3/4.
+- The OTP offsets: found by value matching, not read from the Pervasive
+  app note.
+- Anything in issue #2 about **our** EFR32 (pins, lock, flash size): it
+  is another unit, reported by a third party. Only M-011/M-012 decide.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

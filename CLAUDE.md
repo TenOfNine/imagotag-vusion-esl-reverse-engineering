@@ -167,6 +167,7 @@ docs/
   firmware-plan.md         custom firmware on the EFR32 (path B)
   netlist-from-photos.md   traces reconstructed from PCB photos
   oepl-pin-comparison.md   OpenEPaperLink pin maps vs. our board
+  panel-protocol.md        panel COG, OTP and init/refresh sequence
   references.md            sources
   archive/                 superseded originals (e.g. German HISTORY)
 captures/                  raw captures (.sr, .csv) — not in git

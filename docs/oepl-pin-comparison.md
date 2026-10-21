@@ -3,6 +3,15 @@
 Status 2026-09-25. Question from the maintainer: does one of the EFR32
 board definitions in OpenEPaperLink match our `RFRTx026D` layout?
 
+> **Update 2026-10-21:** `[RESEARCH]` a third party reports the GPIO map
+> of another RFRTx026D (issue #2 of this repo): display SDA PC00, SCK
+> PC01, CS PC02, D/C PC03, RST PC04, **BUSY PA07**, panel supply enable
+> PC06 (low = on); SPI flash on PA00/PB00/PA04/PA05, flash enable PA06 —
+> the flash pins equal OEPL's `BTL_TYPE_CUSTOM` bootloader. This fits
+> section 3 (display lines on pads 1–8 = PC00–PC07) and explains why
+> BUSY is not on port C (section 5 point 3: port A can wake the chip).
+> Still to verify on our unit: M-012 checklist.
+
 **Short answer: no.** None of the OEPL display pin maps fits the photo
 evidence (the display bundle ends on the chip's left pad column). A board
 definition of our own is needed. Everything below is `[RESEARCH]`,

@@ -12,20 +12,23 @@ at the maintainer's request.
 - Owner: **M** = maintainer (hardware, measurements), **C** = Claude Code
   (analysis, docs, code).
 
-Last updated: 2026-09-25 (session 4, housekeeping done).
+Last updated: 2026-10-21 (session 5, project review).
 
 ---
 
 ## Where we stand in one paragraph
 
 The FPC pinout is measured, and the roles of the six signal lines are
-established from captures. The tag's boot sequence is decoded (panel
-ID/OTP read, 800 × 480 assumed). The tag never refreshes without its base
-station, so the display init cannot be sniffed. **Path B is chosen:** custom
-firmware on the original EFR32. Two things block the firmware: the **SWD
-lock state** (M-011 / F-15) and the **EFR32 pin map** (M-012). The photos
-suggest that the display lines end on QFN pads 1–8 (`[ASSUMPTION]`), and
-no OpenEPaperLink pin map matches our board.
+established from captures. The tag never refreshes without its base
+station. **Path B is chosen:** custom firmware on the original EFR32.
+Since the session-5 review the panel side is largely clear: the boot
+reads are the OTP read of a **Pervasive Displays "BWRY Medium" COG**, and
+**all panel-specific init values are in our own boot capture**
+(`docs/panel-protocol.md`). A third party reports a pin map, the SPI
+flash, the lock state and a working refresh for the same board (issue #2)
+— unverified on our unit. Blocking now: the **SWD lock state** (M-011),
+the **verification of the pin map** (M-012) and the **F-15 decision**
+(unlock tag 02?).
 
 ---
 
@@ -86,38 +89,74 @@ no OpenEPaperLink pin map matches our board.
 - [x] OEPL pin maps compared with our board: **no match**
       (`docs/oepl-pin-comparison.md`) (C, 2026-09-25)
 
+### Project review (session 5, 2026-10-21)
+- [x] Panel COG identified as Pervasive Displays "BWRY Medium" type
+      (`[ASSUMPTION]`, strongly supported); boot reads = its OTP read
+      procedure `[RESEARCH]` (C)
+- [x] All OTP-derived init values of the published E2741QS0B3 table found
+      in our own capture, 0 mismatches (`analysis/otp_init_map.py`,
+      `docs/panel-protocol.md`) (C)
+- [x] Third-party report (issue #2) read and cross-checked against our
+      captures/photos — consistent; checklist for our unit in M-012 (C)
+- [x] Panel label lines `C5-ZD`, `EB2000-GDA (SPQ0KX)LF` recorded `[PHOTO]` (C)
+- [x] M-011 instructions completed (exact commands, first-connection hint,
+      `reflash.py -s` alternative) (C)
+- [x] M-009 closed as not needed (fast write bytes confirmed by the
+      Pervasive app note) (C)
+- [x] New question F-17 (256 or 512 kB flash) (C)
+
 ---
 
 ## Open — maintainer (hardware)
 
 Order = suggested priority.
 
-- [ ] **M-011 — SWD access and lock check** (blocks everything in path B)
+- [ ] **Documents (no instrument)** — Claude Code cannot reach these sites
+  - [ ] EFR32FG22 datasheet: check the QFN40 table in
+        `docs/oepl-pin-comparison.md` §2
+  - [ ] Pervasive Displays BWRY Medium update procedure: send screenshots
+        or a PDF printout of the tables (OTP offsets, sequence, timing) —
+        to check the offsets in `docs/panel-protocol.md` §2
+- [ ] **M-011 — SWD lock status** (tag 02, battery in, J-Link; commands and
+      wiring in `measurement-requests.md`)
   - [ ] confirm the vias for pin 22 (SWCLK) / pin 23 (SWDIO), unpowered continuity
-  - [ ] J-Link: **only** `commander device info` + `commander security status`.
-        No unlock, no erase, no flash (`CLAUDE.md` §5.2)
-  - [ ] if unlocked: read out and back up the flash (backup stays **outside** the repo)
-- [ ] **M-012 — EFR32 pin map** (unpowered; FPC carries ±20 V in operation → FPC unplugged)
-  - [ ] FPC 9–14 → QFN pads **1–8** (continuity from the capture wires)
-  - [ ] `XDt` leg 1 (gate) → QFN pad
-  - [ ] both LEDs → QFN pad / supply
-  - [ ] SO-8 `8K417`: all 8 pins → QFN pad / GND / VDD / NFC coil (SPI flash?)
-  - [ ] **Document check:** compare the QFN40 table in
-        `docs/oepl-pin-comparison.md` with the EFR32FG22 datasheet
-- [ ] **F-15 decision** (only if the chip is locked): may the firmware of
-      **tag 02** be erased? It must be written into `CLAUDE.md` before any
-      unlock
-- [ ] M-009 — re-capture the boot at 40 MSa/s, 4 channels (medium priority)
-- [ ] M-005 — `XDt` supply switch in detail (low; path A only)
+  - [ ] `commander device info` + `commander security status` — **nothing
+        else**; send the full text output
+  - [ ] if **not** locked: read out and back up the flash (backup stays
+        **outside** the repo)
+- [ ] **M-012 — verify the pin map** (unpowered, FPC unplugged; checklist
+      with expected pins in `measurement-requests.md`)
+  - [ ] FPC 9–14 → QFN pins (expected 28, 5, 4, 3, 2, 1)
+  - [ ] `XDt` leg 1 (gate) → QFN pin (expected 7)
+  - [ ] SO-8 pins → QFN pins 26/25/20/21, GND, VCC
+  - [ ] both LEDs → QFN pin / supply
+  - [ ] macro photo of the SO-8 marking
+- [ ] **F-15 decision** (if the chip is locked): may **tag 02** be
+      unlocked (original firmware erased)? New basis in
+      `open-questions.md` F-15. Must be written into `CLAUDE.md` before
+      any unlock
+- [ ] Decide whether and how to answer GitHub issues #2 and #3 (Claude
+      Code can draft replies)
+- [ ] GitHub repo "About" text is outdated ("three-colour", "Docs in
+      German") — repo settings, maintainer only
+- [ ] ~~M-009 — re-capture at 40 MSa/s~~ — not needed (2026-10-21)
+- [ ] M-005 — `XDt` supply switch in detail — parked (path A only)
 
 ## Open — Claude Code (analysis, docs, code)
 
-- [ ] After M-011: evaluate the lock state, update `docs/firmware-plan.md`
+- [ ] After M-011: evaluate the lock state and flash size (F-17), update
+      `docs/firmware-plan.md`
 - [ ] After M-012 + datasheet check: write the board definition
-      (OEPL dev slot `0xF0…0xFA`), including USART routing (display
-      probably on port C → USART0?) and BUSY polling
-- [ ] Bring-up firmware steps 1–3 (LED/RTT, panel power + reset + BUSY,
-      replay of the boot reads), verified against the boot capture
+      (OEPL dev slot `0xF0…0xFA`), including USART routing (display on
+      port C → USART0?) and BUSY on PA07
+- [ ] Bring-up firmware steps 1–3 (LED/RTT, panel power + reset + BUSY
+      with the ~1 ms pulse quirk, replay of the boot reads incl. all 112
+      OTP bytes), verified against the boot capture
+- [ ] Step 4 driver: Pervasive BWRY Medium init built from the OTP read at
+      runtime (`docs/panel-protocol.md`), temperature for `E6` from the
+      EFR32 sensor — **not** the OEPL `ucbwry` init
+- [ ] Watch for the third-party OEPL port (issue #2) — reuse instead of
+      duplicating, if it appears
 - [ ] Toolchain: set up GSDK 4.4.1 / `slc` (silabs.com is blocked from the
       container → maintainer download or an alternative); a bare-metal
       project with `gcc-arm-none-eabi` for steps 1–3 is possible
@@ -140,7 +179,9 @@ Order = suggested priority.
 
 | # | Decision | Blocks |
 |---|---|---|
-| F-15 | Erase the original firmware on tag 02 if the chip is locked? | flashing |
+| F-15 | Erase the original firmware on tag 02 if the chip is locked? New basis since 2026-10-21 (`open-questions.md`) | flashing |
+| — | Answer issues #2/#3 on GitHub? | — |
+| — | Own bring-up firmware first, or wait for the third-party OEPL port? | step 5 |
 
 ## Safety reminders (from `CLAUDE.md` §5)
 

@@ -51,6 +51,39 @@ documents refer to here.
 
 ---
 
+## Panel controller (added 2026-10-21)
+
+- **Pervasive Displays — BWRY Medium, EPD update procedure**
+  https://docs.pervasivedisplays.com/knowledge/Hardware/epd-usage/Screens/BWRY_Medium/update-procedure.html
+  → OTP read procedure `70`/`90`/`A2 00 15 00 00 E0`/`92` + dummy byte,
+  bank marker `A5`, banks `0x1500–156F` / `0x1570–15DF` for 5.8"/7.4",
+  read clock ≤ 2.5 MHz. **Not reachable** from the Claude Code
+  environment; content known from search-result snippets only.
+- **bitbank2/bb_epaper, PR #44** — "Add Pervasive Displays E2741QS0B3
+  (741-QS-0B) as EP74YR_480x800", commit `61de1cf` (2026-09-25)
+  https://github.com/bitbank2/bb_epaper/pull/44
+  → table `epd74yr_init_full` (init values from the panel OTP), 4-colour
+  coding `u8Colors_4clr_v2`, refresh/sleep code. Compared with our OTP in
+  `analysis/otp_init_map.py`.
+
+## Reports from others on this board (added 2026-10-21)
+
+- **Issue #2 of this repo** — "Findings from a second RFRTx026D (Vusion
+  7.4" BWRY)", user `dovjonu`, 2026-10-16, AI-assisted (stated)
+  https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2
+  → pin map, chip ID, W25Q80 flash, lock state, 256 kB part, working
+  refresh, OEPL port in progress. Another unit — everything unverified on
+  ours.
+- **Issue #3 of this repo** — question about a 2.2" VUSION GU140 with
+  panel SE2213JS0E1 (different tag), user `nfr1974`, 2026-10-17
+  https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/3
+- **georgestephanis/hacking-imagotags** — SES-imagotag HRD3-0210-A
+  (ContRD010A, EFR32FG22): factory debug lock cleared by device erase
+  https://github.com/georgestephanis/hacking-imagotags (search snippet,
+  not read)
+- **OEPL `reflash.py`** — pyOCD-based status/unlock/flash for EFR32xG2x,
+  in Tag_FW_EFR32xG22 commit `8a8d7a9` (release v43, 2026-10-11)
+
 ## Prior work on Imagotag hardware
 
 ⚠ **All for other, older hardware.** Methodologically useful, not directly

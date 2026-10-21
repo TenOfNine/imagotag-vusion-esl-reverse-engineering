@@ -24,6 +24,12 @@ which pin within 9–14 → the capture settles it. See `pinout.md`,
 
 ### 🟡 F-02 What resolution does the panel have?
 
+**Update 2026-10-21:** `[CAPTURE]` + `[RESEARCH]` our OTP bytes 19–22
+(`01 E0 03 20`) are exactly the TRES parameter of the published init
+table for the Pervasive Displays E2741QS0B3 (`docs/panel-protocol.md`).
+→ 480 × 800 (controller scans 800 lines of 480 px), image = 96,000 bytes
+at 2 bpp. Final confirmation: a correct image in bring-up step 4.
+
 **Update 2026-09-25:** no refresh can be captured (F-08), so the
 frame-block check below is not possible. 800 × 480 stays `[ASSUMPTION]`
 (from the OTP bytes) until our own firmware draws an image of that size.
@@ -47,6 +53,15 @@ source.
 
 ### 🔴 F-03 Which COG controller is in the panel?
 
+**Update 2026-10-21 (session 5 review): practically answered.**
+`[RESEARCH]` Our boot reads (`70`, `90`, `A2 00 15 00 00 E0`, `92` + dummy
+byte + bank marker `A5`) are the OTP read procedure of the **Pervasive
+Displays "BWRY Medium"** COG (5.8"/7.4"). `[CAPTURE]` + `[RESEARCH]` all
+OTP-derived init values of the published E2741QS0B3 table are present in
+our OTP (`analysis/otp_init_map.py`, 0 mismatches). `[ASSUMPTION]` same
+COG as E2741QS0B3 — **test:** bring-up step 3/4. Details:
+`docs/panel-protocol.md`.
+
 **Update 2026-09-25:** `[CAPTURE]` the boot opcodes `0x70`, `0x90`, `0x92`,
 `0xA2` match the UltraChip UC81xx command set (defines in the OEPL source,
 see `references.md`) → `[ASSUMPTION]` UC81xx family, BWRY variant. Not
@@ -69,6 +84,11 @@ UC8179, SSD16xx, IL0373.
 
 ### 🟡 F-04 Is the waveform LUT written by the MCU or stored in OTP?
 
+**Update 2026-10-21:** `[RESEARCH]` with this COG the waveform stays in the
+COG's OTP (`E9 01`); the host only replays the OTP parameters as init
+commands. `[CAPTURE]` those parameters are in our boot capture
+(`docs/panel-protocol.md` §2). No LUT has to be written or reconstructed.
+
 - **Written by the MCU** → it is in the capture, we get it for free.
 - **In the COG's OTP** → we don't need it at all, the controller knows it.
 
@@ -80,6 +100,10 @@ original firmware binary (if readable) or trying the OTP waveform first
 (many UC81xx panels carry it) can answer this.
 
 ### 🟡 F-05 Is the EFR32 debug-locked?
+
+**Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): their chip was locked with
+"debug unlock allowed"; only the first SWD connection after power-up
+answered. Our unit is still unknown → M-011 (exact commands added).
 
 **Update 2026-09-25:** still open; continued as **F-15** (with the erase
 decision). SWD pins researched (pin 22 SWCLK, pin 23 SWDIO), access points
@@ -176,12 +200,20 @@ Unclear. Possibly production test of the panel. Low priority.
 
 ### ⚪ F-12 What refresh rate does the panel tolerate in continuous operation?
 
+**Update 2026-10-21:** `[RESEARCH]` a full refresh takes ≈ 22 s
+(bb_epaper comment for E2741QS0B3; issue #2: 21.9 s). No fast/partial
+mode is published for this panel.
+
 `[RESEARCH]` For three-colour panels E Ink recommends minimum intervals of
 several minutes between updates; a full frame takes 15–30 s.
 
 Uncritical for a dashboard, an exclusion criterion for anything dynamic.
 
 ### ⚪ F-13 Is the panel really three-colour — and which third colour?
+
+**Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): a test image showed black,
+white, yellow and red; 2 bpp, `00` black, `01` white, `10` yellow,
+`11` red. Our own confirmation: bring-up step 4.
 
 **Update 2026-09-23:** maintainer statement: product is a **VUSION 7.4
 BWRY GU140 (EDG3-0740A)** → most likely **four colours B/W/R/Y**
@@ -196,6 +228,9 @@ observation of the device. VUSION also exists with yellow.
 own driver).
 
 ### 🟡 F-14 Is the panel supply (VDDIO/VCI) switched by the MCU?
+
+**Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): supply enable on **PC06, low =
+on** (gate of the P-MOSFET `XDt`). → M-012 row 7.
 
 **Update 2026-09-25:** also relevant for path B: the EFR32 pin driving the
 `XDt` gate is the `enable` pin of the board definition → M-012 item 7.
@@ -214,6 +249,20 @@ load switch. → Measurement request **M-005** (only needed for path A).
 
 ### 🔴 F-15 Is the chip locked — and if so, may tag 02's firmware be erased?
 
+**Update 2026-10-21 — new basis for the decision.** The reason for
+`CLAUDE.md` §5.2 was that an unlock would destroy the only source of the
+init sequence. Now:
+- `[CAPTURE]` all panel-specific init values are in our own boot capture
+  (`docs/panel-protocol.md` §2);
+- `[RESEARCH]` command order, fixed bytes and refresh are published
+  (Pervasive Displays app note, bb_epaper), and a third party reports a
+  working refresh on the same board after an unlock (issue #2);
+- tag 01 and the other untouched tags keep their original firmware, so
+  erasing tag 02 does not remove the original firmware from the project.
+What is still **not** shown: that this sequence works on **our** panel.
+The decision stays with the maintainer and has to be written into
+`CLAUDE.md` before any unlock.
+
 Flashing a custom firmware needs either an unlocked chip (then back up
 first) or an unlock, which **erases** the original firmware. The refresh /
 init sequence was never captured and cannot be (M-010), so an unlock
@@ -224,6 +273,13 @@ any unlock.
 
 ### 🟡 F-16 Does the board have external SPI flash?
 
+**Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): Winbond W25Q80 (1 MB, JEDEC
+`EF 40 14`) on PA00 CLK, PB00 MOSI, PA04 MISO, PA05 CS, supply enable
+PA06 (low = on). `[RESEARCH]` That is exactly the pinout of OEPL's
+`BTL_TYPE_CUSTOM` bootloader (`bootloader/bootloader_pinout.h`, commit
+`8a8d7a9`). Our SO-8 marking `8K417 / 0E47AH` is not identified → M-012
+rows 8–13.
+
 **Update 2026-09-24/25:** `[PHOTO]` the NFC coil is wired to a small 6-pin
 IC, not to the SO-8; the SO-8 `8K417` has 8 pins → `[ASSUMPTION]` it is an
 SPI flash. Still needs M-012 item 9.
@@ -232,6 +288,17 @@ OEPL stores received images in external SPI flash. The SO-8 `8K417` was
 assumed to be the NFC chip (session 1); the NFC read showed an NXP
 NTAG-type tag. Could also be an SPI flash.
 → M-012 item 9.
+
+### 🟡 F-17 Does the EFR32 have 256 kB or 512 kB flash?
+
+Added 2026-10-21. `docs/hardware.md` lists 512 kB from the family table
+(`[RESEARCH]`, order code `…F512GM40`); the actual part was never read.
+`[RESEARCH]` issue #2: on their unit (marking `FG22 / C121GG / C02CYO /
+2507`) DEVINFO MSIZE reads 256 kB, i.e. `EFR32FG22C121F256GM40`; flash
+erases above `0x40000` fail. `[PHOTO]` Our marking has the same second
+line `C121GG`. `[ASSUMPTION]` ours is a 256 kB part too.
+**Test:** M-011 (`commander device info`). Matters for the linker script
+and for OEPL, whose standard builds target 512 kB parts.
 
 ---
 

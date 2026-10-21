@@ -45,14 +45,14 @@ See `progress.md` for the checklist of what is done and what is open,
 `HISTORY.md` for the full history and `docs/open-questions.md` for the
 open questions.
 
-Short version (session 4, 2026-09-25): FPC pinout measured and all six
-signal roles confirmed by captures; the tag's boot sequence is decoded
-(panel ID/OTP read, 800 × 480 assumed). The tag never refreshes without its
-base station, so the display init cannot be sniffed. **Path B chosen: custom
-firmware on the original EFR32** — plan in `docs/firmware-plan.md`. Waiting
-for the SWD lock check (M-011) and the EFR32 pin map (M-012); photos
-suggest the display lines end on QFN pads 1–8, and no OpenEPaperLink pin
-map matches our board (`docs/oepl-pin-comparison.md`).
+Short version (session 5, 2026-10-21): FPC pinout measured, all six
+signal roles confirmed by captures. The boot reads are the OTP read of a
+**Pervasive Displays "BWRY Medium" COG**, and all panel-specific init
+values are in our own boot capture (`docs/panel-protocol.md`). The tag
+never refreshes without its base station. **Path B: custom firmware on the
+original EFR32** (`docs/firmware-plan.md`). Waiting for the SWD lock check
+(M-011), the pin-map verification (M-012) and the unlock decision (F-15).
+A third party reports a working refresh on the same board (issue #2).
 
 ---
 

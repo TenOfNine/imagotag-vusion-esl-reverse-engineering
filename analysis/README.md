@@ -133,6 +133,22 @@ sets: set 1 (`pcb-top-overview.webp` frame) and set 2 (ruler photos,
 
 ---
 
+## otp_init_map.py
+
+Compares the panel OTP bytes from our boot capture with the published
+init table for the Pervasive Displays E2741QS0B3 (bb_epaper PR #44) and
+prints which OTP offset feeds which init command.
+
+```bash
+python3 analysis/otp_init_map.py \
+    analysis/out/2026-09-23_tag02_boot-init-4ch_20MHz_frames.txt
+```
+
+The offsets in the script were found by value matching, not taken from a
+datasheet (`[ASSUMPTION]`, see `docs/panel-protocol.md`).
+
+---
+
 ## make_testcapture.py
 
 Generates a **synthetic** capture to test the decoder without hardware:

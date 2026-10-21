@@ -25,10 +25,10 @@ set the request here to `✅ done`.
 | M-006 | Why BUSY (pin 9) never changed in pass A | ✅ done — panel was unplugged; with panel BUSY toggles | — |
 | M-007 | D5 wire (pin 14) shows no data — check solder point | ✅ done — wiring OK (confirmed by M-008 captures) | — |
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
-| M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | 🟡 open | confidence in write bytes |
+| M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | ⚪ not needed (2026-10-21) — the fast-written bytes `A2 00 15 00 00 E0` match the Pervasive Displays app note exactly | — |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
-| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) | 🟠 maintainer: probably found the right vias; J-Link read-out pending | **SWD lock check (F-05)** |
-| M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open | **custom firmware board definition** |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🔴 open — maintainer: probably found the right vias; J-Link read-out pending. Updated 2026-10-21 (exact commands, first-connection hint) | **SWD lock check (F-05/F-15), flash size (F-17)** |
+| M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
 
 ---
 
@@ -436,6 +436,14 @@ the recording.
 | Different write bytes | 20 MSa/s was too slow for writes → use 40 MSa/s from now on |
 | D0–D3 flat / capture aborts | 40 MSa/s too much for this PC → stay at 20 MSa/s |
 
+**Update 2026-10-21: not needed any more.** The only fast-written payload
+in the boot sequence, `A2 00 15 00 00 E0`, is exactly the OTP start
+address published by Pervasive Displays (`[RESEARCH]`, see
+`docs/panel-protocol.md`), and the commands `70`/`90`/`A2`/`92` match the
+same procedure. The 20 MSa/s decode is therefore independently confirmed.
+Kept here for traceability; do not carry it out unless something new
+contradicts the decode.
+
 ---
 
 ## M-010 — Trigger a refresh while capturing
@@ -516,6 +524,40 @@ are the **2nd and 3rd pad from the bottom on the right side**.
   flash (CLAUDE.md §5.2). The tag stays powered by its battery; VTref
   only senses the voltage.
 
+### Update 2026-10-21 — exact commands and what to send back
+
+**Wiring (tag 02 only):** J-Link SWCLK → via of QFN pin 22, SWDIO → via of
+pin 23, GND → battery minus, VTref → battery plus (sense only). **Do not**
+connect the J-Link 5 V supply pin. Battery in, panel may stay plugged in.
+`[RESEARCH]` ARM 20-pin standard: VTref = 1, SWDIO = 7, SWCLK = 9,
+GND = 4 (check against the SEGGER pin sheet of your J-Link).
+
+**Commands (Simplicity Commander, Windows command prompt):**
+```
+commander --version
+commander device info
+commander security status
+```
+If Commander asks for the device, add `--device EFR32FG22`. Nothing else —
+**no** `device unlock`, `device masserase`, `flash`, `readmem` on a locked
+chip.
+
+**If the connection fails:** `[RESEARCH]` issue #2 reports that on their
+locked unit only the **first SWD connection after power-up** answered.
+Take the battery out, put it back, run `commander security status`
+immediately as the first command.
+
+Alternative without Commander `[RESEARCH]` (OEPL `reflash.py`, commit
+`8a8d7a9`, read 2026-10-21): `python reflash.py -s` prints the debug-lock
+state and then only resets the target. **Never** add `-u`, `-e` or `-f`
+— those unlock/erase/flash.
+
+**Send back:** the complete text output of all commands (copy & paste),
+plus: which tag, battery voltage if known, how many attempts.
+The output answers F-05 (locked?), whether an unlock is allowed (F-15),
+and — if `device info` shows it — the flash size (F-17: 256 or 512 kB).
+
+
 ---
 
 ## M-012 — EFR32 pin map for the custom firmware
@@ -574,6 +616,48 @@ for Claude Code; the table there comes from search snippets only.
 For item 9: if **two** SO-8 pins go to the NFC coil, it is the NFC chip.
 If four pins go to the EFR32 and one each to GND/VDD, it is probably an
 **SPI flash** — important, because OEPL keeps images in external flash.
+
+### Update 2026-10-21 — verify a concrete hypothesis
+
+A third party reports a full GPIO map for another RFRTx026D (issue #2 of
+this repo, found by GPIO scans over SWD on an unlocked chip). It fits our
+photo evidence (display lines on the left pad column, pads 1–8). It is
+`[RESEARCH]` about **another unit** — our unit still needs continuity.
+QFN pin numbers use the **unverified** package table from
+`docs/oepl-pin-comparison.md` (document check above).
+
+⚠ **Unpowered only:** battery out, FPC unplugged. The FPC carries about
++22 V / −20 V in operation; the logic analyser tolerates max. 3.6 V.
+
+Pad position: left column = pins 1–10 counted **top → bottom**; right
+column = pins 21–30 counted **bottom → top**; bottom row = pins 11–20
+**left → right** (pin-1 dot top left, as in `pcb-top-mcu-macro.webp`).
+
+| # | From | Expected (issue #2) | Expected QFN pin / pad | Beeps? |
+|---|---|---|---|---|
+| 1 | FPC 14 (SDA, yellow wire) | PC00 | pin 1 = left, 1st from top | |
+| 2 | FPC 13 (SCK, green) | PC01 | pin 2 = left, 2nd | |
+| 3 | FPC 12 (CS, blue) | PC02 | pin 3 = left, 3rd | |
+| 4 | FPC 11 (D/C, purple) | PC03 | pin 4 = left, 4th | |
+| 5 | FPC 10 (RST, grey) | PC04 | pin 5 = left, 5th | |
+| 6 | FPC 9 (BUSY, white) | **PA07** | pin 28 = **right**, 8th from bottom (3rd from top) | |
+| 7 | `XDt` leg 1 (gate) | PC06 | pin 7 = left, 7th | |
+| 8 | SO-8 pin 1 (`/CS` in the usual 25-series pinout) | PA05 | pin 26 = right, 6th from bottom | |
+| 9 | SO-8 pin 2 (`DO`/MISO) | PA04 | pin 25 = right, 5th from bottom | |
+| 10 | SO-8 pin 5 (`DI`/MOSI) | PB00 | pin 20 = bottom row, 10th from left (rightmost) | |
+| 11 | SO-8 pin 6 (`CLK`) | PA00 | pin 21 = right, 1st from bottom | |
+| 12 | SO-8 pin 4 (GND) | — | battery minus | |
+| 13 | SO-8 pin 8 (VCC) | switched by PA06 (low = on) | not battery plus directly; note where it goes | |
+| 14 | each LED pad (clear + yellow) | unknown (candidates PC05, PC07, PD02, PD03) | pins 6, 8, 38, 37 | |
+
+`[ASSUMPTION]` SO-8 pin numbering and the "usual 25-series" roles: pin 1
+is next to the dot/bevel, counter-clockwise from the top. **Test:** rows
+8–13 themselves. If a row does not beep, probe that line against **all**
+pads of the chip and note what it hits.
+
+Also useful: a sharp macro photo of the SO-8 marking (all lines) — the
+third-party unit reports a Winbond W25Q80 (JEDEC `EF 40 14`); our marking
+`8K417 / 0E47AH` has not been identified.
 
 ### Decision rule
 

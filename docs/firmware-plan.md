@@ -3,6 +3,22 @@
 Status: **concept, nothing built yet** (2026-09-23). Decisions still open are
 marked **DECISION**.
 
+> **Update 2026-10-21 (session 5 review):**
+> - Display driver: the panel COG is (`[ASSUMPTION]`, strongly supported)
+>   the Pervasive Displays "BWRY Medium" type; all panel-specific init
+>   values are in our own boot capture. Init/refresh sequence and sources:
+>   `panel-protocol.md`. The `ucbwry`/UC8179 assumption in section 2 is
+>   superseded — the `ucbwry` init must **not** be used on this panel.
+> - Pin map: a third-party map exists (issue #2 of this repo); M-012 now
+>   verifies it (`measurement-requests.md`).
+> - Flash size may be **256 kB**, not 512 kB (F-17) → linker script and
+>   OEPL build must follow `commander device info`.
+> - A third party announced an OEPL port for this board (board type, PD
+>   BWRY Medium driver, 256 kB build); not in OEPL as of release v43
+>   (2026-10-11).
+> - Section 1 (lock state vs. §5.2) still applies; new arguments in
+>   `open-questions.md` F-15.
+
 Maintainer decision (2026-09-23): the goal is a firmware that runs **on the
 original EFR32FG22** of the tag. No ESP32, no hardware swap — the board stays
 standard (this is path B from `open-questions.md` F-09).
@@ -105,7 +121,11 @@ waveform command** to the panel.
 - ARM GCC: available as `gcc-arm-none-eabi` (13.2) in this environment.
 - Gecko SDK 4.4.1: public on GitHub (`SiliconLabs/gecko_sdk`).
 - `slc` and Simplicity Commander: download from silabs.com — **not
-  reachable** from the Claude Code environment. OEPL's Docker image needs
+  reachable** from the Claude Code environment.
+- Update 2026-10-21: OEPL now ships `reflash.py` (pyOCD; status, unlock,
+  flash with J-Link or CMSIS-DAP) — an alternative to Commander on the
+  maintainer's machine. Flashing our own `.hex` works with
+  `python reflash.py -f <file>.hex` (after an unlock only). OEPL's Docker image needs
   them too.
   → The maintainer builds/flashes locally (Simplicity Studio or Docker), or
   step 1–3 are done as a small bare-metal project that only needs GCC +
