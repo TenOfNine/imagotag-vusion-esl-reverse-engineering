@@ -35,6 +35,8 @@ venv/
 .pio/
 build/
 dist/
+# Silicon Labs SDK headers fetched by firmware/bringup/fetch_sdk.sh
+firmware/bringup/sdk/
 
 # --- Editor / OS -----------------------------------------------------------
 .vscode/

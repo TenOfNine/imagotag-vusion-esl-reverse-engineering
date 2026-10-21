@@ -184,6 +184,7 @@ hardware/
   measurements.md          measurement log (filled in by the maintainer)
   photos/                  board photos
 firmware/                  later driver / firmware code
+  bringup/                 bare-metal bring-up images (steps 1–4)
 ```
 
 ---

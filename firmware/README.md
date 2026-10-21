@@ -1,4 +1,9 @@
-# firmware — still empty
+# firmware
+
+> **Update 2026-10-21:** `bringup/` holds the bare-metal bring-up images
+> (`docs/firmware-plan.md` §7.2). Step 1 (chip identification over RTT,
+> no GPIO) is written and tested in an emulator only — see
+> `bringup/README.md` and measurement request M-013.
 
 > **Update 2026-09-25:** the capture route is exhausted (the tag never
 > refreshes, `HISTORY.md`). The order at the bottom is superseded: path B

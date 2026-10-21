@@ -1464,6 +1464,50 @@ Nothing about our chip: flash size, lock state and pins are still open
 
 ---
 
+## 2026-10-21 — Session 5: Bring-up image step 1 written (emulator-tested only)
+
+### What was done
+- `firmware/bringup/`: bare-metal image for step 1 — own startup code,
+  linker script (image at `0x00000000`, FLASH limited to 256 kB) and a
+  minimal SEGGER-RTT-compatible output; only the GSDK 4.4.1 device and
+  CMSIS headers are used (`fetch_sdk.sh`, sparse clone of
+  `SiliconLabs/gecko_sdk` tag `v4.4.1`, commit `911f6cd`; not committed).
+- The image prints DEVINFO `INFO`/`PART`/`MEMINFO`/`MSIZE`/`PKGINFO`/
+  `EUI64`, `SYSCFG->CHIPREV` and `EMU->RSTCAUSE` over RTT, repeats every
+  10 s, and **touches no GPIO**.
+- Built with `arm-none-eabi-gcc` 13.2.1 (Ubuntu package
+  `15:13.2.rel1-2`): 2,728 bytes code, 1,112 bytes RAM.
+  `bringup_step1.hex` sha256
+  `28a7c84a8ec478714ef444bcca7a51c248f6806eb7b61f855d4216ac875d975c`,
+  `.bin` sha256
+  `b02c4dba1b199e175533b97ee00e296efe1c3372bbc5afba59142375fc3805b7`.
+  Image sent to the maintainer directly (not committed; `.gitignore`
+  excludes `*.hex` to keep original firmware out of the repo).
+- `firmware/bringup/test/emulate.py`: runs the image in Unicorn with
+  faked DEVINFO/EMU/SYSCFG/SysTick and drains RTT like a J-Link host.
+- New measurement request **M-013** (run step 1; preconditions M-011 +
+  backup or F-15; FPC unplugged).
+
+### Result
+- Emulator: vector table SP `0x20008000`, reset handler `0x145`; RTT
+  control block found at `0x20000410`; 40 reports and 398 heartbeats over
+  23,968 bytes through the 1 kB ring buffer, no lost or garbled line;
+  decoding of the test values correct (256 kB and 512 kB `MSIZE`).
+- `[RESEARCH]` GSDK 4.4.1 headers: after reset SYSCLK = FSRCO (20 MHz,
+  `_CMU_SYSCLKCTRL_RESETVALUE`), watchdog off (`_WDOG_EN_RESETVALUE` 0),
+  DEVINFO at `0x0FE08000` (so `MSIZE` at `0x0FE0800C`, matching issue #2).
+- Found while testing: without TrustZone defines the GSDK headers use the
+  **non-secure peripheral aliases** (`EMU_NS_BASE` `0x50004000` …). That
+  is the GSDK default for non-TrustZone projects; the emulator maps both
+  aliases.
+
+### What it does not prove
+Anything about the real chip. The first real result comes from M-013.
+`[ASSUMPTION]` the PART decoding letter + 3 digits — supported by the
+`PART` value reported in issue #2 (2121 → `C121`).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

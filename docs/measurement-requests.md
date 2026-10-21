@@ -29,6 +29,7 @@ set the request here to `✅ done`.
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
 | M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🔴 open — maintainer: probably found the right vias; J-Link read-out pending. Updated 2026-10-21 (exact commands, first-connection hint) | **SWD lock check (F-05/F-15), flash size (F-17)** |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
+| M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-011 + backup or F-15 | F-17, step 2 |
 
 ---
 
@@ -666,6 +667,44 @@ third-party unit reports a Winbond W25Q80 (JEDEC `EF 40 14`); our marking
 | All display lines found | Claude Code writes the board definition + the step-1–3 bring-up firmware |
 | SO-8 is SPI flash | OEPL image storage works as designed |
 | SO-8 is the NFC chip, no flash found | images must live in internal flash → firmware change needed |
+
+---
+
+## M-013 — Run bring-up image step 1 (chip identification)
+
+**Priority:** high, as soon as its preconditions are met
+**Tool:** J-Link, Simplicity Commander, J-Link RTT Viewer
+**State:** tag 02 only, battery in, **FPC unplugged**
+
+### Preconditions
+
+- M-011 done. **Not locked** → full flash backup first (outside the repo).
+  **Locked** → only after F-15 is decided, written into `CLAUDE.md`, and
+  the unlock is done.
+- Never tag 01.
+
+### Task
+
+1. Flash `bringup_step1.hex` (sent by Claude Code; build instructions in
+   `firmware/bringup/README.md`, sha256 is given in `HISTORY.md`).
+2. Read RTT channel 0 with J-Link RTT Viewer (settings in
+   `firmware/bringup/README.md`).
+3. Send the full text of one report (from `=== RFRTx026D bring-up step 1`
+   to `=== end of report ===`) and say whether `alive <n> s` keeps
+   counting.
+
+Why the FPC stays unplugged: this image leaves every GPIO disabled, so the
+gate of the panel supply switch and the panel lines float.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| Report appears, `MSIZE` says 256 kB | F-17 answered: 256 kB build for OEPL (`firmware-plan.md` §7.3) |
+| Report appears, `MSIZE` says 512 kB | F-17 answered: standard OEPL layout fits |
+| `PART` does not decode to `EFR32FG22 C121` | stop; compare with the chip marking before anything else |
+| No RTT output, but the debugger connects | send what RTT Viewer shows (control block found or not); Claude Code checks the image |
+| Flashing fails | send the Commander output; do not retry with other erase options |
 
 ---
 

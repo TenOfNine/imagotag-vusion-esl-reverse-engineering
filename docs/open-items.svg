@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1018" viewBox="0 0 1280 1018" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1118" viewBox="0 0 1280 1118" font-family="Segoe UI, Helvetica, Arial, sans-serif">
 <title>Open items — RFRTx026D / EL074TS1</title>
 <style>.h1{font-size:22px;font-weight:700;fill:#202124}.sub{font-size:13px;fill:#5f6368}.col{font-size:14px;font-weight:700;fill:#ffffff}.title{font-size:13.5px;font-weight:700;fill:#202124}.owner{font-size:10.5px;font-weight:700;letter-spacing:.3px}.body{font-size:12px;fill:#3c4043}.foot{font-size:11.5px;font-style:italic}.arrow{fill:none;stroke:#5f6368;stroke-width:1.6;marker-end:url(#tip)}</style>
 <defs><marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker></defs>
-<rect width="1280" height="1018" fill="#ffffff"/>
+<rect width="1280" height="1118" fill="#ffffff"/>
 <text x="24" y="44" class="h1">Open items — VUSION 7.4" BWRY (RFRTx026D / EL074TS1)</text>
 <text x="24" y="68" class="sub">Snapshot 2026-10-21 · source: progress.md (authoritative) · work tag: tag 02</text>
 <rect x="24" y="84" width="16" height="16" rx="4" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
@@ -111,61 +111,68 @@
 <text x="666" y="437" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
-<rect x="963" y="174" width="293" height="126" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="963" y="174" width="6" height="126" rx="3" fill="#137333"/>
-<text x="979" y="199" class="title">Toolchain + step-1 image</text>
-<text x="1244" y="199" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="979" y="219" class="body" xml:space="preserve">Bare-metal gcc-arm-none-eabi for steps</text>
-<text x="979" y="235" class="body" xml:space="preserve">1–4; GSDK 4.4.1 / slc for OEPL. Step 1</text>
-<text x="979" y="251" class="body" xml:space="preserve">(RTT + DEVINFO, no panel pins) can be</text>
-<text x="979" y="267" class="body" xml:space="preserve">written now — concept: firmware-plan.md</text>
-<text x="979" y="283" class="body" xml:space="preserve">§7</text>
-<rect x="963" y="316" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="963" y="316" width="6" height="100" rx="3" fill="#137333"/>
-<text x="979" y="341" class="title">Board definition</text>
-<text x="1244" y="341" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="979" y="361" class="body" xml:space="preserve">OEPL dev slot 0xF0…0xFA; display on port</text>
-<text x="979" y="377" class="body" xml:space="preserve">C (USART0?), BUSY on PA07</text>
-<text x="979" y="399" class="foot" fill="#137333">needs: M-012 + datasheet check</text>
-<rect x="963" y="432" width="293" height="148" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="963" y="432" width="6" height="148" rx="3" fill="#137333"/>
-<text x="979" y="457" class="title">Bring-up steps 1–3</text>
-<text x="1244" y="457" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="979" y="477" class="body" xml:space="preserve">LED / RTT · panel power, reset, BUSY (1</text>
-<text x="979" y="493" class="body" xml:space="preserve">ms quirk) · OTP read: chip ID 0D04, bank</text>
-<text x="979" y="509" class="body" xml:space="preserve">check, all 112 bytes</text>
-<text x="979" y="525" class="body" xml:space="preserve">Maintainer flashes, sends RTT log +</text>
-<text x="979" y="541" class="body" xml:space="preserve">SLogic capture</text>
-<text x="979" y="563" class="foot" fill="#137333">needs: F-15 · confirms the pin map</text>
-<rect x="963" y="596" width="293" height="148" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="963" y="596" width="6" height="148" rx="3" fill="#137333"/>
-<text x="979" y="621" class="title">Step 4 · first image</text>
-<text x="1244" y="621" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="979" y="641" class="body" xml:space="preserve">Vendor sequence (panel-protocol.md §7):</text>
-<text x="979" y="657" class="body" xml:space="preserve">init from the OTP, 10 + 96,000 bytes,</text>
-<text x="979" y="673" class="body" xml:space="preserve">04, 12 00, turn-off DC/DC + 6 s wait. E6</text>
-<text x="979" y="689" class="body" xml:space="preserve">temperature from the EFR32 sensor — not</text>
-<text x="979" y="705" class="body" xml:space="preserve">ucbwry. Only after step 3</text>
-<text x="979" y="727" class="foot" fill="#137333">confirms: F-02, F-03, F-13</text>
-<rect x="963" y="760" width="293" height="132" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="963" y="760" width="6" height="132" rx="3" fill="#137333"/>
-<text x="979" y="785" class="title">Step 5 · OEPL port</text>
-<text x="1244" y="785" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="979" y="805" class="body" xml:space="preserve">Board type + Pervasive driver. On a 256</text>
-<text x="979" y="821" class="body" xml:space="preserve">kB part the app must shrink to ≤ 208 kB</text>
-<text x="979" y="837" class="body" xml:space="preserve">(v43: 233.6 kB) — or reuse the third-</text>
-<text x="979" y="853" class="body" xml:space="preserve">party port</text>
-<text x="979" y="875" class="foot" fill="#137333">needs: bring-up path decision, F-17</text>
+<rect x="963" y="174" width="293" height="132" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="963" y="174" width="6" height="132" rx="3" fill="#1a56db"/>
+<text x="979" y="199" class="title">M-013 · Run step-1 image</text>
+<text x="1244" y="199" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="979" y="219" class="body" xml:space="preserve">Image written (firmware/bringup,</text>
+<text x="979" y="235" class="body" xml:space="preserve">emulator-tested). Flash after M-011 +</text>
+<text x="979" y="251" class="body" xml:space="preserve">backup or F-15; tag 02, FPC unplugged;</text>
+<text x="979" y="267" class="body" xml:space="preserve">send the RTT report</text>
+<text x="979" y="289" class="foot" fill="#1a56db">answers: F-17</text>
+<rect x="963" y="322" width="293" height="78" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="322" width="6" height="78" rx="3" fill="#137333"/>
+<text x="979" y="347" class="title">Toolchain</text>
+<text x="1244" y="347" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="367" class="body" xml:space="preserve">Bare-metal gcc-arm-none-eabi ready for</text>
+<text x="979" y="383" class="body" xml:space="preserve">steps 2–4; GSDK 4.4.1 / slc for OEPL</text>
+<rect x="963" y="416" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="416" width="6" height="100" rx="3" fill="#137333"/>
+<text x="979" y="441" class="title">Board definition</text>
+<text x="1244" y="441" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="461" class="body" xml:space="preserve">OEPL dev slot 0xF0…0xFA; display on port</text>
+<text x="979" y="477" class="body" xml:space="preserve">C (USART0?), BUSY on PA07</text>
+<text x="979" y="499" class="foot" fill="#137333">needs: M-012 + datasheet check</text>
+<rect x="963" y="532" width="293" height="148" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="532" width="6" height="148" rx="3" fill="#137333"/>
+<text x="979" y="557" class="title">Bring-up steps 2–3</text>
+<text x="1244" y="557" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="577" class="body" xml:space="preserve">Panel power, reset, BUSY (1 ms quirk) ·</text>
+<text x="979" y="593" class="body" xml:space="preserve">OTP read: chip ID 0D04, bank check, all</text>
+<text x="979" y="609" class="body" xml:space="preserve">112 bytes</text>
+<text x="979" y="625" class="body" xml:space="preserve">Maintainer flashes, sends RTT log +</text>
+<text x="979" y="641" class="body" xml:space="preserve">SLogic capture</text>
+<text x="979" y="663" class="foot" fill="#137333">needs: F-15 · confirms the pin map</text>
+<rect x="963" y="696" width="293" height="148" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="696" width="6" height="148" rx="3" fill="#137333"/>
+<text x="979" y="721" class="title">Step 4 · first image</text>
+<text x="1244" y="721" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="741" class="body" xml:space="preserve">Vendor sequence (panel-protocol.md §7):</text>
+<text x="979" y="757" class="body" xml:space="preserve">init from the OTP, 10 + 96,000 bytes,</text>
+<text x="979" y="773" class="body" xml:space="preserve">04, 12 00, turn-off DC/DC + 6 s wait. E6</text>
+<text x="979" y="789" class="body" xml:space="preserve">temperature from the EFR32 sensor — not</text>
+<text x="979" y="805" class="body" xml:space="preserve">ucbwry. Only after step 3</text>
+<text x="979" y="827" class="foot" fill="#137333">confirms: F-02, F-03, F-13</text>
+<rect x="963" y="860" width="293" height="132" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="860" width="6" height="132" rx="3" fill="#137333"/>
+<text x="979" y="885" class="title">Step 5 · OEPL port</text>
+<text x="1244" y="885" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="905" class="body" xml:space="preserve">Board type + Pervasive driver. On a 256</text>
+<text x="979" y="921" class="body" xml:space="preserve">kB part the app must shrink to ≤ 208 kB</text>
+<text x="979" y="937" class="body" xml:space="preserve">(v43: 233.6 kB) — or reuse the third-</text>
+<text x="979" y="953" class="body" xml:space="preserve">party port</text>
+<text x="979" y="975" class="foot" fill="#137333">needs: bring-up path decision, F-17</text>
 <path d="M483.5,370 L483.5,383" class="arrow"/>
 <path d="M483.5,486 L483.5,499" class="arrow"/>
 <path d="M630,214 L638.5,214 L638.5,214 L647,214" class="arrow"/>
-<path d="M943,214 L951.5,214 L951.5,472 L960,472" class="arrow"/>
-<path d="M1109.5,300 L1109.5,313" class="arrow"/>
-<path d="M1109.5,416 L1109.5,429" class="arrow"/>
-<path d="M1109.5,580 L1109.5,593" class="arrow"/>
-<path d="M1109.5,744 L1109.5,757" class="arrow"/>
-<rect x="24" y="912" width="1232" height="36" rx="8" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5" stroke-dasharray="6 4"/>
-<text x="38" y="934" class="body">Parked / low priority: M-005 XDt in detail (path A only) · F-10 disable the EFR32 (path A) · F-11 FPC test points TP1–TP3 · F-12 refresh-rate limits (≈ 22 s refresh + 6 s turn-off per update)</text>
-<rect x="24" y="958" width="1232" height="36" rx="8" fill="#fce8e6" stroke="#c5221f" stroke-width="1.5"/>
-<text x="38" y="980" class="body">Safety (CLAUDE.md §5): tag 01 is never touched · no unlock before F-15 is decided and written into CLAUDE.md · FPC checks unpowered first (≈ ±20 V on the FPC, logic analyser max. 3.6 V)</text>
+<path d="M943,214 L951.5,214 L951.5,214 L960,214" class="arrow"/>
+<path d="M1109.5,306 L1109.5,319" class="arrow"/>
+<path d="M1109.5,400 L1109.5,413" class="arrow"/>
+<path d="M1109.5,516 L1109.5,529" class="arrow"/>
+<path d="M1109.5,680 L1109.5,693" class="arrow"/>
+<path d="M1109.5,844 L1109.5,857" class="arrow"/>
+<rect x="24" y="1012" width="1232" height="36" rx="8" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="38" y="1034" class="body">Parked / low priority: M-005 XDt in detail (path A only) · F-10 disable the EFR32 (path A) · F-11 FPC test points TP1–TP3 · F-12 refresh-rate limits (≈ 22 s refresh + 6 s turn-off per update)</text>
+<rect x="24" y="1058" width="1232" height="36" rx="8" fill="#fce8e6" stroke="#c5221f" stroke-width="1.5"/>
+<text x="38" y="1080" class="body">Safety (CLAUDE.md §5): tag 01 is never touched · no unlock before F-15 is decided and written into CLAUDE.md · FPC checks unpowered first (≈ ±20 V on the FPC, logic analyser max. 3.6 V)</text>
 </svg>

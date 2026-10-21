@@ -85,18 +85,22 @@ COLUMNS = [
         ], "blocks: step 5", False),
     ]),
     ("4 · Firmware on tag 02", [
-        ("tool", "C", "Toolchain + step-1 image", [
-            "Bare-metal gcc-arm-none-eabi for steps 1–4; GSDK 4.4.1 / slc "
-            "for OEPL. Step 1 (RTT + DEVINFO, no panel pins) can be "
-            "written now — concept: firmware-plan.md §7",
+        ("m013", "M", "M-013 · Run step-1 image", [
+            "Image written (firmware/bringup, emulator-tested). Flash after "
+            "M-011 + backup or F-15; tag 02, FPC unplugged; send the RTT "
+            "report",
+        ], "answers: F-17", False),
+        ("tool", "C", "Toolchain", [
+            "Bare-metal gcc-arm-none-eabi ready for steps 2–4; GSDK 4.4.1 "
+            "/ slc for OEPL",
         ], None, False),
         ("board", "C", "Board definition", [
             "OEPL dev slot 0xF0…0xFA; display on port C (USART0?), "
             "BUSY on PA07",
         ], "needs: M-012 + datasheet check", False),
-        ("s13", "C", "Bring-up steps 1–3", [
-            "LED / RTT · panel power, reset, BUSY (1 ms quirk) · "
-            "OTP read: chip ID 0D04, bank check, all 112 bytes",
+        ("s13", "C", "Bring-up steps 2–3", [
+            "Panel power, reset, BUSY (1 ms quirk) · OTP read: chip ID "
+            "0D04, bank check, all 112 bytes",
             "Maintainer flashes, sends RTT log + SLogic capture",
         ], "needs: F-15 · confirms the pin map", False),
         ("s4", "C", "Step 4 · first image", [
@@ -117,7 +121,8 @@ ARROWS = [
     ("m011", "eval"),
     ("eval", "binary"),
     ("m011", "f15"),
-    ("f15", "s13"),
+    ("f15", "m013"),
+    ("m013", "tool"),
     ("tool", "board"),
     ("board", "s13"),
     ("s13", "s4"),

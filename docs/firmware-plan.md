@@ -171,6 +171,11 @@ and in its first RTT line (`CLAUDE.md` §2).
 
 ### 7.2 Bring-up image, step by step
 
+> **Update 2026-10-21:** step 1 is written: `firmware/bringup/`
+> (own startup, linker script and RTT; GSDK 4.4.1 device headers only).
+> Tested in an emulator (`firmware/bringup/test/emulate.py`), not on
+> hardware. Run on the tag: M-013.
+
 One source tree, one build per step (a compile-time `STEP` switch), so
 each image only contains what its step needs:
 
