@@ -54,6 +54,14 @@ original EFR32** (`docs/firmware-plan.md`). Waiting for the SWD lock check
 (M-011), the pin-map verification (M-012) and the unlock decision (F-15).
 A third party reports a working refresh on the same board (issue #2).
 
+### Open items at a glance
+
+![Open items: what is still to do, by owner and stage](docs/open-items.svg)
+
+Snapshot of the open items in `progress.md`, which stays authoritative.
+Regenerate after editing the content in the script:
+`python3 docs/make_open_items_svg.py`.
+
 ---
 
 ## Getting started for Claude Code

@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="922" viewBox="0 0 1280 922" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<title>Open items — RFRTx026D / EL074TS1</title>
+<style>.h1{font-size:22px;font-weight:700;fill:#202124}.sub{font-size:13px;fill:#5f6368}.col{font-size:14px;font-weight:700;fill:#ffffff}.title{font-size:13.5px;font-weight:700;fill:#202124}.owner{font-size:10.5px;font-weight:700;letter-spacing:.3px}.body{font-size:12px;fill:#3c4043}.foot{font-size:11.5px;font-style:italic}.arrow{fill:none;stroke:#5f6368;stroke-width:1.6;marker-end:url(#tip)}</style>
+<defs><marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f6368"/></marker></defs>
+<rect width="1280" height="922" fill="#ffffff"/>
+<text x="24" y="44" class="h1">Open items — VUSION 7.4" BWRY (RFRTx026D / EL074TS1)</text>
+<text x="24" y="68" class="sub">Snapshot 2026-10-21 · source: progress.md (authoritative) · work tag: tag 02</text>
+<rect x="24" y="84" width="16" height="16" rx="4" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<text x="46" y="97" class="body">Maintainer</text>
+<rect x="134" y="84" width="16" height="16" rx="4" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<text x="156" y="97" class="body">Claude Code</text>
+<rect x="251" y="84" width="16" height="16" rx="4" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<text x="273" y="97" class="body">Decision (maintainer)</text>
+<rect x="438" y="84" width="16" height="16" rx="4" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<text x="460" y="97" class="body">Third party</text>
+<rect x="555" y="84" width="16" height="16" rx="4" fill="#ffffff" stroke="#5f6368" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="577" y="97" class="body">conditional / parked</text>
+<path d="M715,92 L749,92" class="arrow"/>
+<text x="759" y="97" class="body">leads to / unblocks</text>
+<rect x="24" y="128" width="293" height="30" rx="6" fill="#202124"/>
+<text x="36" y="148" class="col">1 · Now — no hardware needed</text>
+<rect x="24" y="174" width="293" height="116" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="24" y="174" width="6" height="116" rx="3" fill="#1a56db"/>
+<text x="40" y="199" class="title">Datasheet check</text>
+<text x="305" y="199" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="40" y="219" class="body" xml:space="preserve">Compare the QFN40 pin table in</text>
+<text x="40" y="235" class="body" xml:space="preserve">docs/oepl-pin-comparison.md §2 with the</text>
+<text x="40" y="251" class="body" xml:space="preserve">EFR32FG22 datasheet</text>
+<text x="40" y="273" class="foot" fill="#1a56db">feeds: M-012, board definition</text>
+<rect x="24" y="306" width="293" height="132" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="24" y="306" width="6" height="132" rx="3" fill="#1a56db"/>
+<text x="40" y="331" class="title">Pervasive Displays app note</text>
+<text x="305" y="331" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="40" y="351" class="body" xml:space="preserve">Send screenshots or a PDF of the BWRY</text>
+<text x="40" y="367" class="body" xml:space="preserve">Medium tables (OTP offsets, sequence,</text>
+<text x="40" y="383" class="body" xml:space="preserve">timing)</text>
+<text x="40" y="405" class="foot" fill="#1a56db">checks: OTP offsets in docs/panel-</text>
+<text x="40" y="421" class="foot" fill="#1a56db">protocol.md</text>
+<rect x="24" y="454" width="293" height="78" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="24" y="454" width="6" height="78" rx="3" fill="#1a56db"/>
+<text x="40" y="479" class="title">GitHub "About" text</text>
+<text x="305" y="479" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="40" y="499" class="body" xml:space="preserve">Outdated: "three-colour", "Docs in</text>
+<text x="40" y="515" class="body" xml:space="preserve">German" (repo settings)</text>
+<rect x="24" y="548" width="293" height="116" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<rect x="24" y="548" width="6" height="116" rx="3" fill="#5f6368"/>
+<text x="40" y="573" class="title">Issue #2 — answers</text>
+<text x="305" y="573" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
+<text x="40" y="593" class="body" xml:space="preserve">Our questions 1–7: offset table, full</text>
+<text x="40" y="609" class="body" xml:space="preserve">112-byte OTP, flash marking, DEVINFO,</text>
+<text x="40" y="625" class="body" xml:space="preserve">SWD settings, E6 value, OEPL branch</text>
+<text x="40" y="647" class="foot" fill="#5f6368">then Claude Code evaluates them</text>
+<rect x="24" y="680" width="293" height="94" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<rect x="24" y="680" width="6" height="94" rx="3" fill="#5f6368"/>
+<text x="40" y="705" class="title">Third-party OEPL port</text>
+<text x="305" y="705" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
+<text x="40" y="725" class="body" xml:space="preserve">Announced in issue #2, not in OEPL v43.</text>
+<text x="40" y="741" class="body" xml:space="preserve">Claude Code watches and reuses it</text>
+<text x="40" y="757" class="body" xml:space="preserve">instead of duplicating</text>
+<rect x="337" y="128" width="293" height="30" rx="6" fill="#202124"/>
+<text x="349" y="148" class="col">2 · Tag 02 — non-destructive</text>
+<rect x="337" y="174" width="293" height="196" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="174" width="6" height="196" rx="3" fill="#1a56db"/>
+<text x="353" y="199" class="title">M-011 · SWD lock status</text>
+<text x="618" y="199" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="353" y="219" class="body" xml:space="preserve">• Confirm vias for QFN pins 22/23</text>
+<text x="353" y="235" class="body" xml:space="preserve">  (unpowered)</text>
+<text x="353" y="251" class="body" xml:space="preserve">• J-Link: commander device info +</text>
+<text x="353" y="267" class="body" xml:space="preserve">  commander security status — nothing</text>
+<text x="353" y="283" class="body" xml:space="preserve">  else</text>
+<text x="353" y="299" class="body" xml:space="preserve">• Send the full text output</text>
+<text x="353" y="315" class="body" xml:space="preserve">• If not locked: back up the flash</text>
+<text x="353" y="331" class="body" xml:space="preserve">  (outside the repo)</text>
+<text x="353" y="353" class="foot" fill="#1a56db">answers: F-05, F-17 · basis for F-15</text>
+<rect x="337" y="386" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="337" y="386" width="6" height="100" rx="3" fill="#137333"/>
+<text x="353" y="411" class="title">Evaluate lock state + flash size</text>
+<text x="618" y="411" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="353" y="431" class="body" xml:space="preserve">After M-011: update docs/firmware-</text>
+<text x="353" y="447" class="body" xml:space="preserve">plan.md</text>
+<text x="353" y="469" class="foot" fill="#137333">answers: F-17 (256 or 512 kB)</text>
+<rect x="337" y="502" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" stroke-dasharray="6 4"/>
+<rect x="337" y="502" width="6" height="100" rx="3" fill="#137333"/>
+<text x="353" y="527" class="title">Init sequence from the binary</text>
+<text x="618" y="527" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="353" y="547" class="body" xml:space="preserve">Only if the chip is not locked and the</text>
+<text x="353" y="563" class="body" xml:space="preserve">flash was backed up</text>
+<text x="353" y="585" class="foot" fill="#137333">answers: F-04</text>
+<rect x="337" y="618" width="293" height="164" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="618" width="6" height="164" rx="3" fill="#1a56db"/>
+<text x="353" y="643" class="title">M-012 · Verify the pin map</text>
+<text x="618" y="643" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="353" y="663" class="body" xml:space="preserve">Unpowered, battery out, FPC unplugged</text>
+<text x="353" y="679" class="body" xml:space="preserve">• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1</text>
+<text x="353" y="695" class="body" xml:space="preserve">• XDt gate → QFN 7</text>
+<text x="353" y="711" class="body" xml:space="preserve">• SO-8 → QFN 26/25/20/21, GND, VCC</text>
+<text x="353" y="727" class="body" xml:space="preserve">• LEDs → QFN / supply</text>
+<text x="353" y="743" class="body" xml:space="preserve">• Macro photo of the SO-8 marking</text>
+<text x="353" y="765" class="foot" fill="#1a56db">answers: F-14, F-16</text>
+<rect x="650" y="128" width="293" height="30" rx="6" fill="#202124"/>
+<text x="662" y="148" class="col">3 · Decisions</text>
+<rect x="650" y="174" width="293" height="164" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="174" width="6" height="164" rx="3" fill="#b45309"/>
+<text x="666" y="199" class="title">F-15 · Unlock tag 02?</text>
+<text x="931" y="199" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="219" class="body" xml:space="preserve">Only if the chip is locked. Erases tag</text>
+<text x="666" y="235" class="body" xml:space="preserve">02's original firmware; tag 01 and the</text>
+<text x="666" y="251" class="body" xml:space="preserve">others keep theirs</text>
+<text x="666" y="267" class="body" xml:space="preserve">Must be written into CLAUDE.md before</text>
+<text x="666" y="283" class="body" xml:space="preserve">any unlock</text>
+<text x="666" y="299" class="body" xml:space="preserve">New basis: docs/open-questions.md F-15</text>
+<text x="666" y="321" class="foot" fill="#b45309">blocks: flashing (steps 1–5)</text>
+<rect x="650" y="354" width="293" height="100" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="354" width="6" height="100" rx="3" fill="#b45309"/>
+<text x="666" y="379" class="title">Bring-up path</text>
+<text x="931" y="379" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="399" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
+<text x="666" y="415" class="body" xml:space="preserve">the third-party OEPL port?</text>
+<text x="666" y="437" class="foot" fill="#b45309">blocks: step 5</text>
+<rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
+<text x="975" y="148" class="col">4 · Firmware on tag 02</text>
+<rect x="963" y="174" width="293" height="78" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="174" width="6" height="78" rx="3" fill="#137333"/>
+<text x="979" y="199" class="title">Toolchain</text>
+<text x="1244" y="199" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="219" class="body" xml:space="preserve">Bare-metal gcc-arm-none-eabi for steps</text>
+<text x="979" y="235" class="body" xml:space="preserve">1–3; GSDK 4.4.1 / slc for OEPL</text>
+<rect x="963" y="268" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="268" width="6" height="100" rx="3" fill="#137333"/>
+<text x="979" y="293" class="title">Board definition</text>
+<text x="1244" y="293" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="313" class="body" xml:space="preserve">OEPL dev slot 0xF0…0xFA; display on port</text>
+<text x="979" y="329" class="body" xml:space="preserve">C (USART0?), BUSY on PA07</text>
+<text x="979" y="351" class="foot" fill="#137333">needs: M-012 + datasheet check</text>
+<rect x="963" y="384" width="293" height="148" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="384" width="6" height="148" rx="3" fill="#137333"/>
+<text x="979" y="409" class="title">Bring-up steps 1–3</text>
+<text x="1244" y="409" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="429" class="body" xml:space="preserve">LED / RTT · panel power, reset, BUSY (1</text>
+<text x="979" y="445" class="body" xml:space="preserve">ms quirk) · replay the boot reads incl.</text>
+<text x="979" y="461" class="body" xml:space="preserve">all 112 OTP bytes</text>
+<text x="979" y="477" class="body" xml:space="preserve">Maintainer flashes, sends RTT log +</text>
+<text x="979" y="493" class="body" xml:space="preserve">SLogic capture</text>
+<text x="979" y="515" class="foot" fill="#137333">needs: F-15 · confirms the pin map</text>
+<rect x="963" y="548" width="293" height="132" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="548" width="6" height="132" rx="3" fill="#137333"/>
+<text x="979" y="573" class="title">Step 4 · first image</text>
+<text x="1244" y="573" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="593" class="body" xml:space="preserve">Pervasive BWRY Medium init built from</text>
+<text x="979" y="609" class="body" xml:space="preserve">the OTP at runtime, E6 temperature from</text>
+<text x="979" y="625" class="body" xml:space="preserve">the EFR32 sensor — not the OEPL ucbwry</text>
+<text x="979" y="641" class="body" xml:space="preserve">init. Only after step 3</text>
+<text x="979" y="663" class="foot" fill="#137333">confirms: F-02, F-03, F-13</text>
+<rect x="963" y="696" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
+<rect x="963" y="696" width="6" height="100" rx="3" fill="#137333"/>
+<text x="979" y="721" class="title">Step 5 · OEPL port</text>
+<text x="1244" y="721" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="979" y="741" class="body" xml:space="preserve">Board type + Pervasive driver + 256 kB</text>
+<text x="979" y="757" class="body" xml:space="preserve">build — or reuse the third-party port</text>
+<text x="979" y="779" class="foot" fill="#137333">needs: bring-up path decision</text>
+<path d="M483.5,370 L483.5,383" class="arrow"/>
+<path d="M483.5,486 L483.5,499" class="arrow"/>
+<path d="M630,214 L638.5,214 L638.5,214 L647,214" class="arrow"/>
+<path d="M943,214 L951.5,214 L951.5,424 L960,424" class="arrow"/>
+<path d="M1109.5,252 L1109.5,265" class="arrow"/>
+<path d="M1109.5,368 L1109.5,381" class="arrow"/>
+<path d="M1109.5,532 L1109.5,545" class="arrow"/>
+<path d="M1109.5,680 L1109.5,693" class="arrow"/>
+<rect x="24" y="816" width="1232" height="36" rx="8" fill="#ffffff" stroke="#9aa0a6" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="38" y="838" class="body">Parked / low priority: M-005 XDt in detail (path A only) · F-10 disable the EFR32 (path A) · F-11 FPC test points TP1–TP3 · F-12 refresh-rate limits (≈ 22 s per full refresh)</text>
+<rect x="24" y="862" width="1232" height="36" rx="8" fill="#fce8e6" stroke="#c5221f" stroke-width="1.5"/>
+<text x="38" y="884" class="body">Safety (CLAUDE.md §5): tag 01 is never touched · no unlock before F-15 is decided and written into CLAUDE.md · FPC checks unpowered first (≈ ±20 V on the FPC, logic analyser max. 3.6 V)</text>
+</svg>

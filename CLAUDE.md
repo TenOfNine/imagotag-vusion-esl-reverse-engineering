@@ -168,6 +168,8 @@ docs/
   netlist-from-photos.md   traces reconstructed from PCB photos
   oepl-pin-comparison.md   OpenEPaperLink pin maps vs. our board
   panel-protocol.md        panel COG, OTP and init/refresh sequence
+  open-items.svg           visual snapshot of the open items (README)
+  make_open_items_svg.py   generates open-items.svg
   references.md            sources
   archive/                 superseded originals (e.g. German HISTORY)
 captures/                  raw captures (.sr, .csv) — not in git
