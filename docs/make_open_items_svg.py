@@ -41,8 +41,8 @@ COLUMNS = [
             "(repo settings)",
         ], None, False),
         ("i2", "T", "Issue #2 — answers", [
-            "Our questions 1–7: offset table, full 112-byte OTP, flash "
-            "marking, DEVINFO, SWD settings, E6 value, OEPL branch",
+            "Our questions 2–7 (1 answered ourselves): full 112-byte OTP, "
+            "flash marking, DEVINFO, SWD settings, E6 value, OEPL branch",
         ], "then Claude Code evaluates them", False),
         ("oepl3", "T", "Third-party OEPL port", [
             "Announced in issue #2, not in OEPL v43. Claude Code watches "
@@ -85,9 +85,10 @@ COLUMNS = [
         ], "blocks: step 5", False),
     ]),
     ("4 · Firmware on tag 02", [
-        ("tool", "C", "Toolchain", [
-            "Bare-metal gcc-arm-none-eabi for steps 1–3; "
-            "GSDK 4.4.1 / slc for OEPL",
+        ("tool", "C", "Toolchain + step-1 image", [
+            "Bare-metal gcc-arm-none-eabi for steps 1–4; GSDK 4.4.1 / slc "
+            "for OEPL. Step 1 (RTT + DEVINFO, no panel pins) can be "
+            "written now — concept: firmware-plan.md §7",
         ], None, False),
         ("board", "C", "Board definition", [
             "OEPL dev slot 0xF0…0xFA; display on port C (USART0?), "
@@ -105,9 +106,10 @@ COLUMNS = [
             "Only after step 3",
         ], "confirms: F-02, F-03, F-13", False),
         ("s5", "C", "Step 5 · OEPL port", [
-            "Board type + Pervasive driver + 256 kB build — or reuse the "
+            "Board type + Pervasive driver. On a 256 kB part the app must "
+            "shrink to ≤ 208 kB (v43: 233.6 kB) — or reuse the "
             "third-party port",
-        ], "needs: bring-up path decision", False),
+        ], "needs: bring-up path decision, F-17", False),
     ]),
 ]
 

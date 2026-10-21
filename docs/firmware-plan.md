@@ -144,3 +144,102 @@ waveform command** to the panel.
 - The original firmware image (copyright). Only findings derived from it.
 - Copies of the OEPL sources — a port lives as patches / a fork with its
   licence, referenced from `firmware/`.
+- Copies of Pervasive Displays driver code (CC BY-SA 4.0, "for exclusive
+  use with Pervasive Displays screens") — reimplement from the procedure.
+- The UserData page dump of a tag (vendor data of unknown content).
+
+---
+
+## 7. Flash image concept (2026-10-21)
+
+Maintainer decision (2026-10-21): we go ahead on the assumption that the
+panel is the Pervasive Displays BWRY Medium type (`panel-protocol.md`);
+the colour mapping is tested in step 4. This section is a **concept** —
+nothing is built yet. All pins come from the third-party map (issue #2)
+and stay **unverified** until M-012; every image says so in its source
+and in its first RTT line (`CLAUDE.md` §2).
+
+### 7.1 Two kinds of image
+
+| | Bring-up image (steps 1–4) | OEPL image (step 5) |
+|---|---|---|
+| Layout | one bare-metal application at `0x00000000`, no bootloader | bootloader `0x00000` + application `0x06000` + NVM3 at the end of flash |
+| Size | small; `[ASSUMPTION]` well under 32 kB | application ≤ 208 kB on a 256 kB part (see 7.3) |
+| Build | `gcc-arm-none-eabi` + CMSIS device headers / emlib from `SiliconLabs/gecko_sdk` on GitHub — buildable in the Claude Code container | GSDK 4.4.1 + `slc` (maintainer or Docker), as OEPL |
+| Flashing | J-Link + Simplicity Commander, or `reflash.py -f <file>.hex`, **after** the unlock | the same once; afterwards OTA |
+| Output | SEGGER RTT text log (J-Link RTT Viewer), no UART needed | OEPL radio protocol |
+
+### 7.2 Bring-up image, step by step
+
+One source tree, one build per step (a compile-time `STEP` switch), so
+each image only contains what its step needs:
+
+| Step | What the image does | What it must not do | Check |
+|---|---|---|---|
+| 1 | RTT "hello", prints DEVINFO: part number, **flash size** (F-17), unique ID | touch any panel or flash pin (all stay at reset default = disabled) | RTT log |
+| 2 | panel supply on (PC06 low), vendor reset timing on RST (PC04), wait for BUSY high on PA07 with the ~1 ms pulse handled and a timeout | send any SPI byte | SLogic capture: same RST/BUSY shape as `…_boot-overview-panel_2MHz.sr` |
+| 3 | OTP read exactly as the vendor driver: chip ID must be `0x0D04`, bank marker `A5`, all 112 bytes; prints them | send anything other than `70`, `90`, `A2 00 15 00 00 E0`, `92` | bytes 0–68 equal our capture |
+| 4 | init from the OTP, `10` + test frame, `04`, `12 00`, turn-off DC/DC + 6 s, supply off | run without step 3 having passed | photo of the panel |
+
+Design points:
+
+- **SPI by bit-banging first** (PC00 SDA, PC01 SCK, PC02 CS, PC03 D/C).
+  It avoids the open USART-routing question (display on port C → only
+  USART0?, `oepl-pin-comparison.md` §5) and is fast enough: 96,000 bytes × 8 bit at ~1 µs per bit ≈ 1 s.
+  A USART version can follow once it works.
+- **RAM is 32 kB, the frame is 96,000 bytes.** The image is therefore
+  generated **line by line** (800 lines × 120 bytes) while it is sent —
+  as OEPL does. Step 4's test frame: four bands, one per 2-bit code
+  `00`, `01`, `10`, `11`, plus a small asymmetric marker in one corner.
+  One photo then shows the colour mapping **and** the orientation/mirroring.
+- **Temperature for `E6`:** first test with the vendor default 25 °C;
+  then the EFR32's internal sensor. `[ASSUMPTION]` emlib offers a reader
+  for it on Series 2 — **test:** check in `gecko_sdk`.
+- **Timeouts everywhere:** BUSY after reset (the original firmware gives
+  up after ≈ 10 s, `…_boot-overview_2MHz.sr`), BUSY during refresh
+  (≈ 22 s expected, abort at e.g. 60 s), and the supply goes off on any
+  error.
+
+### 7.3 OEPL image
+
+`[RESEARCH]` OEPL release v43 (`Tag_FW_EFR32xG22` commit `8a8d7a9`),
+from the address ranges in `full_binaries/v43/*_FULL_v43.s37`:
+
+| Region | Address | Size in v43 |
+|---|---|---|
+| Bootloader (Gecko SPIF bootloader, 3 pages reserved) | `0x00000`–`0x05FFF` | 17.6 kB used of 24 kB |
+| Application | from `0x06000` | **233.6 kB** (ends at `0x40650`) |
+| NVM3 (internal flash) | 3 pages | 24 kB (`NVM3_DEFAULT_NVM_SIZE`) |
+| OTA slot | external SPI flash | max. 236 kB upgrade file, LZMA compressed (v43 OTA file: 131 kB) |
+
+Consequences:
+
+- **If our part has 256 kB (F-17), the v43 application does not fit:**
+  256 − 24 (bootloader) − 24 (NVM3) = **208 kB** for the application,
+  v43 needs 233.6 kB. A board-specific build without the drivers and
+  fonts of other tags is needed. `[ASSUMPTION]` that saves ≥ 26 kB —
+  **test:** link map of such a build. Issue #2 reports exactly such a
+  separate 256 kB build.
+- `[RESEARCH]` The **bootloader carries the hardware type**: OEPL patches
+  one ID byte into each bootloader variant (`bootloader/generate_variants.py`),
+  and the application selects its pin table by that byte
+  (`oepl_efr32xg22_get_config()`). For our board: the existing
+  `Custom_SPIF_BTL` base has the flash pins reported in issue #2
+  (PB00/PA04/PA00/PA05, enable PA06) plus a development ID byte
+  (`0xF0…`), or a new ID.
+- Application changes: one `tagconfig` entry (display, flash, LEDs once
+  known, no NFC interface), a Pervasive BWRY Medium display driver
+  (reimplemented, `panel-protocol.md` §7), display parameters 480 × 800
+  four-colour, device `EFR32FG22C121F256GM40` (or F512, per F-17).
+- Licence: OEPL is CC BY-NC-SA 4.0 → the port is non-commercial and
+  share-alike.
+
+### 7.4 What the maintainer will do with the images (after F-15)
+
+1. `commander device info` (flash size) and dump the UserData page, e.g.
+   `python reflash.py --dump-ud-bin ud.bin` — keep it **outside** the
+   repo; the unlock keeps the UserData page (issue #2), our images do
+   not write it.
+2. Flash `bringup_step1.hex`, start J-Link RTT Viewer, send the log.
+3. Steps 2–4 the same way, each with its check from 7.2.
+4. Only then the OEPL image (bootloader + application in one `.s37`).

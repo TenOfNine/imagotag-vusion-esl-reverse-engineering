@@ -1425,6 +1425,45 @@ Pixel coding is still only from bb_epaper / issue #2.
 
 ---
 
+## 2026-10-21 — Session 5: Decision to proceed on the Pervasive assumption; flash image concept
+
+### Maintainer decision
+- We go ahead on the assumption that the panel is the Pervasive Displays
+  BWRY Medium type, although it is only `[ASSUMPTION]`. The colour mapping
+  is tested in bring-up step 4, at some later point.
+- Follow-up comment in issue #2 posted (question 1 answered by the vendor
+  driver; update order and turn-off DC/DC passed on).
+
+### Research for the image concept
+- `[RESEARCH]` OEPL release v43 (`Tag_FW_EFR32xG22` commit `8a8d7a9`),
+  address ranges of `full_binaries/v43/*_FULL_v43.s37` (read with a small
+  S-record parser): bootloader `0x00000`–`0x0468C` (17.6 kB of the 24 kB
+  reserved), application `0x06000`–`0x40650` (**233.6 kB**). NVM3 24 kB
+  (`NVM3_DEFAULT_NVM_SIZE`), OTA upgrade file max. 236 kB in external
+  flash (v43 OTA file 131 kB). OEPL builds for `EFR32BG22C224F512IM40`.
+- `[RESEARCH]` The bootloader variant carries the hardware-type ID byte
+  (`bootloader/generate_variants.py`); the application picks its pin
+  table from it. `Custom_SPIF_BTL` has the flash pins reported for our
+  board in issue #2.
+- `[RESEARCH]` OEPL's radio uses RAIL in IEEE 802.15.4 mode
+  (`firmware/oepl_radio.c`) with its own protocol on top, not Zigbee.
+
+### What follows
+- **If our EFR32 has 256 kB (F-17), the standard OEPL v43 application
+  does not fit**: 256 − 24 − 24 = 208 kB available, 233.6 kB needed.
+  A trimmed board-specific build is required.
+- RAM (32 kB) is smaller than one frame (96,000 bytes) → the image must
+  be generated and sent line by line.
+- Concept written: `docs/firmware-plan.md` §7 (bring-up images steps 1–4
+  as bare-metal builds with bit-banged SPI and RTT; OEPL image layout;
+  what the maintainer flashes after F-15).
+
+### What it does not prove
+Nothing about our chip: flash size, lock state and pins are still open
+(M-011, M-012).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
