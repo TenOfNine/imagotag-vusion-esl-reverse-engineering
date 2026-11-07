@@ -50,69 +50,57 @@
 <text x="40" y="603" class="body" xml:space="preserve">instead of duplicating</text>
 <rect x="337" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="349" y="148" class="col">2 · Tag 02 — non-destructive</text>
-<rect x="337" y="174" width="293" height="244" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="337" y="174" width="6" height="244" rx="3" fill="#1a56db"/>
-<text x="353" y="199" class="title">M-011 · SWD lock status</text>
+<rect x="337" y="174" width="293" height="148" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="174" width="6" height="148" rx="3" fill="#1a56db"/>
+<text x="353" y="199" class="title">M-011 · done (2026-11-07)</text>
 <text x="618" y="199" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="353" y="219" class="body" xml:space="preserve">• Pads 22/23 confirmed by continuity</text>
-<text x="353" y="235" class="body" xml:space="preserve">  (2026-11-07); note: no beep to battery</text>
-<text x="353" y="251" class="body" xml:space="preserve">  ±</text>
-<text x="353" y="267" class="body" xml:space="preserve">• Power-cycle before every attempt</text>
-<text x="353" y="283" class="body" xml:space="preserve">• J-Link: commander device info +</text>
-<text x="353" y="299" class="body" xml:space="preserve">  commander security status — nothing</text>
-<text x="353" y="315" class="body" xml:space="preserve">  else</text>
-<text x="353" y="331" class="body" xml:space="preserve">• Send the full text output</text>
-<text x="353" y="347" class="body" xml:space="preserve">• If not locked: back up the flash</text>
-<text x="353" y="363" class="body" xml:space="preserve">  (outside the repo)</text>
-<text x="353" y="385" class="foot" fill="#1a56db">answers: F-05 · basis for F-15 (F-17 only</text>
-<text x="353" y="401" class="foot" fill="#1a56db">if unlocked)</text>
-<rect x="337" y="434" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5"/>
-<rect x="337" y="434" width="6" height="100" rx="3" fill="#137333"/>
-<text x="353" y="459" class="title">Evaluate lock state + flash size</text>
-<text x="618" y="459" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="353" y="479" class="body" xml:space="preserve">After M-011: update docs/firmware-</text>
-<text x="353" y="495" class="body" xml:space="preserve">plan.md</text>
-<text x="353" y="517" class="foot" fill="#137333">answers: F-17 (256 or 512 kB)</text>
-<rect x="337" y="550" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" stroke-dasharray="6 4"/>
-<rect x="337" y="550" width="6" height="100" rx="3" fill="#137333"/>
-<text x="353" y="575" class="title">Init sequence from the binary</text>
-<text x="618" y="575" class="owner" fill="#137333" text-anchor="end">Claude</text>
-<text x="353" y="595" class="body" xml:space="preserve">Only if the chip is not locked and the</text>
-<text x="353" y="611" class="body" xml:space="preserve">flash was backed up</text>
-<text x="353" y="633" class="foot" fill="#137333">answers: F-04</text>
-<rect x="337" y="666" width="293" height="180" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="337" y="666" width="6" height="180" rx="3" fill="#1a56db"/>
-<text x="353" y="691" class="title">M-012 · Verify the pin map</text>
-<text x="618" y="691" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="353" y="711" class="body" xml:space="preserve">Unpowered, battery out, FPC unplugged</text>
-<text x="353" y="727" class="body" xml:space="preserve">• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1</text>
-<text x="353" y="743" class="body" xml:space="preserve">• XDt gate → QFN 7</text>
-<text x="353" y="759" class="body" xml:space="preserve">• 8K417 chip (leadless, right of the</text>
-<text x="353" y="775" class="body" xml:space="preserve">  EFR32) → QFN 26/25/20/21, GND, VCC</text>
-<text x="353" y="791" class="body" xml:space="preserve">• LEDs → QFN / supply</text>
-<text x="353" y="807" class="body" xml:space="preserve">• Macro photo of the 8K417 chip</text>
-<text x="353" y="829" class="foot" fill="#1a56db">answers: F-14, F-16</text>
+<text x="353" y="219" class="body" xml:space="preserve">Debug lock Enabled · device erase</text>
+<text x="353" y="235" class="body" xml:space="preserve">Enabled · secure boot Disabled. Flash</text>
+<text x="353" y="251" class="body" xml:space="preserve">not readable while locked</text>
+<text x="353" y="267" class="body" xml:space="preserve">• Still to note: pads 22/23 no beep to</text>
+<text x="353" y="283" class="body" xml:space="preserve">  battery ±, tag no.</text>
+<text x="353" y="305" class="foot" fill="#1a56db">answered: F-05 · F-15 is now due</text>
+<rect x="337" y="338" width="293" height="100" rx="8" fill="#e6f4ea" stroke="#137333" stroke-width="1.5" stroke-dasharray="6 4"/>
+<rect x="337" y="338" width="6" height="100" rx="3" fill="#137333"/>
+<text x="353" y="363" class="title">Flash size (F-17)</text>
+<text x="618" y="363" class="owner" fill="#137333" text-anchor="end">Claude</text>
+<text x="353" y="383" class="body" xml:space="preserve">Not readable while locked; comes from</text>
+<text x="353" y="399" class="body" xml:space="preserve">M-013 after the unlock</text>
+<text x="353" y="421" class="foot" fill="#137333">answers: F-17 (256 or 512 kB)</text>
+<rect x="337" y="454" width="293" height="180" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="337" y="454" width="6" height="180" rx="3" fill="#1a56db"/>
+<text x="353" y="479" class="title">M-012 · Verify the pin map</text>
+<text x="618" y="479" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="353" y="499" class="body" xml:space="preserve">Unpowered, battery out, FPC unplugged</text>
+<text x="353" y="515" class="body" xml:space="preserve">• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1</text>
+<text x="353" y="531" class="body" xml:space="preserve">• XDt gate → QFN 7</text>
+<text x="353" y="547" class="body" xml:space="preserve">• 8K417 chip (leadless, right of the</text>
+<text x="353" y="563" class="body" xml:space="preserve">  EFR32) → QFN 26/25/20/21, GND, VCC</text>
+<text x="353" y="579" class="body" xml:space="preserve">• LEDs → QFN / supply</text>
+<text x="353" y="595" class="body" xml:space="preserve">• Macro photo of the 8K417 chip</text>
+<text x="353" y="617" class="foot" fill="#1a56db">answers: F-14, F-16</text>
 <rect x="650" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="662" y="148" class="col">3 · Decisions</text>
-<rect x="650" y="174" width="293" height="164" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="174" width="6" height="164" rx="3" fill="#b45309"/>
-<text x="666" y="199" class="title">F-15 · Unlock tag 02?</text>
+<rect x="650" y="174" width="293" height="180" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="174" width="6" height="180" rx="3" fill="#b45309"/>
+<text x="666" y="199" class="title">F-15 · Unlock tag 02? — DUE</text>
 <text x="931" y="199" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="219" class="body" xml:space="preserve">Only if the chip is locked. Erases tag</text>
-<text x="666" y="235" class="body" xml:space="preserve">02's original firmware; tag 01 and the</text>
-<text x="666" y="251" class="body" xml:space="preserve">others keep theirs</text>
-<text x="666" y="267" class="body" xml:space="preserve">Must be written into CLAUDE.md before</text>
-<text x="666" y="283" class="body" xml:space="preserve">any unlock</text>
-<text x="666" y="299" class="body" xml:space="preserve">New basis: docs/open-questions.md F-15</text>
-<text x="666" y="321" class="foot" fill="#b45309">blocks: flashing (steps 1–5)</text>
-<rect x="650" y="354" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="354" width="6" height="116" rx="3" fill="#b45309"/>
-<text x="666" y="379" class="title">Bring-up path</text>
-<text x="931" y="379" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="399" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
-<text x="666" y="415" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
-<text x="666" y="431" class="body" xml:space="preserve">author for the early branch?</text>
-<text x="666" y="453" class="foot" fill="#b45309">blocks: step 5</text>
+<text x="666" y="219" class="body" xml:space="preserve">Chip is locked, erase-unlock allowed,</text>
+<text x="666" y="235" class="body" xml:space="preserve">secure boot off. The unlock erases tag</text>
+<text x="666" y="251" class="body" xml:space="preserve">02's original firmware; tag 01 and the</text>
+<text x="666" y="267" class="body" xml:space="preserve">others keep theirs</text>
+<text x="666" y="283" class="body" xml:space="preserve">Must be written into CLAUDE.md before</text>
+<text x="666" y="299" class="body" xml:space="preserve">any unlock</text>
+<text x="666" y="315" class="body" xml:space="preserve">New basis: docs/open-questions.md F-15</text>
+<text x="666" y="337" class="foot" fill="#b45309">blocks: flashing (steps 1–5)</text>
+<rect x="650" y="370" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="370" width="6" height="116" rx="3" fill="#b45309"/>
+<text x="666" y="395" class="title">Bring-up path</text>
+<text x="931" y="395" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="415" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
+<text x="666" y="431" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
+<text x="666" y="447" class="body" xml:space="preserve">author for the early branch?</text>
+<text x="666" y="469" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
 <rect x="963" y="174" width="293" height="132" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
@@ -166,8 +154,7 @@
 <text x="979" y="937" class="body" xml:space="preserve">(v43: 233.6 kB) — or reuse the third-</text>
 <text x="979" y="953" class="body" xml:space="preserve">party port</text>
 <text x="979" y="975" class="foot" fill="#137333">needs: bring-up path decision, F-17</text>
-<path d="M483.5,418 L483.5,431" class="arrow"/>
-<path d="M483.5,534 L483.5,547" class="arrow"/>
+<path d="M483.5,322 L483.5,335" class="arrow"/>
 <path d="M630,214 L638.5,214 L638.5,214 L647,214" class="arrow"/>
 <path d="M943,214 L951.5,214 L951.5,214 L960,214" class="arrow"/>
 <path d="M1109.5,306 L1109.5,319" class="arrow"/>

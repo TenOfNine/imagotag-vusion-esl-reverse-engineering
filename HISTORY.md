@@ -1625,6 +1625,53 @@ following traces) was not stated.
 
 ---
 
+## 2026-11-07 — Session 5: M-011 done — EFR32 is debug-locked, erase-unlock allowed, secure boot off
+
+### What was measured
+`[MEASUREMENT]` Maintainer, 2026-11-07, J-Link (DLL 8.94) + Simplicity
+Commander 1v25p2b2004, wiring to the confirmed pads "22"/"23", first
+attempt (no "first session only" problem this time):
+
+```
+commander security status --device EFR32FG22
+SE Firmware version   : 1.2.14
+Serial number         : 00000000000000000c2a6ffffee7942c
+Debug lock            : Enabled
+Device erase          : Enabled
+Secure debug unlock   : Enabled
+Secure boot           : Disabled
+Boot status           : 0x20 - OK
+Command key installed : True
+Sign key installed    : True
+```
+
+`commander device info --device EFR32FG22` → "not in the J-Link device
+database; falling back to generic 'Cortex-M4'", then "ERROR: Debug access
+is locked. Could not connect to device". Recorded in
+`hardware/measurements.md`.
+
+### What follows
+- **F-05 answered: locked.** The original firmware cannot be read out or
+  backed up on tag 02.
+- **Device erase enabled** → the standard unlock by erasing is allowed
+  (`[RESEARCH]` OEPL readme: `commander device unlock`, erases the
+  firmware; issue #2: UserData survives). **Secure boot disabled** →
+  unsigned own firmware can run afterwards.
+- Secure debug unlock enabled with a command key installed: the vendor's
+  certificate-based unlock path, not usable without their key; it does
+  not stop the erase-unlock while "Device erase" is enabled
+  (`[ASSUMPTION]`, consistent with issue #2's successful unlock of a unit
+  from the same product; **test:** the unlock itself).
+- Flash size (F-17) stays open until after an unlock.
+- Next: the F-15 decision by the maintainer. `CLAUDE.md` §5.2 forbids
+  suggesting an unlock until the init sequence is captured and saved;
+  whether the captured OTP values + the vendor procedure satisfy that is
+  the maintainer's call, to be written into `CLAUDE.md` first.
+- Later commands need the full part name (`EFR32FG22` alone is not in the
+  J-Link device database).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

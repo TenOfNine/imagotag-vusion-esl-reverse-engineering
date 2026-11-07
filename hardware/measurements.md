@@ -135,6 +135,32 @@ measurement itself not stated)
 | Pad "22" / "23" | battery minus | ⬜ |
 | Pad "22" / "23" | battery plus | ⬜ |
 
+### Lock status (J-Link read-out)
+
+**Date:** 2026-11-07, first attempt
+**Tool:** J-Link (J-Link DLL 8.94) + Simplicity Commander 1v25p2b2004
+**Tag no.:** ⬜ (presumably tag 02)
+**Wiring:** SWCLK → pad "22", SWDIO → pad "23", GND, VTref (as in M-011)
+
+`commander security status --device EFR32FG22`:
+
+| Field | Value |
+|---|---|
+| SE Firmware version | 1.2.14 |
+| Serial number | `00000000000000000c2a6ffffee7942c` |
+| Debug lock | **Enabled** |
+| Device erase | **Enabled** |
+| Secure debug unlock | Enabled |
+| Secure boot | **Disabled** |
+| Boot status | 0x20 - OK |
+| Command key installed | True |
+| Sign key installed | True |
+
+`commander device info --device EFR32FG22`: "Device part number
+'EFR32FG22' is not in the J-Link device database; falling back to generic
+'Cortex-M4'" → "ERROR: Debug access is locked. Could not connect to
+device" (expected while locked; flash size not readable).
+
 ---
 
 ## Other measurements

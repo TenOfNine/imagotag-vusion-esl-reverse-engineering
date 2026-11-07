@@ -51,21 +51,14 @@ COLUMNS = [
         ], None, False),
     ]),
     ("2 · Tag 02 — non-destructive", [
-        ("m011", "M", "M-011 · SWD lock status", [
-            "• Pads 22/23 confirmed by continuity (2026-11-07); "
-            "note: no beep to battery ±",
-            "• Power-cycle before every attempt",
-            "• J-Link: commander device info + commander security status "
-            "— nothing else",
-            "• Send the full text output",
-            "• If not locked: back up the flash (outside the repo)",
-        ], "answers: F-05 · basis for F-15 (F-17 only if unlocked)", False),
-        ("eval", "C", "Evaluate lock state + flash size", [
-            "After M-011: update docs/firmware-plan.md",
-        ], "answers: F-17 (256 or 512 kB)", False),
-        ("binary", "C", "Init sequence from the binary", [
-            "Only if the chip is not locked and the flash was backed up",
-        ], "answers: F-04", True),
+        ("m011", "M", "M-011 · done (2026-11-07)", [
+            "Debug lock Enabled · device erase Enabled · secure boot "
+            "Disabled. Flash not readable while locked",
+            "• Still to note: pads 22/23 no beep to battery ±, tag no.",
+        ], "answered: F-05 · F-15 is now due", False),
+        ("eval", "C", "Flash size (F-17)", [
+            "Not readable while locked; comes from M-013 after the unlock",
+        ], "answers: F-17 (256 or 512 kB)", True),
         ("m012", "M", "M-012 · Verify the pin map", [
             "Unpowered, battery out, FPC unplugged",
             "• FPC 9–14 → QFN 28, 5, 4, 3, 2, 1",
@@ -77,9 +70,10 @@ COLUMNS = [
         ], "answers: F-14, F-16", False),
     ]),
     ("3 · Decisions", [
-        ("f15", "D", "F-15 · Unlock tag 02?", [
-            "Only if the chip is locked. Erases tag 02's original "
-            "firmware; tag 01 and the others keep theirs",
+        ("f15", "D", "F-15 · Unlock tag 02? — DUE", [
+            "Chip is locked, erase-unlock allowed, secure boot off. "
+            "The unlock erases tag 02's original firmware; tag 01 and "
+            "the others keep theirs",
             "Must be written into CLAUDE.md before any unlock",
             "New basis: docs/open-questions.md F-15",
         ], "blocks: flashing (steps 1–5)", False),
@@ -123,7 +117,6 @@ COLUMNS = [
 
 ARROWS = [
     ("m011", "eval"),
-    ("eval", "binary"),
     ("m011", "f15"),
     ("f15", "m013"),
     ("m013", "tool"),

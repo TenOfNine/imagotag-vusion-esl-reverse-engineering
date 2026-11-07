@@ -105,7 +105,12 @@ data block right after the init is a LUT candidate.
 original firmware binary (if readable) or trying the OTP waveform first
 (many UC81xx panels carry it) can answer this.
 
-### 🟡 F-05 Is the EFR32 debug-locked?
+### ✅ F-05 Is the EFR32 debug-locked?
+
+**Answered 2026-11-07:** `[MEASUREMENT]` yes — debug lock Enabled, device
+erase Enabled, secure boot Disabled (M-011, `hardware/measurements.md`).
+The flash cannot be read out; the original firmware cannot be backed up.
+Continued in F-15.
 
 **Update 2026-10-21:** `[RESEARCH]` issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2, third party, another RFRTx026D, not verified on our unit): their chip was locked with
 "debug unlock allowed"; only the first SWD connection after power-up
@@ -257,6 +262,14 @@ connected to leg 3 of the SOT-23 `XDt`. `[ASSUMPTION]` `XDt` is a P-MOSFET
 load switch. → Measurement request **M-005** (only needed for path A).
 
 ### 🔴 F-15 Is the chip locked — and if so, may tag 02's firmware be erased?
+
+**Update 2026-11-07:** `[MEASUREMENT]` locked, **device erase enabled**
+(the standard unlock by erasing is allowed), **secure boot disabled**
+(unsigned own firmware can run after the erase). Secure debug unlock is
+also enabled and a command key is installed — that path needs the
+vendor's key and is not ours. `[RESEARCH]` OEPL readme: the unlock
+(`commander device unlock`) erases the original firmware; issue #2: the
+UserData page survives. **Only the maintainer's decision is missing.**
 
 **Update 2026-10-21 — new basis for the decision.** The reason for
 `CLAUDE.md` §5.2 was that an unlock would destroy the only source of the

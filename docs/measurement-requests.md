@@ -27,7 +27,7 @@ set the request here to `✅ done`.
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | ⚪ not needed (2026-10-21) — the fast-written bytes `A2 00 15 00 00 E0` match the Pervasive Displays app note exactly | — |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
-| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🟠 pads confirmed by continuity (`[MEASUREMENT]`, reported 2026-11-07, OWON HDS242); battery ± check and J-Link read-out pending | **SWD lock check (F-05/F-15)** |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | ✅ done 2026-11-07 — pads confirmed by continuity; **debug lock enabled, device erase enabled, secure boot disabled** (`hardware/measurements.md`). Still to note: battery ± check, tag number | — |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-011 + backup or F-15 | F-17, step 2 |
 
@@ -544,6 +544,19 @@ nor refutes the assignment.
 Still needed before the J-Link connects (unpowered): continuity from each
 pad to its QFN pin (right column, 2nd and 3rd pad from the bottom), and
 **no** continuity to battery minus / plus.
+
+### Result 2026-11-07
+
+`[MEASUREMENT]` Simplicity Commander 1v25p2 + J-Link, first attempt:
+debug lock **Enabled**, device erase **Enabled**, secure debug unlock
+Enabled, secure boot **Disabled**, SE firmware 1.2.14, command key and
+sign key installed. `device info` refused: "Debug access is locked".
+Full output in `hardware/measurements.md`. → Decision table above: row
+"locked, unlock allowed" → F-15.
+
+Note for later commands: `EFR32FG22` alone is not in the J-Link device
+database (fallback to a generic Cortex-M4) — use the full part name,
+e.g. `EFR32FG22C121F512GM40` or `…F256GM40`.
 
 ### Update 2026-11-07 — pads confirmed, tool choice
 
