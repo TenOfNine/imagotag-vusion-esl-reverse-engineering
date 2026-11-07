@@ -75,10 +75,10 @@ COLUMNS = [
             "(tag 02 only)",
         ], None, False),
         ("m014", "M", "M-014 · Unlock tag 02", [
-            "Attempts 1+2 failed: no SWD connection (DP write failed). "
-            "Next: check wires + battery → timing test (Enter ≤ 1 s after "
-            "battery in) → nRESET wire (M-015). Never other 'security' "
-            "commands",
+            "Attempts 1+2 and timing test failed: no SWD connection. "
+            "Next: wires + battery → voltage decay without battery → "
+            "discharge (100 Ω–1 kΩ), then retry → nRESET (M-015). "
+            "Never other 'security' commands",
         ], "unblocks: M-013 · answers: F-17", False),
         ("path", "D", "Bring-up path", [
             "Own bring-up firmware first, or wait for the third-party "

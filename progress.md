@@ -173,8 +173,10 @@ Order = suggested priority.
       `CLAUDE.md` §5.2 as a tag-02-only exception (M, 2026-11-07)
 - [ ] **M-014 — unlock tag 02** — attempts 1 and 2 failed (2026-11-07);
       attempt 2 failed already at the connection (`security status`).
-      Next: wiring/battery check → timing test (Enter within ~1 s after
-      battery in) → nRESET (M-015); never other `security` commands
+      Timing test failed too. Next: wiring/battery check → measure how
+      long the board stays powered without battery → real power cycle
+      (discharge via ~100 Ω–1 kΩ) → nRESET (M-015); never other
+      `security` commands
 - [ ] M-015 — find RESETn (QFN pin 11?) at a reachable point — only if
       the M-014 checks do not help
 - [ ] GitHub repo "About" text is outdated ("three-colour", "Docs in

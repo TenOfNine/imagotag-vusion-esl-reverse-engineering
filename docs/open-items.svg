@@ -87,24 +87,25 @@
 <text x="931" y="199" class="owner" fill="#b45309" text-anchor="end">Decision</text>
 <text x="666" y="219" class="body" xml:space="preserve">Tag 02 may be unlocked — exception in</text>
 <text x="666" y="235" class="body" xml:space="preserve">CLAUDE.md §5.2 (tag 02 only)</text>
-<rect x="650" y="268" width="293" height="148" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="650" y="268" width="6" height="148" rx="3" fill="#1a56db"/>
+<rect x="650" y="268" width="293" height="164" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="650" y="268" width="6" height="164" rx="3" fill="#1a56db"/>
 <text x="666" y="293" class="title">M-014 · Unlock tag 02</text>
 <text x="931" y="293" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="666" y="313" class="body" xml:space="preserve">Attempts 1+2 failed: no SWD connection</text>
-<text x="666" y="329" class="body" xml:space="preserve">(DP write failed). Next: check wires +</text>
-<text x="666" y="345" class="body" xml:space="preserve">battery → timing test (Enter ≤ 1 s after</text>
-<text x="666" y="361" class="body" xml:space="preserve">battery in) → nRESET wire (M-015). Never</text>
-<text x="666" y="377" class="body" xml:space="preserve">other 'security' commands</text>
-<text x="666" y="399" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
-<rect x="650" y="432" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="432" width="6" height="116" rx="3" fill="#b45309"/>
-<text x="666" y="457" class="title">Bring-up path</text>
-<text x="931" y="457" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="477" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
-<text x="666" y="493" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
-<text x="666" y="509" class="body" xml:space="preserve">author for the early branch?</text>
-<text x="666" y="531" class="foot" fill="#b45309">blocks: step 5</text>
+<text x="666" y="313" class="body" xml:space="preserve">Attempts 1+2 and timing test failed: no</text>
+<text x="666" y="329" class="body" xml:space="preserve">SWD connection. Next: wires + battery →</text>
+<text x="666" y="345" class="body" xml:space="preserve">voltage decay without battery →</text>
+<text x="666" y="361" class="body" xml:space="preserve">discharge (100 Ω–1 kΩ), then retry →</text>
+<text x="666" y="377" class="body" xml:space="preserve">nRESET (M-015). Never other 'security'</text>
+<text x="666" y="393" class="body" xml:space="preserve">commands</text>
+<text x="666" y="415" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
+<rect x="650" y="448" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="448" width="6" height="116" rx="3" fill="#b45309"/>
+<text x="666" y="473" class="title">Bring-up path</text>
+<text x="931" y="473" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="493" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
+<text x="666" y="509" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
+<text x="666" y="525" class="body" xml:space="preserve">author for the early branch?</text>
+<text x="666" y="547" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
 <rect x="963" y="174" width="293" height="116" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>

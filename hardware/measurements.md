@@ -187,6 +187,14 @@ that worked in M-011, now at 1000 kHz): `WARNING: DP write failed`,
 `ERROR: DCI communication failed`. Power-cycle before the command: as
 instructed (not confirmed explicitly). Stopped here, as instructed.
 
+### Timing test — fails (2026-11-07)
+
+Command typed in advance, battery in, Enter within ~1 s (as instructed):
+`commander security status --device EFR32FG22 --speed 1000` → identical
+output: `DP write failed`, retries after reset → `ERROR: DCI communication
+failed`. Results of check 1 (continuity J-Link → pads, battery voltage):
+not reported yet.
+
 ---
 
 ## Other measurements

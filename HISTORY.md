@@ -1764,6 +1764,31 @@ M-011.
 
 ---
 
+## 2026-11-07 — Session 5: M-014 timing test failed as well
+
+### What was tried
+`commander security status --device EFR32FG22 --speed 1000`, typed in
+advance, Enter within ~1 s after the battery went in (M-014 check 2).
+
+### Result
+- `[MEASUREMENT]` Identical failure: `DP write failed`, retries after
+  reset → `ERROR: DCI communication failed`.
+- Check 1 (continuity J-Link → pads, battery voltage) not reported yet.
+
+### Interpretation
+- C2 (firmware sleeps after a few seconds) alone does not explain this:
+  right after power-up the chip should be awake — **if** it was really
+  power-cycled.
+- `[ASSUMPTION]` C4: the board's capacitors keep the EFR32 supplied after
+  the battery is removed (a sleeping EFR32 draws only µA), so removing
+  the battery for 10 s gives no power-on reset; the chip stays asleep.
+  **Test:** measure the voltage on the battery contacts after removal
+  (0 s, 10 s, 1 min, 5 min); then discharge the board through
+  ~100 Ω–1 kΩ and retry.
+- C1 (wiring/supply) is still open until check 1 is reported.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

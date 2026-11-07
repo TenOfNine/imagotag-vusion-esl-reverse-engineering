@@ -897,6 +897,36 @@ Candidate causes, all `[ASSUMPTION]`:
    RESETn (M-015), then repeat — with reset wired, Commander's
    "retry after reset" can catch the chip before the firmware sleeps.
 
+### Update 2026-11-07 (evening) — timing test failed; does the chip really power-cycle?
+
+`[MEASUREMENT]` The timing test (Enter within ~1 s after the battery goes
+in) gives the identical failure. Check 1 (wiring, battery voltage) has
+not been reported yet.
+
+New candidate cause `[ASSUMPTION]` **C4 — no real power-on reset:** the
+board's capacitors may keep the EFR32 supplied for a long time after the
+battery is removed — a sleeping EFR32 draws only µA. Then "battery out
+10 s" does not reset the chip at all, and it stays asleep. M-011 may have
+worked because the tag had been without battery for a long time before.
+
+**Do in this order:**
+
+1. Check 1 from above (continuity J-Link connector → pads, battery
+   voltage) — still needed.
+2. Measure the decay, OWON in DC volts on the **battery contacts of the
+   board**, battery out: note the voltage right away, after 10 s, after
+   1 min and after 5 min.
+3. **Real power cycle:** battery out, then hold a **resistor of about
+   100 Ω–1 kΩ** across the board's battery contacts for ~10 s (or until
+   the OWON shows < 0.3 V). FPC unplugged. Then battery in and Enter
+   within ~1 s on the typed-in `security status` command.
+4. If that works: same procedure for `device unlock`, battery untouched
+   until `DONE`.
+5. Still no connection → M-015 (nRESET).
+
+Also tell: before the successful M-011, had the tag been without battery
+for a long time (e.g. overnight)?
+
 ## M-015 — Reachable point for RESETn (only if M-014 checks fail)
 
 **Tool:** OWON HDS242 continuity, needle probe
