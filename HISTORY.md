@@ -1672,6 +1672,30 @@ is locked. Could not connect to device". Recorded in
 
 ---
 
+## 2026-11-07 — Session 5: F-15 decided — tag 02 may be unlocked
+
+### Maintainer decision
+"Ja, Tag 02 darf entsperrt werden, trag die Ausnahme ein" (2026-11-07).
+Tag 02 may be unlocked, which erases its original firmware.
+
+### What was changed
+- `CLAUDE.md` §5.2 got an exception that covers **tag 02 only**, with the
+  reason: panel-specific init values captured (OTP read in
+  `captures/2026-09-23_tag02_boot-init-4ch_20MHz.sr`), procedure published
+  by Pervasive Displays, tag 01 and the other tags keep their original
+  firmware. Rule 2 stays in force for every other tag; rule 1 (tag 01
+  untouched) is unchanged.
+- New measurement request **M-014** (unlock tag 02: `commander device
+  unlock` with the full part name, then `security status` + `device info`;
+  never other `security` commands, some of which are permanent).
+- F-15 ✅, M-013 now waits for M-014.
+
+### What it does not prove
+That the unlock works on our unit (issue #2's unit unlocked fine), and
+that the panel works with our own firmware.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

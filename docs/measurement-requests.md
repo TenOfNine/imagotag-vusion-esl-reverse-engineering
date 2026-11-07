@@ -29,7 +29,8 @@ set the request here to `✅ done`.
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
 | M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | ✅ done 2026-11-07 — pads confirmed by continuity; **debug lock enabled, device erase enabled, secure boot disabled** (`hardware/measurements.md`). Still to note: battery ± check, tag number | — |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
-| M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-011 + backup or F-15 | F-17, step 2 |
+| M-014 | Unlock tag 02 (erases its original firmware) | 🔴 open — allowed since 2026-11-07 (F-15, `CLAUDE.md` §5.2 exception) | M-013 |
+| M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-014 | F-17, step 2 |
 
 ---
 
@@ -754,6 +755,8 @@ third-party unit reports a Winbond W25Q80 (JEDEC `EF 40 14`); our marking
   **Locked** → only after F-15 is decided, written into `CLAUDE.md`, and
   the unlock is done.
 - Never tag 01.
+- **Update 2026-11-07:** M-011 showed "locked"; F-15 is decided (tag 02
+  may be unlocked) → do **M-014** first.
 
 ### Task
 
@@ -777,6 +780,56 @@ gate of the panel supply switch and the panel lines float.
 | `PART` does not decode to `EFR32FG22 C121` | stop; compare with the chip marking before anything else |
 | No RTT output, but the debugger connects | send what RTT Viewer shows (control block found or not); Claude Code checks the image |
 | Flashing fails | send the Commander output; do not retry with other erase options |
+
+---
+
+## M-014 — Unlock tag 02
+
+**Priority:** high — next step
+**Tool:** J-Link, Simplicity Commander (same setup as M-011)
+**State:** **tag 02 only**, fresh or good battery in, FPC unplugged
+
+⚠ **Irreversible:** erases the original firmware of tag 02. Allowed only
+for tag 02 by the `CLAUDE.md` §5.2 exception of 2026-11-07. Never on
+tag 01 or any other tag.
+
+### Background
+
+`[MEASUREMENT]` M-011: debug lock Enabled, device erase Enabled, secure
+boot Disabled. `[RESEARCH]` OEPL readme: `commander device unlock`
+unlocks by erasing the device; issue #2: the UserData page survives.
+
+### Task
+
+1. Battery out and in (power-cycle), then at once:
+   ```
+   commander device unlock --device EFR32FG22C121F512GM40
+   ```
+   (Use the full part name. The erase does not depend on the flash size,
+   so `F512` is fine even if the chip turns out to have 256 kB.)
+2. Battery out and in, then:
+   ```
+   commander security status --device EFR32FG22C121F512GM40
+   commander device info --device EFR32FG22C121F512GM40
+   ```
+3. Optional, read-only: dump the UserData page for later comparison and
+   keep it **outside** the repo, e.g.
+   `commander readmem --region @userdata --outfile tag02_userdata.bin --device EFR32FG22C121F512GM40`
+   — skip it if Commander does not accept the option; it is not needed.
+4. Send the full text output of steps 1 and 2.
+
+**Never** run `commander security lock`, `security disabledeviceerase`,
+`security writekey`, `security writeconfig` or anything else under
+`security` except `status` — some of these are permanent and could make
+the chip un-flashable for good.
+
+### Decision rule
+
+| Result | Consequence |
+|---|---|
+| `security status` shows Debug lock: Disabled, `device info` shows part and flash size | unlock done; F-17 answered from `device info`; go on with M-013 |
+| Unlock command reports an error, lock still Enabled | send the output; do **not** try other `security` commands |
+| `device info` still refused after a successful unlock message | power-cycle once more and repeat step 2; then send the output |
 
 ---
 

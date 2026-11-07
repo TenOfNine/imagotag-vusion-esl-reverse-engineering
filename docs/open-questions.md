@@ -261,7 +261,11 @@ Update 2026-09-23: `[MEASUREMENT]` 15/16 are one net, 9.98 kΩ to GND,
 connected to leg 3 of the SOT-23 `XDt`. `[ASSUMPTION]` `XDt` is a P-MOSFET
 load switch. → Measurement request **M-005** (only needed for path A).
 
-### 🔴 F-15 Is the chip locked — and if so, may tag 02's firmware be erased?
+### ✅ F-15 Is the chip locked — and if so, may tag 02's firmware be erased?
+
+**Decided 2026-11-07 (maintainer): yes, tag 02 may be unlocked.** Written
+into `CLAUDE.md` §5.2 as an exception that covers tag 02 only. Next:
+M-014 (unlock), then M-013.
 
 **Update 2026-11-07:** `[MEASUREMENT]` locked, **device erase enabled**
 (the standard unlock by erasing is allowed), **secure boot disabled**
@@ -348,3 +352,5 @@ path stays traceable.
 | F-07 | QFN40 | 2026-09-23 | `[PHOTO]` M-003 |
 | F-08 | No — no refresh on battery insertion or NFC read | 2026-09-23 | `[CAPTURE]` |
 | F-09 | Path B (custom firmware on the original EFR32) | 2026-09-23 | maintainer decision |
+| F-05 | Locked: debug lock Enabled, device erase Enabled, secure boot Disabled | 2026-11-07 | `[MEASUREMENT]` M-011 |
+| F-15 | Tag 02 may be unlocked (`CLAUDE.md` §5.2 exception) | 2026-11-07 | maintainer decision |

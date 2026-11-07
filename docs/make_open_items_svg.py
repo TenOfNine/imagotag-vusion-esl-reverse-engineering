@@ -55,7 +55,7 @@ COLUMNS = [
             "Debug lock Enabled · device erase Enabled · secure boot "
             "Disabled. Flash not readable while locked",
             "• Still to note: pads 22/23 no beep to battery ±, tag no.",
-        ], "answered: F-05 · F-15 is now due", False),
+        ], "answered: F-05 · F-15 decided", False),
         ("eval", "C", "Flash size (F-17)", [
             "Not readable while locked; comes from M-013 after the unlock",
         ], "answers: F-17 (256 or 512 kB)", True),
@@ -70,13 +70,14 @@ COLUMNS = [
         ], "answers: F-14, F-16", False),
     ]),
     ("3 · Decisions", [
-        ("f15", "D", "F-15 · Unlock tag 02? — DUE", [
-            "Chip is locked, erase-unlock allowed, secure boot off. "
-            "The unlock erases tag 02's original firmware; tag 01 and "
-            "the others keep theirs",
-            "Must be written into CLAUDE.md before any unlock",
-            "New basis: docs/open-questions.md F-15",
-        ], "blocks: flashing (steps 1–5)", False),
+        ("f15", "D", "F-15 · decided (2026-11-07)", [
+            "Tag 02 may be unlocked — exception in CLAUDE.md §5.2 "
+            "(tag 02 only)",
+        ], None, False),
+        ("m014", "M", "M-014 · Unlock tag 02", [
+            "commander device unlock (full part name), then security "
+            "status + device info. Never other 'security' commands",
+        ], "unblocks: M-013 · answers: F-17", False),
         ("path", "D", "Bring-up path", [
             "Own bring-up firmware first, or wait for the third-party "
             "OEPL port? Ask its author for the early branch?",
@@ -85,8 +86,7 @@ COLUMNS = [
     ("4 · Firmware on tag 02", [
         ("m013", "M", "M-013 · Run step-1 image", [
             "Image written (firmware/bringup, emulator-tested). Flash after "
-            "M-011 + backup or F-15; tag 02, FPC unplugged; send the RTT "
-            "report",
+            "M-014; tag 02, FPC unplugged; send the RTT report",
         ], "answers: F-17", False),
         ("tool", "C", "Toolchain", [
             "Bare-metal gcc-arm-none-eabi ready for steps 2–4; GSDK 4.4.1 "
@@ -100,7 +100,7 @@ COLUMNS = [
             "Panel power, reset, BUSY (1 ms quirk) · OTP read: chip ID "
             "0D04, bank check, all 112 bytes",
             "Maintainer flashes, sends RTT log + SLogic capture",
-        ], "needs: F-15 · confirms the pin map", False),
+        ], "needs: M-013, M-012 · confirms the pin map", False),
         ("s4", "C", "Step 4 · first image", [
             "Vendor sequence (panel-protocol.md §7): init from the OTP, "
             "10 + 96,000 bytes, 04, 12 00, turn-off DC/DC + 6 s wait. "
@@ -118,7 +118,8 @@ COLUMNS = [
 ARROWS = [
     ("m011", "eval"),
     ("m011", "f15"),
-    ("f15", "m013"),
+    ("f15", "m014"),
+    ("m014", "m013"),
     ("m013", "tool"),
     ("tool", "board"),
     ("board", "s13"),
@@ -129,8 +130,8 @@ ARROWS = [
 PARKED = ("Parked / low priority: M-005 XDt in detail (path A only) · "
           "F-10 disable the EFR32 (path A) · F-11 FPC test points TP1–TP3 · "
           "F-12 refresh-rate limits (≈ 22 s refresh + 6 s turn-off per update)")
-SAFETY = ("Safety (CLAUDE.md §5): tag 01 is never touched · no unlock "
-          "before F-15 is decided and written into CLAUDE.md · FPC checks "
+SAFETY = ("Safety (CLAUDE.md §5): tag 01 is never touched · unlock allowed "
+          "for tag 02 only (§5.2 exception, 2026-11-07) · FPC checks "
           "unpowered first (≈ ±20 V on the FPC, logic analyser max. 3.6 V)")
 
 # ---------------------------------------------------------------- layout

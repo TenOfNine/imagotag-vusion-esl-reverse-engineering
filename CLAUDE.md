@@ -120,6 +120,13 @@ These rules protect hardware that cannot be re-ordered.
 2. **Sniff before unlock.** Unlocking the EFR32 irrevocably erases the
    original firmware. As long as the panel's init sequence has not been
    captured and saved, no unlock is suggested.
+   - **Exception (maintainer decision, 2026-11-07): tag 02 only** may be
+     unlocked, which erases its original firmware. Reason: the
+     panel-specific init values are captured (OTP read in
+     `captures/2026-09-23_tag02_boot-init-4ch_20MHz.sr`), the procedure is
+     published by Pervasive Displays (`docs/panel-protocol.md` §7), and
+     tag 01 and the other tags keep their original firmware. Every other
+     tag stays under rule 2.
 3. **High voltage on the FPC.** Several pins of the 24-pin connector carry
    about +22 V / −20 V in operation. The logic analyser tolerates max.
    3.6 V. For every measurement request that involves the FPC, Claude Code

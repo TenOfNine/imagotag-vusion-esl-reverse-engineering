@@ -32,6 +32,11 @@ standard (this is path B from `open-questions.md` F-09).
 
 ## 1. The blocker first: lock state vs. safety rule 5.2
 
+> **Update 2026-11-07:** resolved. M-011: locked, device erase enabled,
+> secure boot disabled → row "Locked, unauthenticated unlock allowed".
+> The maintainer decided F-15: tag 02 may be unlocked; the exception is in
+> `CLAUDE.md` §5.2. Unlock: M-014.
+
 Everything depends on the result of the SWD lock check (F-05, M-011).
 
 | Lock state | What flashing means | Consequence |
