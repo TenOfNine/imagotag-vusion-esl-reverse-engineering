@@ -29,7 +29,8 @@ set the request here to `✅ done`.
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
 | M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | ✅ done 2026-11-07 — pads confirmed by continuity; **debug lock enabled, device erase enabled, secure boot disabled** (`hardware/measurements.md`). Still to note: battery ± check, tag number | — |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
-| M-014 | Unlock tag 02 (erases its original firmware) | 🔴 attempt 1 failed (`DP write failed`, no DCI access) — attempt 2 with one command per power-cycle, generic device name, lower SWD speed | M-013 |
+| M-014 | Unlock tag 02 (erases its original firmware) | 🔴 attempt 1 failed; attempt 2 failed already at the `security status` that worked in M-011 → connection problem first (checks + timing + nRESET, see update) | M-013 |
+| M-015 | Find a reachable point for RESETn (and VDD) | 🟡 only if the M-014 checks do not help | M-014 |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-014 | F-17, step 2 |
 
 ---
@@ -859,6 +860,62 @@ If Commander does not accept `--speed`, leave it out. If step 1 works
 and step 2 fails the same way: fallback OEPL `reflash.py -u` (pyOCD, works
 with a J-Link) — it unlocked a unit of this board in issue #2; ask Claude
 Code for the exact setup first.
+
+### Update 2026-11-07 (later) — attempt 2 fails at the connection itself
+
+`[MEASUREMENT]` Attempt 2, step 1: the same `security status` that worked
+in M-011 now gets `DP write failed` / `DCI communication failed`. So the
+problem is the **SWD connection**, not the unlock command.
+`[ASSUMPTION]` attempt 1 erased nothing.
+
+Candidate causes, all `[ASSUMPTION]`:
+
+- **C1 — wiring / supply:** a wire loosened after M-011, a bad GND, or a
+  weak battery.
+- **C2 — the original firmware puts the chip to deep sleep** a short
+  time after power-up; in deep sleep the debug port does not answer.
+  This would also explain issue #2's "only the first session after
+  power-up" and why it vanished after their unlock (no firmware left).
+  Commander's built-in fix — "retrying after reset and 10 ms delay" —
+  needs the **reset line**, which we have not wired: its "Resetting
+  device…" has no effect on our board. Issue #2 had nRESET wired.
+- C3 — SWD clock: already lowered to 1000 kHz, so unlikely.
+
+**Checks, in this order (stop at the first one that helps):**
+
+1. Unpowered: continuity from the J-Link connector pins to the board —
+   SWCLK (pin 9) → pad "22", SWDIO (pin 7) → pad "23", GND (pin 4) →
+   battery minus, VTref (pin 1) → battery plus. And battery voltage with
+   the OWON.
+2. **Timing test:** type `commander security status --device EFR32FG22
+   --speed 1000` without pressing Enter; battery out ≥ 10 s; battery in
+   and press Enter **within about 1 s**. Twice, each with a full
+   power-cycle. Works → C2 is likely; then do the unlock the same way
+   (`commander device unlock --device EFR32FG22 --speed 1000`, Enter
+   within 1 s of the battery going in, battery untouched until `DONE`).
+3. If neither helps: wire the J-Link **nRESET (pin 15)** to the chip's
+   RESETn (M-015), then repeat — with reset wired, Commander's
+   "retry after reset" can catch the chip before the firmware sleeps.
+
+## M-015 — Reachable point for RESETn (only if M-014 checks fail)
+
+**Tool:** OWON HDS242 continuity, needle probe
+**State:** unpowered, battery out, FPC unplugged
+
+`[RESEARCH]` (search snippets only, see `oepl-pin-comparison.md` §2):
+RESETn = QFN pin 11 = with the usual numbering the **first pad of the
+bottom row, next to the 38.4 MHz crystal**. `[ASSUMPTION]` numbering and
+table.
+
+Task: probe from that pad to the exposed pads near the SWD pads on the
+bottom side (e.g. the ones between and right of "22"/"23" in
+`photos/pcb-bottom-swd-pads-22-23.webp`) and to nearby vias; note which
+one beeps. Also check it does **not** beep to battery plus/minus.
+Optional: find a VDD point (beeps to battery plus) next to them.
+
+Then: J-Link pin 15 (nRESET) → that point.
+
+---
 
 **Never** run `commander security lock`, `security disabledeviceerase`,
 `security writekey`, `security writeconfig` or anything else under

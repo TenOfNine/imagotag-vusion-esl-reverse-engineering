@@ -1733,6 +1733,37 @@ command is not stated.
 
 ---
 
+## 2026-11-07 — Session 5: M-014 attempt 2 — no SWD connection at all
+
+### What was tried
+Maintainer, attempt 2, step 1: `commander security status --device
+EFR32FG22 --speed 1000` after a power-cycle — the command that worked in
+M-011.
+
+### Result
+- `[MEASUREMENT]` `WARNING: DP write failed`, Commander's retries
+  "after reset and 10 ms delay" and "after reset and no delay" → `ERROR:
+  DCI communication failed`. Stopped as instructed.
+
+### Interpretation
+- The failure is in the SWD connection, not in the unlock command:
+  the same read-only status worked before.
+- `[ASSUMPTION]` C1 wiring/supply changed after M-011 (loose wire, GND,
+  battery). **Test:** continuity J-Link connector → pads, battery voltage.
+- `[ASSUMPTION]` C2: the original firmware sends the chip to deep sleep
+  shortly after power-up, and a sleeping chip does not answer on SWD.
+  M-011 then succeeded because the command happened to run while the
+  chip was awake. This also fits issue #2's "only the first session after
+  power-up" (gone after their unlock, i.e. without firmware) and the fact
+  that their nRESET was wired. Commander's "retry after reset" cannot
+  work for us: nRESET is not connected. **Test:** timing test (Enter
+  within ~1 s after the battery goes in); if that is not enough, wire
+  nRESET (new M-015).
+- Corrects the reasoning of the attempt-1 entry: H1 ("first session
+  only") is probably the same effect as C2, seen from the outside.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

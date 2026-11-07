@@ -179,6 +179,14 @@ device" (expected while locked; flash size not readable).
 
 Lock state after attempt 1: **unknown** (no successful read-out).
 
+### Attempt 2, step 1 — connection fails (2026-11-07)
+
+`commander security status --device EFR32FG22 --speed 1000` (the command
+that worked in M-011, now at 1000 kHz): `WARNING: DP write failed`,
+"DCI communication failed, retrying after reset and 10 ms delay…" ×2 →
+`ERROR: DCI communication failed`. Power-cycle before the command: as
+instructed (not confirmed explicitly). Stopped here, as instructed.
+
 ---
 
 ## Other measurements
