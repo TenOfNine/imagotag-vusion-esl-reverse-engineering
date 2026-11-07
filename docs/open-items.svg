@@ -33,21 +33,16 @@
 <text x="305" y="331" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
 <text x="40" y="351" class="body" xml:space="preserve">Outdated: "three-colour", "Docs in</text>
 <text x="40" y="367" class="body" xml:space="preserve">German" (repo settings)</text>
-<rect x="24" y="400" width="293" height="110" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
-<rect x="24" y="400" width="6" height="110" rx="3" fill="#5f6368"/>
-<text x="40" y="425" class="title">Issue #2 — still open there</text>
+<rect x="24" y="400" width="293" height="148" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
+<rect x="24" y="400" width="6" height="148" rx="3" fill="#5f6368"/>
+<text x="40" y="425" class="title">Third-party OEPL image</text>
 <text x="305" y="425" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
-<text x="40" y="445" class="body" xml:space="preserve">Early OEPL branch / 256 kB .s37</text>
-<text x="40" y="461" class="body" xml:space="preserve">requested (2026-11-07); also asked where</text>
-<text x="40" y="477" class="body" xml:space="preserve">their nRESET is wired. Open: their flash</text>
-<text x="40" y="493" class="body" xml:space="preserve">marking</text>
-<rect x="24" y="526" width="293" height="94" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
-<rect x="24" y="526" width="6" height="94" rx="3" fill="#5f6368"/>
-<text x="40" y="551" class="title">Third-party OEPL port</text>
-<text x="305" y="551" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
-<text x="40" y="571" class="body" xml:space="preserve">Announced in issue #2, not in OEPL v43.</text>
-<text x="40" y="587" class="body" xml:space="preserve">Claude Code watches and reuses it</text>
-<text x="40" y="603" class="body" xml:space="preserve">instead of duplicating</text>
+<text x="40" y="445" class="body" xml:space="preserve">Gist: 256 kB .s37 (app 190.5 kB) + patch</text>
+<text x="40" y="461" class="body" xml:space="preserve">+ README; tested by them with a real AP.</text>
+<text x="40" y="477" class="body" xml:space="preserve">Reviewed: firmware-plan.md §7.3a.</text>
+<text x="40" y="493" class="body" xml:space="preserve">Deviation: 6 ms instead of the vendor's</text>
+<text x="40" y="509" class="body" xml:space="preserve">6 s after FF E3</text>
+<text x="40" y="531" class="foot" fill="#5f6368">no OTA from an AP (not finished)</text>
 <rect x="337" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="349" y="148" class="col">2 · Tag 02 — non-destructive</text>
 <rect x="337" y="174" width="293" height="148" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
@@ -87,25 +82,33 @@
 <text x="931" y="199" class="owner" fill="#b45309" text-anchor="end">Decision</text>
 <text x="666" y="219" class="body" xml:space="preserve">Tag 02 may be unlocked — exception in</text>
 <text x="666" y="235" class="body" xml:space="preserve">CLAUDE.md §5.2 (tag 02 only)</text>
-<rect x="650" y="268" width="293" height="164" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="650" y="268" width="6" height="164" rx="3" fill="#1a56db"/>
-<text x="666" y="293" class="title">M-014 · Unlock tag 02</text>
+<rect x="650" y="268" width="293" height="132" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="650" y="268" width="6" height="132" rx="3" fill="#1a56db"/>
+<text x="666" y="293" class="title">M-015 · Wire nRESET</text>
 <text x="931" y="293" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="666" y="313" class="body" xml:space="preserve">Attempts 1+2 and timing test failed: no</text>
-<text x="666" y="329" class="body" xml:space="preserve">SWD connection. Next: wires + battery →</text>
-<text x="666" y="345" class="body" xml:space="preserve">voltage decay without battery →</text>
-<text x="666" y="361" class="body" xml:space="preserve">discharge (100 Ω–1 kΩ), then retry →</text>
-<text x="666" y="377" class="body" xml:space="preserve">nRESET (M-015). Never other 'security'</text>
-<text x="666" y="393" class="body" xml:space="preserve">commands</text>
-<text x="666" y="415" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
-<rect x="650" y="448" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="448" width="6" height="116" rx="3" fill="#b45309"/>
-<text x="666" y="473" class="title">Bring-up path</text>
-<text x="931" y="473" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="493" class="body" xml:space="preserve">Own bring-up firmware first, or the</text>
-<text x="666" y="509" class="body" xml:space="preserve">third-party OEPL port (early branch</text>
-<text x="666" y="525" class="body" xml:space="preserve">requested)?</text>
-<text x="666" y="547" class="foot" fill="#b45309">blocks: step 5</text>
+<text x="666" y="313" class="body" xml:space="preserve">RESETn = QFN pin 11; third party's point</text>
+<text x="666" y="329" class="body" xml:space="preserve">is left of the SWD pads (approx. area</text>
+<text x="666" y="345" class="body" xml:space="preserve">marked). Confirm by continuity,</text>
+<text x="666" y="361" class="body" xml:space="preserve">unpowered → J-Link pin 15</text>
+<text x="666" y="383" class="foot" fill="#1a56db">unblocks: M-014</text>
+<rect x="650" y="416" width="293" height="148" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="650" y="416" width="6" height="148" rx="3" fill="#1a56db"/>
+<text x="666" y="441" class="title">M-014 · Unlock tag 02</text>
+<text x="931" y="441" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
+<text x="666" y="461" class="body" xml:space="preserve">Attempts 1+2 failed (no SWD connection).</text>
+<text x="666" y="477" class="body" xml:space="preserve">Next: nRESET wired + board discharged</text>
+<text x="666" y="493" class="body" xml:space="preserve">(~100 Ω across battery contacts) before</text>
+<text x="666" y="509" class="body" xml:space="preserve">each command. Never other 'security'</text>
+<text x="666" y="525" class="body" xml:space="preserve">commands</text>
+<text x="666" y="547" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
+<rect x="650" y="580" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="580" width="6" height="116" rx="3" fill="#b45309"/>
+<text x="666" y="605" class="title">After the unlock</text>
+<text x="931" y="605" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="625" class="body" xml:space="preserve">Third-party OEPL image as a shortcut</text>
+<text x="666" y="641" class="body" xml:space="preserve">(after step 1 + M-012 display lines), or</text>
+<text x="666" y="657" class="body" xml:space="preserve">own steps 2–4?</text>
+<text x="666" y="679" class="foot" fill="#b45309">blocks: steps 2–5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
 <rect x="963" y="174" width="293" height="116" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
@@ -161,7 +164,8 @@
 <path d="M483.5,322 L483.5,335" class="arrow"/>
 <path d="M630,214 L638.5,214 L638.5,213.0 L647,213.0" class="arrow"/>
 <path d="M796.5,252 L796.5,265" class="arrow"/>
-<path d="M943,308 L951.5,308 L951.5,214 L960,214" class="arrow"/>
+<path d="M796.5,400 L796.5,413" class="arrow"/>
+<path d="M943,456 L951.5,456 L951.5,214 L960,214" class="arrow"/>
 <path d="M1109.5,290 L1109.5,303" class="arrow"/>
 <path d="M1109.5,384 L1109.5,397" class="arrow"/>
 <path d="M1109.5,500 L1109.5,513" class="arrow"/>

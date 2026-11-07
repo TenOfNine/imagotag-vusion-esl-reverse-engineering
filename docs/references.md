@@ -100,6 +100,13 @@ documents refer to here.
 - **OEPL `reflash.py`** — pyOCD-based status/unlock/flash for EFR32xG2x,
   in Tag_FW_EFR32xG22 commit `8a8d7a9` (release v43, 2026-10-11)
 
+- **Third-party OEPL port for RFRTx026D (work in progress)** — unlisted
+  gist by `dovjonu`, linked from issue #2 on 2026-11-07:
+  https://gist.github.com/dovjonu/eb298c18211ce074800050219e103dd5
+  (commits `51f78c0`, `de7f7f9`): prebuilt `IMAGOTAG_RFRTX026D_FULL.s37`,
+  patch against `Tag_FW_EFR32xG22` `8a8d7a9`, README, SWD wiring photo.
+  CC BY-NC-SA 4.0. Reviewed in `docs/firmware-plan.md` §7.3a.
+
 ## Prior work on Imagotag hardware
 
 ⚠ **All for other, older hardware.** Methodologically useful, not directly

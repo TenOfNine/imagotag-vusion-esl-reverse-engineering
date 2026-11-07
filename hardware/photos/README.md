@@ -23,6 +23,7 @@
 | `derived/pcb-top-8k417-location.jpg` | where the `8K417` chip sits (red box, right of the EFR32), with a zoomed inset; from `pcb-top-ruler.jpg` (2026-10-21) |
 | `pcb-bottom-swd-pads-22-23.webp` | maintainer photo (2026-10-21): bottom side near the LEDs, the two exposed pads marked "22" and "23" = reachable points for QFN pins 22 (SWCLK) / 23 (SWDIO), M-011 (738 × 625, annotated by the maintainer) |
 | `derived/pcb-swd-pads-projected-top.jpg` | those two pads located in `pcb-bottom-ruler.jpg` ((1517,696) and (1651,700)) and projected onto `pcb-top-ruler.jpg` with registration set 2 — a plausibility view, not a connection proof |
+| `derived/pcb-bottom-nreset-area-approx.jpg` | maintainer's SWD photo with the **approximate** area of the nRESET point used by the third party (issue #2), transferred by eye from their wiring photo — to be confirmed by continuity to QFN pin 11 (M-015) |
 | `pcb-bottom-capture-wiring.webp` | tag 02 back side, 2026-09-23: seven wires soldered to vias for the capture (M-004/M-007). Colour → channel mapping not yet stated |
 
 ---

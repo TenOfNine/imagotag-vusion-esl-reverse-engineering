@@ -244,7 +244,9 @@ that `04` is **not** part of the init.
    **wait 6000 ms**. No `07 A5` deep sleep.
 
 `[ASSUMPTION]` The panel supply (`XDt`, PC06) may only be switched off
-after step 7 including the 6 s wait. **Test:** none without a scope on the
+after step 7 including the 6 s wait. (Note 2026-11-07: the third-party
+OEPL driver in issue #2 waits only 6 ms here and has refreshed three
+panels fine — `firmware-plan.md` §7.3a.) **Test:** none without a scope on the
 HV rails; follow the vendor order.
 
 ### 7.4 Bus details

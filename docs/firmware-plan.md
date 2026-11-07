@@ -252,6 +252,37 @@ Consequences:
 - Licence: OEPL is CC BY-NC-SA 4.0 → the port is non-commercial and
   share-alike.
 
+### 7.3a Third-party OEPL image (2026-11-07)
+
+`[RESEARCH]` https://gist.github.com/dovjonu/eb298c18211ce074800050219e103dd5 (commits `51f78c0`, `de7f7f9`), linked from issue #2:
+`IMAGOTAG_RFRTX026D_FULL.s37` (sha256
+`0e7fd1023d7e651cfd46b2d473016c8e7b6a7832871b7c1532aac8dc55d3b127`,
+checked), the source patch against `Tag_FW_EFR32xG22` `8a8d7a9`, and a
+README. Licence CC BY-NC-SA 4.0. Our check of the files:
+
+- Address ranges (own S-record parser): bootloader `0x0000`–`0x46AC`,
+  application `0x6000`–`0x35A08` (**190.5 kB**) → fits a 256 kB part with
+  room for NVM3; no UserData page in the image.
+- Pin table in the patch = the issue #2 map (display on USART0, PC00–PC04,
+  BUSY PA07, supply PC06; flash PA00/PB00/PA04/PA05 + PA06; LEDs
+  PB01–PB04 + charge pump PC07 at 5 kHz; NFC NTAG I2C PD02/PD03, supply
+  PC05; RTT debug output).
+- Display driver `oepl_display_driver_pdbwry.c`, written from the app
+  note: OTP read with chip-ID/bank check, init from OTP, `10`, `04`,
+  `12 00`, time limits on all BUSY waits. **One deviation from the vendor
+  driver:** after the final `FF E3` it waits **6 ms**, the vendor waits
+  **6000 ms** (`COG_stopDCDC`) before the supply may go off.
+  `[ASSUMPTION]` a unit slip; effect unknown (the vendor wait presumably
+  lets the HV rails settle). Their 3 panels refreshed fine with it.
+- Do **not** use OTA from an AP (their README: OTA not finished).
+- Without an AP the tag should draw OEPL's "No AP found" screen — that
+  alone would be a full panel test on our unit (`[ASSUMPTION]`).
+
+Recommended order (proposal): unlock → our step-1 image (identifies the
+chip, touches no pins) → M-012 at least for the display lines and PC06
+(their image drives the panel with the third-party pin map) → then the
+third-party image as the shortcut for steps 2–5, or our own steps 2–4.
+
 ### 7.4 What the maintainer will do with the images (after F-15)
 
 1. `commander device info` (flash size) and dump the UserData page, e.g.

@@ -40,15 +40,11 @@ COLUMNS = [
             "Outdated: \"three-colour\", \"Docs in German\" "
             "(repo settings)",
         ], None, False),
-        ("i2", "T", "Issue #2 — still open there", [
-            "Early OEPL branch / 256 kB .s37 requested (2026-11-07); also "
-            "asked where their nRESET is wired. Open: their flash "
-            "marking",
-        ], None, False),
-        ("oepl3", "T", "Third-party OEPL port", [
-            "Announced in issue #2, not in OEPL v43. Claude Code watches "
-            "and reuses it instead of duplicating",
-        ], None, False),
+        ("oepl3", "T", "Third-party OEPL image", [
+            "Gist: 256 kB .s37 (app 190.5 kB) + patch + README; tested by "
+            "them with a real AP. Reviewed: firmware-plan.md §7.3a. "
+            "Deviation: 6 ms instead of the vendor's 6 s after FF E3",
+        ], "no OTA from an AP (not finished)", False),
     ]),
     ("2 · Tag 02 — non-destructive", [
         ("m011", "M", "M-011 · done (2026-11-07)", [
@@ -74,16 +70,20 @@ COLUMNS = [
             "Tag 02 may be unlocked — exception in CLAUDE.md §5.2 "
             "(tag 02 only)",
         ], None, False),
+        ("m015", "M", "M-015 · Wire nRESET", [
+            "RESETn = QFN pin 11; third party's point is left of the SWD "
+            "pads (approx. area marked). Confirm by continuity, unpowered "
+            "→ J-Link pin 15",
+        ], "unblocks: M-014", False),
         ("m014", "M", "M-014 · Unlock tag 02", [
-            "Attempts 1+2 and timing test failed: no SWD connection. "
-            "Next: wires + battery → voltage decay without battery → "
-            "discharge (100 Ω–1 kΩ), then retry → nRESET (M-015). "
-            "Never other 'security' commands",
+            "Attempts 1+2 failed (no SWD connection). Next: nRESET wired + "
+            "board discharged (~100 Ω across battery contacts) before each "
+            "command. Never other 'security' commands",
         ], "unblocks: M-013 · answers: F-17", False),
-        ("path", "D", "Bring-up path", [
-            "Own bring-up firmware first, or the third-party OEPL port "
-            "(early branch requested)?",
-        ], "blocks: step 5", False),
+        ("path", "D", "After the unlock", [
+            "Third-party OEPL image as a shortcut (after step 1 + M-012 "
+            "display lines), or own steps 2–4?",
+        ], "blocks: steps 2–5", False),
     ]),
     ("4 · Firmware on tag 02", [
         ("m013", "M", "M-013 · Run step-1 image", [
@@ -120,7 +120,8 @@ COLUMNS = [
 ARROWS = [
     ("m011", "eval"),
     ("m011", "f15"),
-    ("f15", "m014"),
+    ("f15", "m015"),
+    ("m015", "m014"),
     ("m014", "m013"),
     ("m013", "tool"),
     ("tool", "board"),

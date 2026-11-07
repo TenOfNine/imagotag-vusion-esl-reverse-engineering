@@ -299,6 +299,11 @@ any unlock.
 
 ### 🟡 F-16 Does the board have external SPI flash?
 
+**Update 2026-11-07:** `[RESEARCH]` issue #2: flash parts vary between
+units — Winbond W25Q80 (their tag 1, JEDEC ID) and GigaDevice marked
+`GD 2436 J4EE` (their third board). Their firmware logs the detected flash
+size over RTT at boot. Ours (`8K417 / 0E47AH`) still unidentified.
+
 **Update 2026-10-21 (later):** `[RESEARCH]` third-party comment in issue #2:
 they identified theirs only by JEDEC ID (`0x9F` → `EF 40 14`), not by the
 marking; read-only, needs GPIO control (flash supply PA06 low, CS PA05,

@@ -1869,6 +1869,60 @@ No new technical insight; waiting for the reply.
 
 ---
 
+## 2026-11-07 — Session 5: Issue #2 reply — third-party OEPL image, nRESET location, LED/NFC pins
+
+### What was received
+`[RESEARCH]` Reply by `dovjonu` (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6712082345), their units, not ours:
+- **Early OEPL port** as an unlisted gist (https://gist.github.com/dovjonu/eb298c18211ce074800050219e103dd5, commits `51f78c0`,
+  `de7f7f9`): prebuilt `IMAGOTAG_RFRTX026D_FULL.s37`, source patch against
+  `Tag_FW_EFR32xG22` `8a8d7a9`, README, SWD wiring photo. Tested by them
+  with a real AP (ESP32-S3 + C6): association, image upload/draw, LED
+  command, NFC URL; a second tag unlocked and works the same way. OTA from
+  the AP must not be used yet.
+- **LEDs:** PB01 G, PB02 R, PB03 B, PB04 W (active high via transistors),
+  only lit while **PC07** toggles a charge pump (bright at 1–10 kHz, dark
+  from 20 kHz).
+- **NFC:** NXP NTAG I2C at 0x55 on PD02 (SDA) / PD03 (SCL), supply PC05.
+- **Lock configuration** before their unlock: SE FW 1.2.14 (same as ours),
+  debug lock applied, unlock allowed, authenticated unlock allowed;
+  unsigned OEPL firmware ran after the erase-unlock on both tags.
+- **nRESET:** on the back side, left of the SWD pads, on a trace where they
+  scraped the solder mask; continuity to **pin 11 (RESETn)**. SWCLK/SWDIO
+  on the two small pads below the LEDs (= ours).
+- They never tried with the battery or without nRESET; power came from the
+  probe, replug = real power cycle. Second tag: first status read failed
+  (`No ACK`), after a replug the unlock as first session worked. After the
+  unlock, the core appeared only after a pin reset.
+- Flash parts vary: W25Q80 (tag 1), GigaDevice marked `GD 2436 J4EE`
+  (third board).
+- The author considers his project done (tags in use as calendar / to-do
+  list). The maintainer thanked him in the issue.
+
+### Our review of the gist (Claude Code, 2026-11-07)
+- sha256 of the `.s37` matches their README
+  (`0e7fd1023d7e651cfd46b2d473016c8e7b6a7832871b7c1532aac8dc55d3b127`).
+- Address ranges: bootloader `0x0000`–`0x46AC`, application
+  `0x6000`–`0x35A08` (190.5 kB) → fits a 256 kB part.
+- Patch pin table = the issue #2 map; display on **USART0** (port C) —
+  fits our earlier `[ASSUMPTION]` that port C needs USART0.
+- `[RESEARCH]` Deviation from Pervasive's driver: after the final `FF E3`
+  their `display_sleep()` waits **6 ms**; the vendor's `COG_stopDCDC()`
+  waits **6000 ms** before the supply may go off. Effect unknown.
+
+### What follows
+- M-015 (nRESET) is now the recommended next hardware step; approximate
+  area transferred to our photo:
+  `hardware/photos/derived/pcb-bottom-nreset-area-approx.jpg`.
+- M-014 next attempt: nRESET wired + board discharged before each command.
+- M-012 rows for LEDs/NFC now have concrete expected pins.
+- After the unlock, the third-party image is a possible shortcut for steps
+  2–5 (proposal in `firmware-plan.md` §7.3a); decision with the maintainer.
+
+### What it does not prove
+Nothing on our unit; the binary was not built or run by us.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

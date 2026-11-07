@@ -12,6 +12,14 @@ board definitions in OpenEPaperLink match our `RFRTx026D` layout?
 > BUSY is not on port C (section 5 point 3: port A can wake the chip).
 > Still to verify on our unit: M-012 checklist.
 
+> **Update 2026-11-07:** `[RESEARCH]` third-party OEPL port (issue #2,
+> https://gist.github.com/dovjonu/eb298c18211ce074800050219e103dd5): board type `IMAGOTAG_RFRTX026D` (0x08) with the full map —
+> display USART0 PC00–PC04, BUSY PA07, supply PC06; flash PA00/PB00/PA04/
+> PA05, enable PA06; **LEDs PB01 G, PB02 R, PB03 B, PB04 W (active high)
+> plus a charge pump on PC07**; **NFC NTAG I2C at 0x55 on PD02 SDA /
+> PD03 SCL, supply PC05**. Unexplained: PA03, PA08, PD00, PD01. Still
+> unverified on our unit (M-012).
+
 **Short answer: no.** None of the OEPL display pin maps fits the photo
 evidence (the display bundle ends on the chip's left pad column). A board
 definition of our own is needed. Everything below is `[RESEARCH]`,

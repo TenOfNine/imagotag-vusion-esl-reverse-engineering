@@ -30,7 +30,7 @@ set the request here to `✅ done`.
 | M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | ✅ done 2026-11-07 — pads confirmed by continuity; **debug lock enabled, device erase enabled, secure boot disabled** (`hardware/measurements.md`). Still to note: battery ± check, tag number | — |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
 | M-014 | Unlock tag 02 (erases its original firmware) | 🔴 attempt 1 failed; attempt 2 failed already at the `security status` that worked in M-011 → connection problem first (checks + timing + nRESET, see update) | M-013 |
-| M-015 | Find a reachable point for RESETn (and VDD) | 🟡 only if the M-014 checks do not help | M-014 |
+| M-015 | Find a reachable point for RESETn (and VDD) | 🟠 recommended now — third party located theirs (issue #2, 2026-11-07); area marked in `derived/pcb-bottom-nreset-area-approx.jpg` | M-014 |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-014 | F-17, step 2 |
 
 ---
@@ -724,6 +724,7 @@ column = pins 21–30 counted **bottom → top**; bottom row = pins 11–20
 | 12 | SO-8 pin 4 (GND) | — | battery minus | |
 | 13 | SO-8 pin 8 (VCC) | switched by PA06 (low = on) | not battery plus directly; note where it goes | |
 | 14 | each LED pad (clear + yellow) | unknown (candidates PC05, PC07, PD02, PD03) | pins 6, 8, 38, 37 | |
+| 14a | **Update 2026-11-07** (third party, issue #2): LEDs are switched by transistors from PB01 green, PB02 red, PB03 blue, PB04 white and only light while **PC07** drives a charge pump; NFC = NTAG I2C on PD02 (SDA) / PD03 (SCL), supply PC05 | — | PB01–PB04 = pins 19–16 (bottom row, 9th–6th from left), PC07 = pin 8, PC05 = pin 6, PD02/PD03 = pins 38/37 | optional, low priority |
 
 `[ASSUMPTION]` SO-8 pin numbering and the "usual 25-series" roles: pin 1
 is next to the dot/bevel, counter-clockwise from the top. **Test:** rows
@@ -927,7 +928,7 @@ worked because the tag had been without battery for a long time before.
 Also tell: before the successful M-011, had the tag been without battery
 for a long time (e.g. overnight)?
 
-## M-015 — Reachable point for RESETn (only if M-014 checks fail)
+## M-015 — Reachable point for RESETn
 
 **Tool:** OWON HDS242 continuity, needle probe
 **State:** unpowered, battery out, FPC unplugged
@@ -945,7 +946,51 @@ Optional: find a VDD point (beeps to battery plus) next to them.
 
 Then: J-Link pin 15 (nRESET) → that point.
 
+### Update 2026-11-07 — where the third party connected it
+
+`[RESEARCH]` Issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6712082345): on the back side, a spot **left of the SWD
+pads** where they scraped the solder mask off a trace; it has continuity to
+**QFN pin 11 (RESETn)**. Their photo: `rfrtx026d_swd_wiring.jpg` in
+https://gist.github.com/dovjonu/eb298c18211ce074800050219e103dd5 (not copied into this repo).
+`[PHOTO]` Transferred by eye to our photo (same pad spacing in both):
+`hardware/photos/derived/pcb-bottom-nreset-area-approx.jpg` — the lower
+end of the left via column, about 1 mm left/above pad "22". **Approximate
+only.**
+
+Task, unpowered (battery out, FPC unplugged):
+1. One probe on QFN pin 11 (bottom row, 1st pad from the left, next to the
+   38.4 MHz crystal — `[ASSUMPTION]` numbering, cf. M-011 where the pads
+   counted as 22/23 were confirmed).
+2. Search with the other probe in the marked area: vias first; if none
+   beeps, the trace there (scrape a little solder mask only where a trace
+   is found to beep, as the third party did).
+3. The point must **not** beep to battery plus or minus.
+4. Solder a thin wire there → J-Link **pin 15 (nRESET)**.
+
 ---
+
+### Update 2026-11-07 (night) — what worked for the third party
+
+`[RESEARCH]` Issue #2 (https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6712082345): they never used the battery or a setup
+without nRESET — the tag was always powered from the probe's 3.3 V with the
+battery out, and every probe replug was a real power cycle (a few seconds
+off, nothing discharged). On their second tag the first status read also
+failed with `No ACK`; after a replug, the unlock as the **very first**
+session worked. After the unlock the core only appeared after a **pin
+reset**. Their guess (untested): factory firmware in EM4 + board
+capacitors keeping the chip alive longer than 10 s.
+
+Our next attempt therefore combines both measures:
+1. M-015: nRESET wired (J-Link pin 15).
+2. Battery out, discharge (≈ 100 Ω across the battery contacts for a
+   second or more, FPC unplugged), battery in.
+3. `commander security status --device EFR32FG22 --speed 1000` — with
+   nRESET connected, Commander's "retrying after reset" can now act.
+4. If it shows the lock as before: discharge again, then
+   `commander device unlock --device EFR32FG22 --speed 1000` as the
+   first command; battery untouched until `DONE`.
+5. Discharge, then `security status` (expect Debug lock: Disabled) and
+   `device info --device EFR32FG22C121F512GM40`.
 
 **Never** run `commander security lock`, `security disabledeviceerase`,
 `security writekey`, `security writeconfig` or anything else under
