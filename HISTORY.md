@@ -1603,6 +1603,28 @@ following traces) was not stated.
 
 ---
 
+## 2026-11-07 — Session 5: SWD pads 22/23 confirmed by continuity (M-011)
+
+### What was measured
+- `[MEASUREMENT]` Maintainer, reported 2026-11-07, OWON HDS242
+  continuity, after following the traces: pad "22" ↔ QFN pin 22 (SWCLK)
+  and pad "23" ↔ QFN pin 23 (SWDIO) beep. Pads as in
+  `hardware/photos/pcb-bottom-swd-pads-22-23.webp`. Entered in
+  `hardware/measurements.md`.
+- Not stated: the measurement date, the tag number (presumably tag 02),
+  and the check that neither pad beeps to battery minus/plus.
+
+### What follows
+- Resolves the open point of the previous entry: the projected position of
+  "23" next to the `8K417` chip was only a registration effect or a trace
+  route; the continuity measurement decides.
+- `[ASSUMPTION]` the QFN numbering (pin 1 at the dot, counter-clockwise)
+  is the one used for "pin 22/23"; the measurement confirms the pads
+  reach the pads the maintainer counted as 22/23.
+- Next: J-Link read-out with Simplicity Commander (M-011 update).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

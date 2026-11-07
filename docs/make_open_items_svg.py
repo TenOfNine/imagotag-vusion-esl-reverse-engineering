@@ -18,7 +18,7 @@ import os
 import textwrap
 from xml.sax.saxutils import escape
 
-SNAPSHOT = "2026-10-21"
+SNAPSHOT = "2026-11-07"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "open-items.svg")
 
 # owner -> (legend label, fill, stroke, short tag on the card)
@@ -52,8 +52,8 @@ COLUMNS = [
     ]),
     ("2 · Tag 02 — non-destructive", [
         ("m011", "M", "M-011 · SWD lock status", [
-            "• Pads 22/23 located (photo) — confirm by continuity, "
-            "unpowered; no beep to battery ±",
+            "• Pads 22/23 confirmed by continuity (2026-11-07); "
+            "note: no beep to battery ±",
             "• Power-cycle before every attempt",
             "• J-Link: commander device info + commander security status "
             "— nothing else",

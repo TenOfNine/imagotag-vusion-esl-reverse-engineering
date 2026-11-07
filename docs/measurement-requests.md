@@ -27,7 +27,7 @@ set the request here to `✅ done`.
 | M-008 | D4–D7 flat only at 20 MSa/s? Analyser channel-mode test | ✅ done 2026-09-23 — yes; 4 channels on D0–D3 work | — |
 | M-009 | Re-capture boot at 40 MSa/s, 4 channels (write clock ~6 MHz) | ⚪ not needed (2026-10-21) — the fast-written bytes `A2 00 15 00 00 E0` match the Pervasive Displays app note exactly | — |
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
-| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🟠 pads located (maintainer photo 2026-10-21, `pcb-bottom-swd-pads-22-23.webp`); how they were confirmed is not stated yet; J-Link read-out pending | **SWD lock check (F-05/F-15)** |
+| M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | 🟠 pads confirmed by continuity (`[MEASUREMENT]`, reported 2026-11-07, OWON HDS242); battery ± check and J-Link read-out pending | **SWD lock check (F-05/F-15)** |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-011 + backup or F-15 | F-17, step 2 |
 
@@ -544,6 +544,20 @@ nor refutes the assignment.
 Still needed before the J-Link connects (unpowered): continuity from each
 pad to its QFN pin (right column, 2nd and 3rd pad from the bottom), and
 **no** continuity to battery minus / plus.
+
+### Update 2026-11-07 — pads confirmed, tool choice
+
+`[MEASUREMENT]` (maintainer, reported 2026-11-07, OWON HDS242 continuity,
+traces followed first): pad "22" ↔ QFN pin 22 and pad "23" ↔ QFN pin 23
+beep. Entered in `hardware/measurements.md`. Still to note: no beep to
+battery minus/plus, tag number.
+
+**Tool for the read-out:** Simplicity Commander (command line) with the
+J-Link — first choice, because it talks to the Secure Engine and prints
+the debug-lock state directly. Install the current SEGGER J-Link software
+as well (driver; RTT Viewer later for M-013). Fallback: OEPL `reflash.py -s`
+(pyOCD, also works with a J-Link). In the Commander **GUI** do not click
+"Unlock debug access", "Erase chip" or "Flash".
 
 ### Update 2026-10-21 — exact commands and what to send back
 

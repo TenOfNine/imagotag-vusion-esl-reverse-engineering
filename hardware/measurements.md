@@ -119,6 +119,24 @@ measurement)
 
 ---
 
+## M-011 — SWD access points (QFN pins 22/23)
+
+**Reported:** 2026-11-07 (dictated by the maintainer in chat; date of the
+measurement itself not stated)
+**Tool:** OWON HDS242, continuity
+**Tag no.:** ⬜ (presumably tag 02 — to be confirmed)
+**State:** ⬜ (unpowered expected)
+**Photo:** `photos/pcb-bottom-swd-pads-22-23.webp`
+
+| Point (bottom side, below the LEDs) | Continuity to | Result |
+|---|---|---|
+| Pad "22" | QFN pin 22 (SWCLK, PA01) | ✅ beeps (traces followed, then continuity) |
+| Pad "23" | QFN pin 23 (SWDIO, PA02) | ✅ beeps (traces followed, then continuity) |
+| Pad "22" / "23" | battery minus | ⬜ |
+| Pad "22" / "23" | battery plus | ⬜ |
+
+---
+
 ## Other measurements
 
 > Free field for anything that was not part of a request.
