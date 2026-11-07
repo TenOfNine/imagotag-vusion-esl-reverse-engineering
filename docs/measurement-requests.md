@@ -29,7 +29,7 @@ set the request here to `✅ done`.
 | M-010 | Trigger a refresh (NFC) while capturing | ✅ done 2026-09-23 — negative: NFC read causes no SPI activity | — |
 | M-011 | Find reachable points for SWCLK (pin 22) / SWDIO (pin 23) + lock status | ✅ done 2026-11-07 — pads confirmed by continuity; **debug lock enabled, device erase enabled, secure boot disabled** (`hardware/measurements.md`). Still to note: battery ± check, tag number | — |
 | M-012 | EFR32 pin map: display lines, supply switch, LEDs, SO-8 | 🔴 open — since 2026-10-21 a **verification** of a third-party pin map (checklist in the M-012 update) | **custom firmware board definition** |
-| M-014 | Unlock tag 02 (erases its original firmware) | 🔴 open — allowed since 2026-11-07 (F-15, `CLAUDE.md` §5.2 exception) | M-013 |
+| M-014 | Unlock tag 02 (erases its original firmware) | 🔴 attempt 1 failed (`DP write failed`, no DCI access) — attempt 2 with one command per power-cycle, generic device name, lower SWD speed | M-013 |
 | M-013 | Run bring-up image step 1 (chip identification over RTT) | ⏸ waits for M-014 | F-17, step 2 |
 
 ---
@@ -817,6 +817,48 @@ unlocks by erasing the device; issue #2: the UserData page survives.
    `commander readmem --region @userdata --outfile tag02_userdata.bin --device EFR32FG22C121F512GM40`
    — skip it if Commander does not accept the option; it is not needed.
 4. Send the full text output of steps 1 and 2.
+
+### Update 2026-11-07 — attempt 1 failed, procedure for attempt 2
+
+`[MEASUREMENT]` attempt 1 (details in `hardware/measurements.md`): both
+unlock commands ended with `DP write failed` / "Could not access Debug
+challenge interface"; afterwards even `security status` failed (`DCI
+communication failed`), and `device info` failed in the J-Link
+`InitTarget()` script. The lock state after attempt 1 is unknown;
+`[ASSUMPTION]` nothing was erased, because the unlock command never
+reached the debug challenge interface.
+
+Two hypotheses, both `[ASSUMPTION]`:
+
+- **H1 — "first session only":** a locked chip answers only the first SWD
+  session after power-up (third-party report in issue #2). Attempt 1 ran
+  several commands without a power-cycle in between (not stated).
+- **H2 — device name:** M-011 succeeded with `--device EFR32FG22`, where
+  J-Link fell back to a generic Cortex-M4. With the full name J-Link runs
+  its EFR32-specific connect script (`InitTarget()`), which may not cope
+  with the locked chip and spoil the session.
+- (Possible as well: SWD clock too high for the thin wires — default
+  speed was used.)
+
+**Attempt 2 — exactly one command per power-cycle**, battery out for
+≥ 10 s each time, and the command started right after the battery is
+back in:
+
+1. Power-cycle → `commander security status --device EFR32FG22 --speed 1000`
+   — the command that worked in M-011. Must show the same values as then.
+   If it fails as well: stop and send the output (wiring/connection
+   problem, not the unlock).
+2. Power-cycle → `commander device unlock --device EFR32FG22 --speed 1000`
+   — **do not touch the battery until `DONE` appears.**
+3. Power-cycle → `commander security status --device EFR32FG22 --speed 1000`
+   → expected "Debug lock: Disabled".
+4. Power-cycle → `commander device info --device EFR32FG22C121F512GM40 --speed 1000`
+   (after the unlock the full name should work).
+
+If Commander does not accept `--speed`, leave it out. If step 1 works
+and step 2 fails the same way: fallback OEPL `reflash.py -u` (pyOCD, works
+with a J-Link) — it unlocked a unit of this board in issue #2; ask Claude
+Code for the exact setup first.
 
 **Never** run `commander security lock`, `security disabledeviceerase`,
 `security writekey`, `security writeconfig` or anything else under

@@ -74,9 +74,10 @@ COLUMNS = [
             "Tag 02 may be unlocked — exception in CLAUDE.md §5.2 "
             "(tag 02 only)",
         ], None, False),
-        ("m014", "M", "M-014 · Unlock tag 02", [
-            "commander device unlock (full part name), then security "
-            "status + device info. Never other 'security' commands",
+        ("m014", "M", "M-014 · Unlock tag 02 (attempt 2)", [
+            "Attempt 1 failed (DP write failed). Now: one command per "
+            "power-cycle, --device EFR32FG22, --speed 1000; status → "
+            "unlock → status → info. Never other 'security' commands",
         ], "unblocks: M-013 · answers: F-17", False),
         ("path", "D", "Bring-up path", [
             "Own bring-up firmware first, or wait for the third-party "

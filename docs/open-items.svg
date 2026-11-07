@@ -87,22 +87,24 @@
 <text x="931" y="199" class="owner" fill="#b45309" text-anchor="end">Decision</text>
 <text x="666" y="219" class="body" xml:space="preserve">Tag 02 may be unlocked — exception in</text>
 <text x="666" y="235" class="body" xml:space="preserve">CLAUDE.md §5.2 (tag 02 only)</text>
-<rect x="650" y="268" width="293" height="116" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
-<rect x="650" y="268" width="6" height="116" rx="3" fill="#1a56db"/>
-<text x="666" y="293" class="title">M-014 · Unlock tag 02</text>
+<rect x="650" y="268" width="293" height="148" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>
+<rect x="650" y="268" width="6" height="148" rx="3" fill="#1a56db"/>
+<text x="666" y="293" class="title">M-014 · Unlock tag 02 (attempt 2)</text>
 <text x="931" y="293" class="owner" fill="#1a56db" text-anchor="end">Maintainer</text>
-<text x="666" y="313" class="body" xml:space="preserve">commander device unlock (full part</text>
-<text x="666" y="329" class="body" xml:space="preserve">name), then security status + device</text>
-<text x="666" y="345" class="body" xml:space="preserve">info. Never other 'security' commands</text>
-<text x="666" y="367" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
-<rect x="650" y="400" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
-<rect x="650" y="400" width="6" height="116" rx="3" fill="#b45309"/>
-<text x="666" y="425" class="title">Bring-up path</text>
-<text x="931" y="425" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="445" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
-<text x="666" y="461" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
-<text x="666" y="477" class="body" xml:space="preserve">author for the early branch?</text>
-<text x="666" y="499" class="foot" fill="#b45309">blocks: step 5</text>
+<text x="666" y="313" class="body" xml:space="preserve">Attempt 1 failed (DP write failed). Now:</text>
+<text x="666" y="329" class="body" xml:space="preserve">one command per power-cycle, --device</text>
+<text x="666" y="345" class="body" xml:space="preserve">EFR32FG22, --speed 1000; status → unlock</text>
+<text x="666" y="361" class="body" xml:space="preserve">→ status → info. Never other 'security'</text>
+<text x="666" y="377" class="body" xml:space="preserve">commands</text>
+<text x="666" y="399" class="foot" fill="#1a56db">unblocks: M-013 · answers: F-17</text>
+<rect x="650" y="432" width="293" height="116" rx="8" fill="#fef3e0" stroke="#b45309" stroke-width="1.5"/>
+<rect x="650" y="432" width="6" height="116" rx="3" fill="#b45309"/>
+<text x="666" y="457" class="title">Bring-up path</text>
+<text x="931" y="457" class="owner" fill="#b45309" text-anchor="end">Decision</text>
+<text x="666" y="477" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
+<text x="666" y="493" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
+<text x="666" y="509" class="body" xml:space="preserve">author for the early branch?</text>
+<text x="666" y="531" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
 <rect x="963" y="174" width="293" height="116" rx="8" fill="#e8f0fe" stroke="#1a56db" stroke-width="1.5"/>

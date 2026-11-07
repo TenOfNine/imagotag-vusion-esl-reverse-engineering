@@ -163,6 +163,24 @@ device" (expected while locked; flash size not readable).
 
 ---
 
+## M-014 — Unlock tag 02
+
+### Attempt 1 — failed (2026-11-07)
+
+**Tool:** J-Link + Simplicity Commander 1v25p2b2004
+**Power-cycling between the commands:** not stated
+
+| Command | Output (abridged) |
+|---|---|
+| `commander device unlock --device EFR32FG22C121F512GM40` | "Unlocking debug access (triggers a mass erase)…" → `ERROR: DP write failed` → `ERROR: Could not access Debug challenge interface` |
+| same, repeated | same errors |
+| `commander security status --device EFR32FG22C121F512GM40` | `WARNING: DP write failed` ×10, retries after reset → `ERROR: DCI communication failed` |
+| `commander device info --device EFR32FG22C121F512GM40` | `JLinkError: J-Link script file function InitTarget() returned with error code -1` → "Could not connect debugger" |
+
+Lock state after attempt 1: **unknown** (no successful read-out).
+
+---
+
 ## Other measurements
 
 > Free field for anything that was not part of a request.

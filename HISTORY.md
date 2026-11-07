@@ -1696,6 +1696,43 @@ that the panel works with our own firmware.
 
 ---
 
+## 2026-11-07 — Session 5: M-014 unlock attempt 1 failed (`DP write failed`)
+
+### What was tried
+Maintainer, 2026-11-07, tag 02 (presumably), J-Link + Simplicity
+Commander 1v25p2b2004, following M-014 with the full part name
+`EFR32FG22C121F512GM40`. Whether the tag was power-cycled before each
+command is not stated.
+
+### Result
+- `[MEASUREMENT]` `commander device unlock` (twice): "Unlocking debug
+  access (triggers a mass erase)…", then `ERROR: DP write failed` and
+  `ERROR: Could not access Debug challenge interface`.
+- `[MEASUREMENT]` `commander security status` afterwards: repeated
+  `DP write failed`, retries after reset, `ERROR: DCI communication
+  failed` — the same command had worked in M-011 (with `--device
+  EFR32FG22`, first attempt).
+- `[MEASUREMENT]` `commander device info`: `JLinkError: J-Link script file
+  function InitTarget() returned with error code -1`.
+- Lock state after the attempt: unknown.
+
+### Interpretation
+- `[ASSUMPTION]` Nothing was erased: the unlock request never reached
+  the debug challenge interface. **Test:** the next successful
+  `security status` (and, after an unlock, the panel behaviour is
+  irrelevant anyway).
+- `[ASSUMPTION]` H1: the locked chip answers only the first SWD session
+  after power-up (as reported in issue #2), and attempt 1 had several
+  sessions without power-cycling. H2: the full device name makes J-Link
+  run its EFR32 `InitTarget()` script, which fails on the locked chip,
+  while the generic fallback of M-011 worked. Possibly also the default
+  SWD clock on thin wires.
+  **Test:** attempt 2 — one command per power-cycle, `--device
+  EFR32FG22`, `--speed 1000`, starting with the `security status` that
+  worked before (M-014 update).
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

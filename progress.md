@@ -171,8 +171,10 @@ Order = suggested priority.
       unplugged; send the RTT report (`firmware/bringup/README.md`)
 - [x] **F-15 decision:** tag 02 may be unlocked — written into
       `CLAUDE.md` §5.2 as a tag-02-only exception (M, 2026-11-07)
-- [ ] **M-014 — unlock tag 02** (`commander device unlock`, then
-      `security status` + `device info`; never other `security` commands)
+- [ ] **M-014 — unlock tag 02** — attempt 1 failed (`DP write failed`,
+      2026-11-07); attempt 2: one command per power-cycle, `--device
+      EFR32FG22`, `--speed 1000` (procedure in `measurement-requests.md`);
+      never other `security` commands
 - [ ] GitHub repo "About" text is outdated ("three-colour", "Docs in
       German") — repo settings, maintainer only
 - [ ] ~~M-009 — re-capture at 40 MSa/s~~ — not needed (2026-10-21)
