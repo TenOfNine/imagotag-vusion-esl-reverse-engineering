@@ -1789,6 +1789,70 @@ advance, Enter within ~1 s after the battery went in (M-014 check 2).
 
 ---
 
+## Open thread at the end of session 5 (2026-11-07)
+
+Resume point. Supersedes "Open thread at the end of session 3". Session
+paused by the maintainer.
+
+### Where we stand
+- **Panel:** `[ASSUMPTION]`, strongly supported — Pervasive Displays
+  "BWRY Medium" COG (chip ID `0D 04`). All panel-specific init values are
+  in our own boot capture; the full procedure (OTP read, init, update,
+  turn-off DC/DC) is in `docs/panel-protocol.md` §7 (from Pervasive's own
+  driver). Colours and orientation: third-party values, to be checked in
+  step 4.
+- **Pins:** third-party map (issue #2) — display on PC00–PC04, BUSY PA07,
+  panel supply PC06 (low = on), SPI flash on PA00/PB00/PA04/PA05 + PA06.
+  **Unverified on our unit** (M-012 open). The `8K417` chip is a leadless
+  ~2 × 3 mm package, not an SO-8.
+- **SWD:** pads for QFN 22/23 confirmed by continuity (M-011). Lock state
+  `[MEASUREMENT]`: debug lock Enabled, device erase Enabled, secure boot
+  Disabled. **F-15 decided: tag 02 may be unlocked** (`CLAUDE.md` §5.2
+  exception).
+- **Unlock (M-014): not done.** Attempt 1 (full part name) → `DP write
+  failed` / no DCI access; since then even the read-only `security
+  status` fails (attempt 2 step 1, and a timing test with Enter ≤ 1 s
+  after battery in). `[ASSUMPTION]` nothing was erased.
+- **Firmware:** bring-up image step 1 written (`firmware/bringup/`, RTT +
+  DEVINFO, no GPIO), emulator-tested only; hex was sent to the maintainer
+  (sha256 in the step-1 entry). Concept for steps 2–5 in
+  `docs/firmware-plan.md` §7.
+- **Issue #2:** answers evaluated; open there: their flash marking, the
+  public OEPL branch (offered early on request — not asked yet).
+
+### Waiting for the maintainer (M-014 update in `measurement-requests.md`)
+1. Check 1: continuity J-Link connector → pads (SWCLK pin 9 → "22",
+   SWDIO pin 7 → "23", GND pin 4, VTref pin 1) and battery voltage.
+2. Voltage on the board's battery contacts after removing the battery
+   (0 s, 10 s, 1 min, 5 min) — tests C4 "no real power-on reset".
+3. Discharged power cycle (100 Ω–1 kΩ across the battery contacts, FPC
+   unplugged), then `security status` within ~1 s; if it works, the
+   unlock the same way.
+4. If still no connection: M-015 (RESETn, QFN pin 11 `[ASSUMPTION]`) and
+   wire J-Link nRESET.
+5. Open small items: which tag was used in M-011/M-014; pads 22/23 no
+   beep to battery ±; was the tag without battery for long before the
+   successful M-011?
+6. Independent of the unlock: M-012 (pin-map continuity), datasheet check
+   of the QFN40 table, macro photo of the `8K417` chip.
+
+### Decisions still open
+- Ask the issue #2 author for the early OEPL branch?
+- Exception in `.gitignore` for our own prebuilt bring-up images?
+- Which USB Zigbee stick (model) — only for a possible 802.15.4 sniffer.
+
+### What Claude Code does next time
+- Read this entry, `progress.md`, `docs/measurement-requests.md` (M-014,
+  M-015), `docs/firmware-plan.md` §7, `docs/panel-protocol.md` §7–8.
+- Evaluate the M-014 check results; if the unlock succeeds: F-17 from
+  `device info`, then M-013 (step-1 image), then steps 2–3.
+- Toolchain is not persistent in the cloud container: `apt-get install
+  gcc-arm-none-eabi libnewlib-arm-none-eabi`, then
+  `firmware/bringup/fetch_sdk.sh` and `make`; emulator test needs
+  `pip install unicorn pyelftools`.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

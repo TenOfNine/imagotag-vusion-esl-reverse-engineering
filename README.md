@@ -45,14 +45,16 @@ See `progress.md` for the checklist of what is done and what is open,
 `HISTORY.md` for the full history and `docs/open-questions.md` for the
 open questions.
 
-Short version (session 5, 2026-10-21): FPC pinout measured, all six
+Short version (end of session 5, 2026-11-07): FPC pinout measured, all six
 signal roles confirmed by captures. The boot reads are the OTP read of a
 **Pervasive Displays "BWRY Medium" COG**, and all panel-specific init
 values are in our own boot capture (`docs/panel-protocol.md`). The tag
 never refreshes without its base station. **Path B: custom firmware on the
-original EFR32** (`docs/firmware-plan.md`). Waiting for the SWD lock check
-(M-011), the pin-map verification (M-012) and the unlock decision (F-15).
-A third party reports a working refresh on the same board (issue #2).
+original EFR32** (`docs/firmware-plan.md`). The EFR32 is debug-locked
+(erase-unlock allowed, secure boot off); the maintainer allowed the
+unlock of tag 02, but the J-Link currently gets no SWD connection
+(M-014). The bring-up image for step 1 is written. A third party reports
+a working refresh on the same board (issue #2).
 
 ### Open items at a glance
 
