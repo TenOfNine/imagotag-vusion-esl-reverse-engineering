@@ -1853,6 +1853,22 @@ paused by the maintainer.
 
 ---
 
+## 2026-11-07 — Session 5: Early OEPL branch requested in issue #2
+
+At the maintainer's request, comment posted in issue #2
+(https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6711879645):
+- asked for the early branch of the third-party OEPL port (or a prebuilt
+  256 kB `.s37`), offered as work in progress;
+- shared our lock state (M-011), the stuck unlock (M-014) and the
+  `8K417` package correction;
+- asked where their nRESET is connected on the board (RESETn = QFN pin
+  11?), whether they tried with the battery in or without nRESET, and how
+  long the tag was unpowered between runs — all relevant for M-014/M-015.
+
+No new technical insight; waiting for the reply.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 

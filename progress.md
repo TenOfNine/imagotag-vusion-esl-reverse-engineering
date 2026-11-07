@@ -205,6 +205,11 @@ Order = suggested priority.
 - [ ] Watch for the third-party OEPL port (issue #2) — reuse instead of
       duplicating, if it appears
 - [ ] OEPL image for a 256 kB part: trimmed build ≤ 208 kB (concept §7.3)
+- [x] Issue #2: early OEPL branch (or 256 kB `.s37`) requested; our lock
+      state, unlock problem and the `8K417` package shared; asked where
+      their nRESET is connected (C, 2026-11-07,
+      https://github.com/TenOfNine/imagotag-vusion-esl-reverse-engineering/issues/2#issuecomment-6711879645)
+- [ ] Evaluate the reply in issue #2 (branch/firmware, nRESET location)
 - [x] ~~Evaluate the answers to our questions in issue #2~~ — done
       2026-10-21 (`panel-protocol.md` §8, `HISTORY.md`); still open there:
       their flash marking (question 3), the public OEPL branch (question 7)
@@ -234,7 +239,7 @@ Order = suggested priority.
 | # | Decision | Blocks |
 |---|---|---|
 | F-15 | Erase the original firmware on tag 02 if the chip is locked? New basis since 2026-10-21 (`open-questions.md`) | flashing |
-| — | Own bring-up firmware first, or wait for the third-party OEPL port? Their author offers to push a branch early (issue #2) | step 5 |
+| — | Own bring-up firmware first, or wait for the third-party OEPL port? (early branch requested in issue #2, 2026-11-07) | step 5 |
 
 ## Safety reminders (from `CLAUDE.md` §5)
 

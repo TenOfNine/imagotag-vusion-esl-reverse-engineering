@@ -41,9 +41,9 @@ COLUMNS = [
             "(repo settings)",
         ], None, False),
         ("i2", "T", "Issue #2 — still open there", [
-            "Answers 2, 4–6 received and evaluated (panel-protocol.md §8). "
-            "Open: flash marking (3), public OEPL branch (7, offered early "
-            "on request)",
+            "Early OEPL branch / 256 kB .s37 requested (2026-11-07); also "
+            "asked where their nRESET is wired. Open: their flash "
+            "marking",
         ], None, False),
         ("oepl3", "T", "Third-party OEPL port", [
             "Announced in issue #2, not in OEPL v43. Claude Code watches "
@@ -81,8 +81,8 @@ COLUMNS = [
             "Never other 'security' commands",
         ], "unblocks: M-013 · answers: F-17", False),
         ("path", "D", "Bring-up path", [
-            "Own bring-up firmware first, or wait for the third-party "
-            "OEPL port? Ask its author for the early branch?",
+            "Own bring-up firmware first, or the third-party OEPL port "
+            "(early branch requested)?",
         ], "blocks: step 5", False),
     ]),
     ("4 · Firmware on tag 02", [

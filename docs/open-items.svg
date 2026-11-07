@@ -37,10 +37,10 @@
 <rect x="24" y="400" width="6" height="110" rx="3" fill="#5f6368"/>
 <text x="40" y="425" class="title">Issue #2 — still open there</text>
 <text x="305" y="425" class="owner" fill="#5f6368" text-anchor="end">3rd party</text>
-<text x="40" y="445" class="body" xml:space="preserve">Answers 2, 4–6 received and evaluated</text>
-<text x="40" y="461" class="body" xml:space="preserve">(panel-protocol.md §8). Open: flash</text>
-<text x="40" y="477" class="body" xml:space="preserve">marking (3), public OEPL branch (7,</text>
-<text x="40" y="493" class="body" xml:space="preserve">offered early on request)</text>
+<text x="40" y="445" class="body" xml:space="preserve">Early OEPL branch / 256 kB .s37</text>
+<text x="40" y="461" class="body" xml:space="preserve">requested (2026-11-07); also asked where</text>
+<text x="40" y="477" class="body" xml:space="preserve">their nRESET is wired. Open: their flash</text>
+<text x="40" y="493" class="body" xml:space="preserve">marking</text>
 <rect x="24" y="526" width="293" height="94" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.5"/>
 <rect x="24" y="526" width="6" height="94" rx="3" fill="#5f6368"/>
 <text x="40" y="551" class="title">Third-party OEPL port</text>
@@ -102,9 +102,9 @@
 <rect x="650" y="448" width="6" height="116" rx="3" fill="#b45309"/>
 <text x="666" y="473" class="title">Bring-up path</text>
 <text x="931" y="473" class="owner" fill="#b45309" text-anchor="end">Decision</text>
-<text x="666" y="493" class="body" xml:space="preserve">Own bring-up firmware first, or wait for</text>
-<text x="666" y="509" class="body" xml:space="preserve">the third-party OEPL port? Ask its</text>
-<text x="666" y="525" class="body" xml:space="preserve">author for the early branch?</text>
+<text x="666" y="493" class="body" xml:space="preserve">Own bring-up firmware first, or the</text>
+<text x="666" y="509" class="body" xml:space="preserve">third-party OEPL port (early branch</text>
+<text x="666" y="525" class="body" xml:space="preserve">requested)?</text>
 <text x="666" y="547" class="foot" fill="#b45309">blocks: step 5</text>
 <rect x="963" y="128" width="293" height="30" rx="6" fill="#202124"/>
 <text x="975" y="148" class="col">4 · Firmware on tag 02</text>
