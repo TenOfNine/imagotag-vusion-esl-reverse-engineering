@@ -1923,6 +1923,62 @@ Nothing on our unit; the binary was not built or run by us.
 
 ---
 
+## 2026-11-09 — Session 6: Zigbee on the tag? Gecko SDK device check
+
+### What was tried
+Maintainer question: can the tags be addressed over Zigbee in software
+(a USB Zigbee stick on Home Assistant is available; model still unknown)?
+Desk research only. Silicon Labs Gecko SDK **v4.4.1** (commit `911f6cd`,
+the same version the bring-up image uses) cloned blobless with a sparse
+checkout of the component metadata (`*.slcc`) only.
+
+### Result
+- `[RESEARCH]` `protocol/zigbee/component/zigbee_stack_common.slcc`,
+  required by every Zigbee PRO stack variant (e.g.
+  `zigbee_pro_leaf_stack.slcc`, the end-device stack), requires the
+  capability `device_supports_zigbee` on Cortex-M devices.
+- `[RESEARCH]` `platform/Device/component/efr32fg22c121f256gm40.slcc`
+  and `efr32fg22c121f512gm40.slcc` provide `device_supports_rail`,
+  `device_supports_rail_stack` and `device_supports_connect`, but **not**
+  `device_supports_zigbee`. `efr32mg22c224f512im40.slcc` provides
+  `device_supports_zigbee` (plus Bluetooth), `efr32bg22c224f512im40.slcc`
+  Bluetooth only. The `device_has_*` peripheral lists of these parts are
+  identical.
+- `[RESEARCH]` OpenThread
+  (`protocol/openthread/component/ot_platform_abstraction_core.slcc`)
+  requires `device_supports_thread`; neither FG22 nor MG22 provides it in
+  this SDK.
+- `[RESEARCH]` The Zigbee stack ships as per-core libraries
+  (`protocol/zigbee/build/gcc/cortex-m33/...`), not per chip family. The
+  gate found is in the project configuration (SLC metadata). Whether the
+  library also checks the part at run time was **not** examined.
+- `[RESEARCH]` For comparison: OEPL uses RAIL in IEEE 802.15.4 mode with
+  its own protocol, not Zigbee (entry of 2026-10-21). The third-party
+  port reports association, image upload and drawing through a real
+  ESP32-S3 + ESP32-C6 AP on its RFRTx026D (gist README, issue #2) — so
+  the radio side of 802.15.4 is not the obstacle.
+
+### What follows
+- Silicon Labs' own Zigbee stack is **not offered** for EFR32FG22 in
+  GSDK 4.4.1. A Zigbee firmware for the tag would need either a build
+  for an MG22 part run on the FG22 (`[ASSUMPTION]` it builds; unknown
+  whether it runs and whether the SDK licence permits it — test: build a
+  sleepy-end-device sample for `EFR32MG22C224F512IM40`, flash it on
+  tag 02 after the unlock, try to join a test network), or a non-Silabs
+  Zigbee stack (none known to Claude Code for EFR32).
+- Even then there is no standard Zigbee cluster for pushing a picture: a
+  manufacturer-specific cluster plus a ZHA quirk / Zigbee2MQTT converter
+  would be needed. One frame is 96,000 bytes (2 bpp, 480×800).
+- No change to the plan: path B stays OEPL; Home Assistant integration
+  goes through an OEPL AP and the OEPL integration; the Zigbee stick can
+  stay a normal Zigbee coordinator.
+
+### What it does not prove
+Nothing about our unit (part number and flash size still from the third
+party, F-17). SLC capabilities are SDK metadata, not a hardware limit.
+
+---
+
 <!--
 TEMPLATE FOR NEW ENTRIES — copy and fill in:
 
